@@ -1,16 +1,39 @@
 <div class="container">
   <header>
-    <img src="assets/images/logo.png" alt="SmartHub Logo" class="logo" />
-    <nav>
-      <a href="#">Accueil</a>
-      <a href="#">Fonctionnalités</a>
-      <a href="#">À propos</a>
-      <a href="#">Contact</a>
-    </nav>
+    <div class="header-top">
+      <nav class="left-nav">
+        <a routerLink="/">Accueil</a>
+        <a routerLink="/demo">Démo</a>
+      </nav>
+      <div class="logo-wrapper">
+        <img src="assets/images/logo.png" alt="SmartHub Logo" class="logo" />
+      </div>
+      <nav class="right-nav">
+        <a routerLink="/login" class="login-btn">Connexion</a>
+        <a routerLink="/register" class="register-btn">Inscription</a>
+      </nav>
+    </div>
   </header>
-  <section class="hero">
-    <h1>Contrôlez votre maison en toute simplicité</h1>
-    <p>Une solution moderne pour une maison connectée et intelligente.</p>
-    <button class="cta">Découvrez SmartHub</button>
-  </section>
+  <main>
+    <section class="hero">
+      <h1>Contrôlez votre maison en toute simplicité</h1>
+      <p>Une solution moderne pour une maison connectée et intelligente.</p>
+      <button class="cta">Découvrez SmartHub</button>
+    </section>
+    <section class="description">
+      <div class="desc-content">
+        <h2>À propos de SmartHub</h2>
+        <p>
+          SmartHub vous offre une expérience connectée unique pour gérer et contrôler votre maison en toute simplicité.
+          Profitez d'une interface intuitive et de fonctionnalités avancées pour sécuriser et optimiser votre quotidien.
+        </p>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <nav class="footer-nav">
+      <a routerLink="/about">À propos</a>
+      <a routerLink="/contact">Contact</a>
+    </nav>
+  </footer>
 </div>
