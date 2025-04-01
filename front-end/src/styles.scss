@@ -1,4 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html {
+  scroll-behavior: smooth;
+}
+
+html, body {
+  height: 100%; // Assure que html et body occupent toute la hauteur
+  width: 100%; // Assure que html et body occupent toute la largeur
+  margin: 0;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  background-color: #f9f9f9; // Couleur de fond douce
+  color: #333; // Couleur de texte douce
+}
+
+a {
+  color: #6c9df2; // Couleur pastel pour les liens
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #5a8ae0; // Couleur légèrement plus foncée au survol
+  }
+}
+
+.container {
+  min-height: 100vh; // Assure que le conteneur occupe toute la hauteur de la fenêtre
+  width: 100%; // Assure que le conteneur occupe toute la largeur de la fenêtre
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; // Assure que le contenu est bien réparti
+}

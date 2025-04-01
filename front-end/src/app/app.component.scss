@@ -1,7 +1,24 @@
+html {
+  scroll-behavior: smooth; // Active le défilement fluide
+}
+
 .container {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #f9f9f9; // Couleur de fond douce
+  color: #333; // Couleur de texte douce
+  display: flex;
+  flex-direction: column; // Assure une disposition en colonne
+  padding-top: 80px; // Ajoute un espace pour compenser la hauteur de la barre fixe
+  width: 100%; // Assure que le conteneur occupe toute la largeur de l'écran
+  height: 100%; // Assure que le conteneur occupe toute la hauteur disponible
+  min-height: 100vh; // Assure que le conteneur occupe toute la hauteur de la fenêtre
+}
+
+main {
+  flex: 1; // Permet au contenu principal de remplir l'espace disponible
+  width: 100%; // Assure que le contenu principal occupe toute la largeur de l'écran
 }
 
 header {
@@ -9,7 +26,11 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  background: #f8f8f8;
+  background: #e8f0fe; // Couleur pastel pour l'en-tête
+  position: fixed; // Rend la barre fixe
+  top: 0;
+  width: 100%;
+  z-index: 1000; // Assure que la barre reste au-dessus des autres éléments
 
   .logo {
     height: 40px;
@@ -25,36 +46,94 @@ header {
       color: #0070c0;
     }
   }
+
+  .top-nav {
+    display: flex;
+    gap: 10px;
+
+    button {
+      background-color: #6c9df2; // Couleur pastel unifiée pour les boutons
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #5a8ae0; // Couleur légèrement plus foncée au survol
+      }
+    }
+  }
 }
 
 .hero {
   text-align: center;
-  padding: 100px 20px;
-  background: linear-gradient(135deg, #e3e3e3 0%, #ffffff 100%);
+  flex: 1; // Permet à la section hero de remplir l'espace restant
+  min-height: 80%; // Réduit la hauteur minimale à 80% de la hauteur de la fenêtre
+  padding: 8% 5%; // Réduit le padding vertical pour ajuster l'espacement
+  background: linear-gradient(135deg, #e8f0fe 0%, #ffffff 100%);
+  height: 100%;
+  width: 100%; // Assure que la section hero occupe toute la largeur de l'écran
 
   h1 {
-    font-size: 48px;
-    margin-bottom: 20px;
-    color: #222;
+    font-size: 3vw; // Taille de police relative à la largeur de la fenêtre
+    margin-bottom: 2%;
+    color: #333;
   }
 
   p {
-    font-size: 24px;
-    margin-bottom: 40px;
+    font-size: 1.5vw; // Taille de police relative à la largeur de la fenêtre
+    margin-bottom: 4%;
     color: #555;
   }
 
   .cta {
-    background-color: #0070c0;
+    background-color: #6c9df2; // Même couleur que les boutons
     color: #fff;
     border: none;
-    padding: 15px 30px;
-    font-size: 18px;
+    padding: 1.5% 3%; // Padding en pourcentage
+    font-size: 1.2vw; // Taille de police relative à la largeur de la fenêtre
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s;
     &:hover {
-      background-color: #005a90;
+      background-color: #5a8ae0;
+    }
+  }
+}
+
+.discover-smarthub {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .description-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    .text-content {
+      max-width: 500px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .image-content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
   }
 }
