@@ -11,14 +11,11 @@ html {
   display: flex;
   flex-direction: column; // Assure une disposition en colonne
   padding-top: 80px; // Ajoute un espace pour compenser la hauteur de la barre fixe
-  width: 100%; // Assure que le conteneur occupe toute la largeur de l'écran
-  height: 100%; // Assure que le conteneur occupe toute la hauteur disponible
   min-height: 100vh; // Assure que le conteneur occupe toute la hauteur de la fenêtre
 }
 
 main {
   flex: 1; // Permet au contenu principal de remplir l'espace disponible
-  width: 100%; // Assure que le contenu principal occupe toute la largeur de l'écran
 }
 
 header {
@@ -71,11 +68,9 @@ header {
 .hero {
   text-align: center;
   flex: 1; // Permet à la section hero de remplir l'espace restant
-  min-height: 80%; // Réduit la hauteur minimale à 80% de la hauteur de la fenêtre
-  padding: 8% 5%; // Réduit le padding vertical pour ajuster l'espacement
+  min-height: 100%; // Augmente la hauteur minimale à 90% de la hauteur de la fenêtre
+  padding: 16% 10%; // Ajuste le padding pour équilibrer l'espacement
   background: linear-gradient(135deg, #e8f0fe 0%, #ffffff 100%);
-  height: 100%;
-  width: 100%; // Assure que la section hero occupe toute la largeur de l'écran
 
   h1 {
     font-size: 3vw; // Taille de police relative à la largeur de la fenêtre
@@ -136,4 +131,27 @@ header {
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
   }
+}
+
+.description {
+  text-align: center; // Centre le texte horizontalement
+  display: flex;
+  flex-direction: column;
+  align-items: center; // Centre horizontalement les éléments enfants
+  justify-content: center; // Centre verticalement les éléments enfants
+  padding: 40px 20px;
+
+  .desc-content {
+    max-width: 800px; // Limite la largeur pour un meilleur rendu
+    text-align: center; // Centre le texte à l'intérieur
+  }
+}
+
+footer {
+  background-color: #0071e3; // Couleur bleue pour le footer
+  color: #fff;
+  text-align: center;
+  padding: 15px 0;
+  font-size: 0.9rem;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); // Ajout d'une ombre subtile
 }

@@ -1,32 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
 
-html {
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
   scroll-behavior: smooth;
 }
 
-html, body {
-  height: 100%; // Assure que html et body occupent toute la hauteur
-  width: 100%; // Assure que html et body occupent toute la largeur
-  margin: 0;
-  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
-  background-color: #f9f9f9; // Couleur de fond douce
-  color: #333; // Couleur de texte douce
-}
-
 a {
-  color: #6c9df2; // Couleur pastel pour les liens
+  color: #6c9df2;
   text-decoration: none;
   transition: color 0.3s ease;
 
   &:hover {
-    color: #5a8ae0; // Couleur légèrement plus foncée au survol
+    color: #5a8ae0;
   }
 }
 
 .container {
-  min-height: 100vh; // Assure que le conteneur occupe toute la hauteur de la fenêtre
-  width: 100%; // Assure que le conteneur occupe toute la largeur de la fenêtre
+  min-height: 100vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; // Assure que le contenu est bien réparti
+  justify-content: space-between;
+}
+
+footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  font-size: 0.9rem;
 }
