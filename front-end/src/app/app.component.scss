@@ -1,17 +1,17 @@
 html {
-  scroll-behavior: smooth; // Active le défilement fluide
+  scroll-behavior: smooth;
 }
 
 .container {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #000; // Fond noir
-  color: #fff; // Texte blanc
+  background-color: #000;
+  color: #fff;
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding-top: 80px; // Ajoute un espace pour compenser la hauteur de la barre fixe
+  padding-top: 80px;
   min-height: 100vh;
 }
 
@@ -26,47 +26,47 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  background: #111; // Noir légèrement plus clair pour l'en-tête
+  background: #111;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 1000;
+}
 
-  .logo {
-    height: 40px;
-  }
+header .logo {
+  height: 40px;
+}
 
-  nav a {
-    margin-left: 20px;
-    text-decoration: none;
-    color: #fff; // Texte blanc
-    font-weight: 500;
-    transition: color 0.3s;
+header nav a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: color 0.3s;
+}
 
-    &:hover {
-      color: #ff9800; // Orange vif au survol
-    }
-  }
+header nav a:hover {
+  color: #ff9800;
+}
 
-  .top-nav {
-    display: flex;
-    gap: 10px;
+header .top-nav {
+  display: flex;
+  gap: 10px;
+}
 
-    button {
-      background-color: #ff9800; // Orange vif pour les boutons
-      color: #000; // Texte noir
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+header .top-nav button {
+  background-color: #ff9800;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-      &:hover {
-        background-color: #e67e22; // Orange plus foncé au survol
-      }
-    }
-  }
+header .top-nav button:hover {
+  background-color: #e67e22;
 }
 
 .hero {
@@ -74,68 +74,68 @@ header {
   flex: 1;
   min-height: 100%;
   padding: 16% 10%;
-  background: linear-gradient(135deg, #111 0%, #000 100%); // Dégradé noir
+  background: linear-gradient(135deg, #111 0%, #000 100%);
+}
 
-  h1 {
-    font-size: 3vw;
-    margin-bottom: 2%;
-    color: #fff; // Texte blanc
-  }
+.hero h1 {
+  font-size: 3vw;
+  margin-bottom: 2%;
+  color: #fff;
+}
 
-  p {
-    font-size: 1.5vw;
-    margin-bottom: 4%;
-    color: #ccc; // Texte secondaire gris clair
-  }
+.hero p {
+  font-size: 1.5vw;
+  margin-bottom: 4%;
+  color: #ccc;
+}
 
-  .cta {
-    background-color: #ff9800;
-    color: #000;
-    border: none;
-    padding: 1.5% 3%;
-    font-size: 1.2vw;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+.hero .cta {
+  background-color: #ff9800;
+  color: #000;
+  border: none;
+  padding: 1.5% 3%;
+  font-size: 1.2vw;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
 
-    &:hover {
-      background-color: #e67e22;
-    }
-  }
+.hero .cta:hover {
+  background-color: #e67e22;
 }
 
 .discover-smarthub {
   text-align: center;
   padding: 40px 20px;
   background-color: #111;
+}
 
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #fff;
-  }
+.discover-smarthub h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #fff;
+}
 
-  .description-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
+.discover-smarthub .description-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
 
-    .text-content {
-      max-width: 500px;
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #ccc;
-    }
+.discover-smarthub .text-content {
+  max-width: 500px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #ccc;
+}
 
-    .image-content img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3); // Ombre orange
-    }
-  }
+.discover-smarthub .image-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
 }
 
 .description {
@@ -145,20 +145,70 @@ header {
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
+}
 
-  .desc-content {
-    max-width: 800px;
-    text-align: center;
-    color: #fff;
-  }
+.description .desc-content {
+  max-width: 800px;
+  text-align: center;
+  color: #fff;
 }
 
 footer {
   width: 100%;
-  background-color: #111; // Noir légèrement plus clair pour le footer
+  background-color: #111;
   color: #fff;
   text-align: center;
   padding: 15px 0;
   font-size: 0.9rem;
-  box-shadow: 0 -2px 5px rgba(255, 152, 0, 0.3); // Ombre orange
+  box-shadow: 0 -2px 5px rgba(255, 152, 0, 0.3);
+}
+
+.hero {
+  position: relative;
+  text-align: center;
+  flex: 1;
+  min-height: 100%;
+  padding: 16% 10%;
+  background-color: #000;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: -35%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1400px;
+  height: 900px;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 255, 200, 0.6),
+    rgba(255, 200, 100, 0.4),
+    rgba(255, 150, 0, 0.2),
+    transparent 80%
+  );
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  z-index: 0;
+  filter: blur(6px) brightness(1.8);
+  animation: triangleGlow 4s ease-in-out infinite;
+}
+
+
+@keyframes triangleGlow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1.05);
+  }
+}
+
+.hero h1,
+.hero p,
+.hero .cta {
+  position: relative;
+  z-index: 1;
 }
