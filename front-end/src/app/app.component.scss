@@ -6,16 +6,19 @@ html {
   font-family: 'Helvetica Neue', Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f9f9f9; // Couleur de fond douce
-  color: #333; // Couleur de texte douce
+  background-color: #000; // Fond noir
+  color: #fff; // Texte blanc
   display: flex;
-  flex-direction: column; // Assure une disposition en colonne
+  flex-direction: column;
+  width: 100%;
   padding-top: 80px; // Ajoute un espace pour compenser la hauteur de la barre fixe
-  min-height: 100vh; // Assure que le conteneur occupe toute la hauteur de la fenêtre
+  min-height: 100vh;
 }
 
 main {
-  flex: 1; // Permet au contenu principal de remplir l'espace disponible
+  flex: 1;
+  width: 100%;
+  margin-top: 80px;
 }
 
 header {
@@ -23,11 +26,11 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  background: #e8f0fe; // Couleur pastel pour l'en-tête
-  position: fixed; // Rend la barre fixe
+  background: #111; // Noir légèrement plus clair pour l'en-tête
+  position: fixed;
   top: 0;
   width: 100%;
-  z-index: 1000; // Assure que la barre reste au-dessus des autres éléments
+  z-index: 1000;
 
   .logo {
     height: 40px;
@@ -36,11 +39,12 @@ header {
   nav a {
     margin-left: 20px;
     text-decoration: none;
-    color: #333;
+    color: #fff; // Texte blanc
     font-weight: 500;
     transition: color 0.3s;
+
     &:hover {
-      color: #0070c0;
+      color: #ff9800; // Orange vif au survol
     }
   }
 
@@ -49,8 +53,8 @@ header {
     gap: 10px;
 
     button {
-      background-color: #6c9df2; // Couleur pastel unifiée pour les boutons
-      color: #fff;
+      background-color: #ff9800; // Orange vif pour les boutons
+      color: #000; // Texte noir
       border: none;
       padding: 10px 20px;
       font-size: 16px;
@@ -59,7 +63,7 @@ header {
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: #5a8ae0; // Couleur légèrement plus foncée au survol
+        background-color: #e67e22; // Orange plus foncé au survol
       }
     }
   }
@@ -67,34 +71,35 @@ header {
 
 .hero {
   text-align: center;
-  flex: 1; // Permet à la section hero de remplir l'espace restant
-  min-height: 100%; // Augmente la hauteur minimale à 90% de la hauteur de la fenêtre
-  padding: 16% 10%; // Ajuste le padding pour équilibrer l'espacement
-  background: linear-gradient(135deg, #e8f0fe 0%, #ffffff 100%);
+  flex: 1;
+  min-height: 100%;
+  padding: 16% 10%;
+  background: linear-gradient(135deg, #111 0%, #000 100%); // Dégradé noir
 
   h1 {
-    font-size: 3vw; // Taille de police relative à la largeur de la fenêtre
+    font-size: 3vw;
     margin-bottom: 2%;
-    color: #333;
+    color: #fff; // Texte blanc
   }
 
   p {
-    font-size: 1.5vw; // Taille de police relative à la largeur de la fenêtre
+    font-size: 1.5vw;
     margin-bottom: 4%;
-    color: #555;
+    color: #ccc; // Texte secondaire gris clair
   }
 
   .cta {
-    background-color: #6c9df2; // Même couleur que les boutons
-    color: #fff;
+    background-color: #ff9800;
+    color: #000;
     border: none;
-    padding: 1.5% 3%; // Padding en pourcentage
-    font-size: 1.2vw; // Taille de police relative à la largeur de la fenêtre
+    padding: 1.5% 3%;
+    font-size: 1.2vw;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s;
+
     &:hover {
-      background-color: #5a8ae0;
+      background-color: #e67e22;
     }
   }
 }
@@ -102,12 +107,12 @@ header {
 .discover-smarthub {
   text-align: center;
   padding: 40px 20px;
-  background-color: #f9f9f9;
+  background-color: #111;
 
   h2 {
     font-size: 2rem;
     margin-bottom: 20px;
-    color: #333;
+    color: #fff;
   }
 
   .description-container {
@@ -121,37 +126,39 @@ header {
       max-width: 500px;
       font-size: 1.1rem;
       line-height: 1.6;
-      color: #555;
+      color: #ccc;
     }
 
     .image-content img {
       max-width: 100%;
       height: auto;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3); // Ombre orange
     }
   }
 }
 
 .description {
-  text-align: center; // Centre le texte horizontalement
+  text-align: center;
   display: flex;
   flex-direction: column;
-  align-items: center; // Centre horizontalement les éléments enfants
-  justify-content: center; // Centre verticalement les éléments enfants
+  align-items: center;
+  justify-content: center;
   padding: 40px 20px;
 
   .desc-content {
-    max-width: 800px; // Limite la largeur pour un meilleur rendu
-    text-align: center; // Centre le texte à l'intérieur
+    max-width: 800px;
+    text-align: center;
+    color: #fff;
   }
 }
 
 footer {
-  background-color: #0071e3; // Couleur bleue pour le footer
+  width: 100%;
+  background-color: #111; // Noir légèrement plus clair pour le footer
   color: #fff;
   text-align: center;
   padding: 15px 0;
   font-size: 0.9rem;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); // Ajout d'une ombre subtile
+  box-shadow: 0 -2px 5px rgba(255, 152, 0, 0.3); // Ombre orange
 }

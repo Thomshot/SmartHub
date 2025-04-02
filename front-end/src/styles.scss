@@ -5,18 +5,18 @@ html, body {
   width: 100%;
   margin: 0;
   font-family: 'Roboto', 'Helvetica Neue', sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
-  scroll-behavior: smooth;
+  background-color: #000; // Fond noir
+  color: #fff; // Texte blanc
+  scroll-behavior: smooth; // Active le défilement fluide pour les liens d'ancrage
 }
 
 a {
-  color: #6c9df2;
+  color: #ff9800; // Orange vif pour les liens
   text-decoration: none;
   transition: color 0.3s ease;
 
   &:hover {
-    color: #5a8ae0;
+    color: #e67e22; // Orange plus foncé au survol
   }
 }
 
@@ -29,7 +29,7 @@ a {
 }
 
 footer {
-  background-color: #333;
+  background-color: #111; // Noir légèrement plus clair pour le footer
   color: #fff;
   text-align: center;
   padding: 20px 0;
