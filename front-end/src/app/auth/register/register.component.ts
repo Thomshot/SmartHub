@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
-  imports: [],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  imports: [FormsModule], // Ajout de FormsModule
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.scss'
 })
-export class LoginComponent {
-
+export class RegisterComponent {
+  user = {
+    email: '',
+    password: ''
+  };
 }

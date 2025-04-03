@@ -4,18 +4,22 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialDModule } from './shared/material-d.module';
 import { AccueilComponent } from './accueil/accueil.component';
+import { RegisterComponent } from './auth/register/register.component'; // Import du composant Register
+import { AppRoutingModule } from './app.routes';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AccueilComponent,
+    RegisterComponent, // Ajout de RegisterComponent ici
   ],
   imports: [
     BrowserModule,
     MaterialDModule,
-    AccueilComponent,
-    HttpClientModule // Ajout du module HTTP pour communiquer avec l’API PHP
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,70 +1,69 @@
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartHub</title>
-  </head>
-  <body class="animated">
-    <header>
-      <div class="header-top">
-        <img class="logo" src="assets/logo.png" alt="SmartHub Logo" />
-        <nav class="top-nav">
-          <button routerLink="/" routerLinkActive="active">Accueil</button>
-          <button routerLink="/demo" routerLinkActive="active">Démonstration</button>
-          <button routerLink="/login" routerLinkActive="active" class="login-btn">Connexion</button>
-          <button routerLink="/register" routerLinkActive="active" class="register-btn">Inscription</button>
-        </nav>
-      </div>
-    </header>
-    <main>
-      <section class="hero">
-        <h1>Contrôlez votre maison en toute simplicité</h1>
-        <p>Une solution moderne pour une maison connectée et intelligente.</p>
-        <a href="#features" class="cta">Découvrez SmartHub</a>
-      </section>
+<header>
+  <div class="header-top">
+    <img class="logo" src="assets/logo.png" alt="SmartHub Logo" />
+    <nav class="top-nav">
+      <button routerLink="/" routerLinkActive="active">Accueil</button>
+      <button routerLink="/demo" routerLinkActive="active">Démonstration</button>
+      <button routerLinkActive="active" class="login-btn" (click)="openLoginPopup()">Connexion</button>
+      <button routerLink="/register" routerLinkActive="active" class="register-btn">Inscription</button>
+    </nav>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <h1>Contrôlez votre maison en toute simplicité</h1>
+    <p>Une solution moderne pour une maison connectée et intelligente.</p>
+    <a href="#features" class="cta">Découvrez SmartHub</a>
+  </section>
 
-      <section id="discover-smarthub" class="discover-smarthub">
-        <h2>Découvrez les fonctionnalités de SmartHub</h2>
-        <div class="description-container">
-          <div class="text-content">
-            <p>
-              SmartHub est votre solution tout-en-un pour gérer vos appareils connectés,
-              automatiser vos tâches quotidiennes et améliorer votre confort à la maison.
-              Avec une interface intuitive et des outils puissants, SmartHub simplifie votre vie.
-            </p>
-          </div>
-          <div class="image-content">
-            <img src="assets/images/test.png" alt="Aperçu de SmartHub" />
-          </div>
-        </div>
-      </section>
-      <section id="features" class="description">
-        <div class="desc-content">
-          <h2>À propos de SmartHub</h2>
-          <p>
-            SmartHub vous offre une expérience connectée unique pour gérer et contrôler votre maison en toute simplicité.
-            Profitez d'une interface intuitive et de fonctionnalités avancées pour sécuriser et optimiser votre quotidien.
-          </p>
-        </div>
-      </section>
-    </main>
-    <footer>
-      <p>&copy; 2025 SmartHub. Tous droits réservés.</p>
-    </footer>
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        var desc = document.querySelector('.description');
-        function checkScroll() {
-          var rect = desc.getBoundingClientRect();
-          if (rect.top < window.innerHeight) {
-            desc.classList.add('visible');
-            window.removeEventListener('scroll', checkScroll);
-          }
-        }
-        window.addEventListener('scroll', checkScroll);
-        checkScroll();
-      });
-    </script>
-  </body>
-</html>
+  <section id="discover-smarthub" class="discover-smarthub">
+    <h2>Découvrez les fonctionnalités de SmartHub</h2>
+    <div class="description-container">
+      <div class="text-content">
+        <p>
+          SmartHub est votre solution tout-en-un pour gérer vos appareils connectés,
+          automatiser vos tâches quotidiennes et améliorer votre confort à la maison.
+          Avec une interface intuitive et des outils puissants, SmartHub simplifie votre vie.
+        </p>
+      </div>
+      <div class="image-content">
+        <img src="assets/images/test.png" alt="Aperçu de SmartHub" />
+      </div>
+    </div>
+  </section>
+  <section id="features" class="description">
+    <div class="desc-content">
+      <h2>À propos de SmartHub</h2>
+      <p>
+        SmartHub vous offre une expérience connectée unique pour gérer et contrôler votre maison en toute simplicité.
+        Profitez d'une interface intuitive et de fonctionnalités avancées pour sécuriser et optimiser votre quotidien.
+      </p>
+    </div>
+  </section>
+</main>
+
+<div class="popup" *ngIf="isLoginPopupVisible">
+  <div class="popup-content">
+    <h2>Connexion</h2>
+    <form>
+      <div class="form-group">
+        <label for="email">Adresse mail</label>
+        <input type="email" id="email" name="email" placeholder="Entrez votre adresse mail" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" placeholder="Entrez votre mot de passe" required />
+      </div>
+      <button type="submit">Se connecter</button>
+    </form>
+    <p>
+      Vous n'avez pas de compte ?
+      <a routerLink="/register">Inscrivez-vous ici</a>
+    </p>
+    <button class="close-btn" (click)="closeLoginPopup()">Fermer</button>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 SmartHub. Tous droits réservés.</p>
+</footer>
