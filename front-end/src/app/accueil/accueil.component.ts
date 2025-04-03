@@ -10,4 +10,5 @@ import { MaterialDModule } from '../shared/material-d.module';
   styleUrl: './accueil.component.scss'
 })
 export class AccueilComponent {
-  }
+  nomSite="Safynest"
+}

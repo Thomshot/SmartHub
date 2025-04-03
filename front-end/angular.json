@@ -33,8 +33,7 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
-              "src/styles.scss",
-              "src/boostrap-utility.scss"
+              "src/styles.scss"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
