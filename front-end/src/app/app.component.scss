@@ -255,14 +255,19 @@ body {
 }
 
 .popup-content {
-  background-color: #111; /* Couleur de fond similaire à votre thème */
+  background-color: #111;
   padding: 40px;
   border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(255, 152, 0, 0.25), 0 20px 40px rgba(255, 152, 0, 0.3);
+  box-shadow:
+    0 0 20px 6px rgba(255, 152, 0, 0.4),
+    0 0 40px 12px rgba(255, 152, 0, 0.3),
+    0 0 60px 18px rgba(255, 152, 0, 0.2);
   text-align: center;
   width: 90%;
   max-width: 400px;
+  position: relative; /* pour positionner le bouton en absolu */
 }
+
 
 .popup-content h2 {
   color: #fff;
@@ -273,6 +278,7 @@ body {
 .popup-content .form-group {
   margin-bottom: 20px;
   text-align: left;
+  width: 100%;
 }
 
 .popup-content label {
@@ -283,6 +289,7 @@ body {
 }
 
 .popup-content input {
+  width: 100%;
   color: #fff; /* Texte blanc */
   background-color: #222; /* Fond sombre */
   border: 2px solid #ff9800; /* Bordure orange */
@@ -329,17 +336,34 @@ body {
 }
 
 .close-btn {
-  margin-top: 20px;
-  background-color: #ff9800; /* Couleur orange */
-  color: #000; /* Texte noir */
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 35px;
+  height: 35px;
+  background-color: #ff9800;
+  color: #000;
   border: none;
-  padding: 10px 20px;
-  border-radius: 6px;
+  border-radius: 50%;
+  font-size: 22px;
+  font-weight: bold;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: background-color 0.3s ease;
+  box-shadow: 0 0 12px rgba(255, 152, 0, 0.6); /* glow autour */
 }
+
+.close-btn:hover {
+  background-color: #e67e22;
+}
+
 
 .close-btn:hover {
   background-color: #e67e22; /* Orange plus foncé au survol */
 }
 
+.popup {
+  z-index: 10000; /* Plus élevé que le header */
+}

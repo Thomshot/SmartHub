@@ -5,7 +5,7 @@
       <button routerLink="/" routerLinkActive="active">Accueil</button>
       <button routerLink="/demo" routerLinkActive="active">Démonstration</button>
       <button routerLinkActive="active" class="login-btn" (click)="openLoginPopup()">Connexion</button>
-      <button routerLink="/register" routerLinkActive="active" class="register-btn">Inscription</button>
+      <button (click)="navigateToRegister()" class="register-btn">Inscription</button>
     </nav>
   </div>
 </header>
@@ -44,6 +44,7 @@
 
 <div class="popup" *ngIf="isLoginPopupVisible">
   <div class="popup-content">
+    <button class="close-btn" (click)="closeLoginPopup()">×</button>
     <h2>Connexion</h2>
     <form>
       <div class="form-group">
@@ -60,7 +61,6 @@
       Vous n'avez pas de compte ?
       <a routerLink="/register">Inscrivez-vous ici</a>
     </p>
-    <button class="close-btn" (click)="closeLoginPopup()">Fermer</button>
   </div>
 </div>
 
