@@ -3,22 +3,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialDModule } from './shared/material-d.module';
-import { AccueilComponent } from './accueil/accueil.component';
-import { RegisterComponent } from './auth/register/register.component'; // Import du composant Register
-import { AppRoutingModule } from './app.routes';
-
+import { AppRoutingModule } from './app.routes'; // Import du module de routage
 
 @NgModule({
   declarations: [
-    AppComponent,
-    AccueilComponent,
-    RegisterComponent, // Ajout de RegisterComponent ici
+    AppComponent
   ],
   imports: [
     BrowserModule,
     MaterialDModule,
-    AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    AppRoutingModule // Ajout du module de routage
   ],
   providers: [],
   bootstrap: [AppComponent]
