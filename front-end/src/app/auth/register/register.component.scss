@@ -1,0 +1,151 @@
+.register-form-container {
+    background-color: #111;
+    color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(255, 152, 0, 0.3);
+    max-width: 500px;
+    margin: 150px auto;
+    text-align: center;
+    position: relative; /* Nécessaire pour positionner le bouton "Retour" */
+  }
+  
+  .register-form-container h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #ff9800;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #222;
+    border: 2px solid #ff9800;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+  }
+  
+  .form-group input:focus {
+    border-color: #e67e22;
+  }
+  
+  .gender-options {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .gender-options input[type="text"] {
+    flex: 1;
+    padding: 5px;
+    font-size: 1rem;
+    color: #fff;
+    background-color: #222;
+    border: 2px solid #ff9800;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  button[type="button"],
+  button[type="submit"] {
+    background-color: #ff9800;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button[type="button"]:hover,
+  button[type="submit"]:hover {
+    background-color: #e67e22;
+  }
+  
+  .gender-options label {
+    display: flex;
+    align-items: center;
+    font-size: 1rem; /* Taille du texte */
+    color: #fff; /* Texte blanc */
+  }
+  
+  .gender-options input[type="radio"] {
+    width: 16px; /* Taille du bouton radio */
+    height: 16px; /* Taille du bouton radio */
+    margin-right: 5px; /* Espacement entre le bouton et le texte */
+    appearance: none; /* Supprime le style natif */
+    border: 2px solid #ff9800; /* Bordure orange */
+    border-radius: 50%; /* Forme circulaire */
+    outline: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .gender-options input[type="radio"]:checked {
+    background-color: #ff9800; /* Remplissage orange lorsqu'il est coché */
+    border-color: #e67e22; /* Bordure orange plus foncée */
+  }
+  
+  .back-btn {
+    all: unset; /* ✅ Réinitialise TOUS les styles natifs et hérités */
+    color: #ff9800;
+    font-size: 2.2rem;
+    font-weight: 900;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    line-height: 1;
+    transition: color 0.3s ease;
+  }
+  
+  .back-btn:hover {
+    color: #e67e22;
+  }
+  
+  .confirmation-message {
+    text-align: center;
+    margin-top: 20px;
+    color: #fff;
+  }
+  
+  .confirmation-message p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  
+  .confirmation-message button {
+    background-color: #ff9800;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .confirmation-message button:hover {
+    background-color: #e67e22;
+  }
+  
