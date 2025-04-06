@@ -3,6 +3,8 @@ import { AccueilComponent } from './accueil/accueil.component';
 import { RouterOutlet } from '@angular/router';
 import { MaterialDModule } from './shared/material-d.module';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-root',
@@ -14,6 +16,12 @@ import { CommonModule } from '@angular/common';
 export class AppComponent {
   title = 'siteweb-maison';
   isLoginPopupVisible: boolean = false;
+  
+  constructor(private router: Router) {}
+
+  navigateToRegister(): void {
+    this.router.navigate(['/register']);
+  }
 
   openLoginPopup(): void {
     console.log('Bouton Connexion cliqué');

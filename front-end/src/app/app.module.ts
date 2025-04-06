@@ -17,6 +17,7 @@ import { AppRoutingModule } from './app.routes';
   imports: [
     BrowserModule,
     MaterialDModule,
+    AppRoutingModule,
     HttpClientModule
   ],
   providers: [],
