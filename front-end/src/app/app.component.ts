@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [RouterOutlet, MaterialDModule, CommonModule, RouterModule], // Ajouter CommonModule ici
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'] // Corrigé : styleUrls au lieu de styleUrl
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   isLoginPopupVisible = false;
