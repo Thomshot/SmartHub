@@ -19,7 +19,7 @@ export class AppComponent {
   constructor(public router: Router) {}
 
   navigateToRegister(): void {
-    this.router.navigate(['/register']);
+    this.router.navigate(['register']);
   }
 
   openLoginPopup(): void {
