@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import bcrypt from 'bcrypt'; // 🔒 Pour hacher les mots de passe
+import bcrypt from 'bcrypt';// 🔒 Pour hacher les mots de passe
 import User from '../models/user';
 
 export const registerUser = async (req: Request, res: Response) => {

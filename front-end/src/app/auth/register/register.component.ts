@@ -14,6 +14,9 @@ import { HttpClient } from '@angular/common/http';
 export class RegisterComponent implements OnInit {
   currentStep = 1;
 
+  // ✅ Pour afficher le message d’erreur sous le formulaire
+  errorMessage: string = '';
+
   user = {
     gender: '',
     otherGender: '',
@@ -30,8 +33,8 @@ export class RegisterComponent implements OnInit {
   constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
-    console.log("✅ RegisterComponent chargé !");
-    console.log("currentStep au chargement :", this.currentStep);
+    console.log('✅ RegisterComponent chargé');
+    console.log('currentStep au chargement :', this.currentStep);
   }
 
   goToNextStep(): void {
@@ -43,19 +46,21 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.errorMessage = ''; // Reset erreur avant chaque tentative
+
     if (this.user.password !== this.user.confirmPassword) {
-      alert("Les mots de passe ne correspondent pas.");
+      this.errorMessage = "Les mots de passe ne correspondent pas.";
       return;
     }
 
     this.http.post('http://localhost:3000/api/register', this.user).subscribe({
       next: (res: any) => {
-        console.log('Succès:', res);
-        this.currentStep = 3; // confirmation
+        console.log('✅ Succès:', res);
+        this.currentStep = 3;
       },
       error: (err) => {
-        console.error('Erreur:', err);
-        alert(err.error?.message || 'Erreur serveur');
+        console.error('❌ Erreur:', err);
+        this.errorMessage = err.error?.message || 'Erreur serveur.';
       }
     });
   }
