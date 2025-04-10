@@ -17,6 +17,19 @@ export class RegisterComponent implements OnInit {
   // ✅ Pour afficher le message d’erreur sous le formulaire
   errorMessage: string = '';
 
+  // Messages d'erreur pour les champs
+  lastNameError: string | null = null;
+  firstNameError: string | null = null;
+  cityError: string | null = null;
+  addressError: string | null = null;
+  birthDateError: string | null = null;
+  emailError: string | null = null;
+  passwordError: string | null = null;
+  confirmPasswordError: string | null = null;
+
+  // Date maximale pour la validation de la date de naissance
+  maxBirthDate: string = new Date().toISOString().split('T')[0];
+
   user = {
     gender: '',
     otherGender: '',
@@ -24,7 +37,7 @@ export class RegisterComponent implements OnInit {
     lastName: '',
     firstName: '',
     city: '',
-    street: '',
+    address: '', // Renommé de "street" à "address"
     email: '',
     password: '',
     confirmPassword: ''
@@ -81,5 +94,73 @@ export class RegisterComponent implements OnInit {
     if (value.length > 5) value = value.slice(0, 5) + '/' + value.slice(5);
     input.value = value;
     this.user.birthDate = value;
+  }
+
+  // Validation du champ nom
+  validateLastName(): void {
+    const namePattern = /^[a-zA-ZÀ-ÿ\s-]+$/;
+    this.lastNameError = namePattern.test(this.user.lastName)
+      ? null
+      : 'Le nom ne doit contenir que des lettres.';
+  }
+
+  // Validation du champ prénom
+  validateFirstName(): void {
+    const namePattern = /^[a-zA-ZÀ-ÿ\s-]+$/;
+    this.firstNameError = namePattern.test(this.user.firstName)
+      ? null
+      : 'Le prénom ne doit contenir que des lettres.';
+  }
+
+  // Validation du champ ville
+  validateCity(): void {
+    const cityPattern = /^[a-zA-ZÀ-ÿ\s-]+$/;
+    this.cityError = cityPattern.test(this.user.city)
+      ? null
+      : 'La ville ne doit contenir que des lettres.';
+  }
+
+  // Validation du champ adresse
+  validateAddress(): void {
+    const addressPattern = /^[a-zA-ZÀ-ÿ0-9\s-]+$/;
+    this.addressError = addressPattern.test(this.user.address)
+      ? null
+      : 'L\'adresse ne doit contenir que des lettres et des chiffres.';
+  }
+
+  // Validation du champ date de naissance
+  validateBirthDate(): void {
+    const birthDate = new Date(this.user.birthDate);
+    const minDate = new Date('1900-01-01');
+    const maxDate = new Date();
+
+    this.birthDateError =
+      birthDate >= minDate && birthDate <= maxDate
+        ? null
+        : 'La date de naissance doit être entre 1900 et aujourd\'hui.';
+  }
+
+  // Validation du champ email
+  validateEmail(): void {
+    const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+    this.emailError = emailPattern.test(this.user.email)
+      ? null
+      : 'Veuillez entrer une adresse mail valide.';
+  }
+
+  // Validation du champ mot de passe
+  validatePassword(): void {
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    this.passwordError = passwordPattern.test(this.user.password)
+      ? null
+      : 'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.';
+  }
+
+  // Validation du champ confirmation du mot de passe
+  validateConfirmPassword(): void {
+    this.confirmPasswordError =
+      this.user.password === this.user.confirmPassword
+        ? null
+        : 'Les mots de passe ne correspondent pas.';
   }
 }
