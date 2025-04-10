@@ -387,4 +387,9 @@ body {
   margin-top: 5px;
 }
 
+.logo {
+  height: clamp(60px, 10vw, 140px);
+  width: auto;
+}
+
 
