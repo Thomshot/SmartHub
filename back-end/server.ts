@@ -10,7 +10,6 @@ dotenv.config();
 const app = express();
 const port = 3000;
 
-// ✅ Middleware d'abord !
 app.use(cors({
   origin: ['http://localhost:4200', 'http://localhost:4000'],
   credentials: true,

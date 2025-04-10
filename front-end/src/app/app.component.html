@@ -58,6 +58,10 @@
       </div>
       <!-- Bouton de soumission -->
       <button type="submit" [disabled]="emailError || passwordError">Se connecter</button>
+
+      <div *ngIf="loginError" class="error-message">
+        {{ loginError }}
+      </div>
     </form>
     <p>
       Vous n'avez pas de compte ?
