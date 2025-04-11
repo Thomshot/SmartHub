@@ -4,16 +4,15 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatFormFieldModule} from '@angular/material/form-field';
-
+import {MatSidenavModule} from '@angular/material/sidenav';
 const AngularComponents=[ MatButtonModule,
                           MatToolbarModule,
                           MatIconModule,
-                          MatTabsModule,MatFormFieldModule];
+                          MatTabsModule,MatFormFieldModule,MatSidenavModule];
 
 @NgModule({
     exports:[AngularComponents],
-    imports: [AngularComponents
-    ],
+    imports: [AngularComponents],
 
   })
   export class MaterialDModule { }
