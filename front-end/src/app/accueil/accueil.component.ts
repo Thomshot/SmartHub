@@ -15,7 +15,7 @@ import { OnInit } from '@angular/core';
 })
 export class AccueilComponent implements OnInit {
   isMobileorTablet: boolean = false;
-
+  user: string="Bonnet Ostrean";
   shouldSidenavBeOpened(): boolean {
     return !this.isMobileorTablet;
   }
@@ -23,6 +23,7 @@ export class AccueilComponent implements OnInit {
   constructor(private breakpointObserver: BreakpointObserver) {}
 
   ngOnInit(): void {
+    
     this.breakpointObserver.observe(['(max-width: 960px)'])
       .subscribe(result => {
         this.isMobileorTablet = result.matches;
@@ -31,6 +32,9 @@ export class AccueilComponent implements OnInit {
   selectedIndex:number=0;
   onTabChange(index:number){
     this.selectedIndex=index;
+  }
+  closeSidenav():boolean {
+    return !this.isMobileorTablet;
   }
   }
 
