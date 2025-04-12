@@ -1,6 +1,5 @@
 <div class="register-form-container">
   <h2>Formulaire d'inscription</h2>
-
   <!-- Premier formulaire -->
   <form *ngIf="currentStep === 1">
     <div class="form-group">
@@ -43,112 +42,164 @@
       </div>
     </div>
 
+    <!-- Champ pour la date de naissance avec validation -->
     <div class="form-group">
       <label for="birthDate">Date de naissance</label>
       <input
-        type="text"
+        type="date"
         id="birthDate"
         name="birthDate"
         [(ngModel)]="user.birthDate"
-        placeholder="JJ/MM/AAAA"
-        (input)="formatDate($event)"
-        maxlength="10"
+        (ngModelChange)="validateBirthDate()"
         required
+        [min]="'1900-01-01'"
+        [max]="maxBirthDate"
       />
+      <div *ngIf="birthDateError" class="error-message">
+        {{ birthDateError }}
+      </div>
     </div>
 
+    <!-- Champ pour le nom avec validation -->
     <div class="form-group">
       <label for="lastName">Nom</label>
       <input
         type="text"
         id="lastName"
         name="lastName"
-        [(ngModel)]="user.lastName"
         placeholder="Entrez votre nom"
+        [(ngModel)]="user.lastName"
+        (ngModelChange)="validateLastName()"
         required
+        pattern="^[a-zA-ZÀ-ÿ\s-]+$"
       />
+      <div *ngIf="lastNameError" class="error-message">
+        {{ lastNameError }}
+      </div>
     </div>
 
+    <!-- Champ pour le prénom avec validation -->
     <div class="form-group">
       <label for="firstName">Prénom</label>
       <input
         type="text"
         id="firstName"
         name="firstName"
-        [(ngModel)]="user.firstName"
         placeholder="Entrez votre prénom"
+        [(ngModel)]="user.firstName"
+        (ngModelChange)="validateFirstName()"
         required
+        pattern="^[a-zA-ZÀ-ÿ\s-]+$"
       />
+      <div *ngIf="firstNameError" class="error-message">
+        {{ firstNameError }}
+      </div>
     </div>
 
+    <!-- Champ pour la ville avec validation -->
     <div class="form-group">
       <label for="city">Ville</label>
       <input
         type="text"
         id="city"
         name="city"
-        [(ngModel)]="user.city"
         placeholder="Entrez votre ville"
+        [(ngModel)]="user.city"
+        (ngModelChange)="validateCity()"
         required
+        pattern="^[a-zA-ZÀ-ÿ\s-]+$"
       />
+      <div *ngIf="cityError" class="error-message">
+        {{ cityError }}
+      </div>
     </div>
 
+    <!-- Champ pour l'adresse avec validation -->
     <div class="form-group">
-      <label for="street">Rue</label>
+      <label for="address">Adresse</label>
       <input
         type="text"
-        id="street"
-        name="street"
-        [(ngModel)]="user.street"
-        placeholder="Entrez votre rue"
+        id="address"
+        name="address"
+        placeholder="Entrez votre adresse"
+        [(ngModel)]="user.address"
+        (ngModelChange)="validateAddress()"
         required
+        pattern="^[a-zA-ZÀ-ÿ0-9\s-]+$"
       />
+      <div *ngIf="addressError" class="error-message">
+        {{ addressError }}
+      </div>
     </div>
 
     <button type="button" (click)="goToNextStep()">Suivant</button>
   </form>
 
-<!-- Deuxième formulaire -->
-<form *ngIf="currentStep === 2" (ngSubmit)="onSubmit()">
-  <button type="button" class="back-btn" (click)="goToPreviousStep()">&#8592;</button>
-  <div class="form-group">
-    <label for="email">Adresse mail</label>
-    <input
-      type="email"
-      id="email"
-      name="email"
-      [(ngModel)]="user.email"
-      placeholder="Entrez votre adresse mail"
-      required
-    />
-  </div>
-  <div class="form-group">
-    <label for="password">Mot de passe</label>
-    <input
-      type="password"
-      id="password"
-      name="password"
-      [(ngModel)]="user.password"
-      placeholder="Entrez votre mot de passe"
-      required
-    />
-  </div>
-  <div class="form-group">
-    <label for="confirmPassword">Confirmez votre mot de passe</label>
-    <input
-      type="password"
-      id="confirmPassword"
-      name="confirmPassword"
-      [(ngModel)]="user.confirmPassword"
-      placeholder="Confirmez votre mot de passe"
-      required
-    />
-  </div>
-  <button type="submit">S'inscrire</button>
-</form>
+  <!-- Deuxième formulaire -->
+  <form *ngIf="currentStep === 2" (ngSubmit)="onSubmit()">
+    <button type="button" class="back-btn" (click)="goToPreviousStep()">&#8592;</button>
 
-<div *ngIf="currentStep === 3" class="confirmation-message">
-  <p>Vous avez maintenant un compte. Connectez-vous pour accéder à votre espace personnel.</p>
-  <button type="button" (click)="navigateToLogin()">Se connecter</button>
-</div>
+    <!-- Champ pour l'adresse mail avec validation -->
+    <div class="form-group">
+      <label for="email">Adresse mail</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        [(ngModel)]="user.email"
+        (ngModelChange)="validateEmail()"
+        placeholder="Entrez votre adresse mail"
+        required
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+      />
+      <div *ngIf="emailError" class="error-message">
+        {{ emailError }}
+      </div>
+    </div>
+
+    <!-- Champ pour le mot de passe avec validation -->
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        [(ngModel)]="user.password"
+        (ngModelChange)="validatePassword()"
+        placeholder="Entrez votre mot de passe"
+        required
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+      />
+      <div *ngIf="passwordError" class="error-message">
+        {{ passwordError }}
+      </div>
+    </div>
+
+    <!-- Champ pour confirmer le mot de passe avec validation -->
+    <div class="form-group">
+      <label for="confirmPassword">Confirmez votre mot de passe</label>
+      <input
+        type="password"
+        id="confirmPassword"
+        name="confirmPassword"
+        [(ngModel)]="user.confirmPassword"
+        (ngModelChange)="validateConfirmPassword()"
+        placeholder="Confirmez votre mot de passe"
+        required
+      />
+      <div *ngIf="confirmPasswordError" class="error-message">
+        {{ confirmPasswordError }}
+      </div>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    <button type="submit" [disabled]="emailError || passwordError || confirmPasswordError">S'inscrire</button>
+  </form>
+
+  <div *ngIf="currentStep === 3" class="confirmation-message">
+    <p>Vous avez maintenant un compte. Connectez-vous pour accéder à votre espace personnel.</p>
+    <button type="button" (click)="navigateToLogin()">Se connecter</button>
+  </div>
 </div>
