@@ -7,9 +7,13 @@ import { HomeComponent } from './home/home.component';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AccueilComponent } from './accueil/accueil.component';
+import { ProfilComponent } from './profil/profil.component'; 
+
 @NgModule({
   declarations: [
     AppComponent,
+    AccueilComponent,
+    ProfilComponent,
 
   ],
   imports: [
