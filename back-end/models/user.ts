@@ -1,15 +1,21 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  gender: String,
-  otherGender: String,
-  birthDate: String,
-  lastName: String,
-  firstName: String,
-  city: String,
-  street: String,
+  gender: { type: String },
+  otherGender: { type: String },
+  birthDate: { type: String, required: true },
+  lastName: { type: String, required: true },
+  firstName: { type: String, required: true },
+  city: { type: String, required: true },
+  address: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  login: { type: String },
+  memberType: { type: String },
+  photo: { type: String, default: '' },
+  role: { type: String, default: 'débutant', enum: ['débutant', 'intermédiaire', 'avancé', 'experte', 'admin'] },
+  isVerified: { type: Boolean, default: false },
+  verificationToken: { type: String }
 }, { timestamps: true });
 
 export default mongoose.model('User', userSchema);

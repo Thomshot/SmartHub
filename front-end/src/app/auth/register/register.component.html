@@ -2,6 +2,45 @@
   <h2>Formulaire d'inscription</h2>
   <!-- Premier formulaire -->
   <form *ngIf="currentStep === 1">
+    <!-- Pseudonyme (login) -->
+    <div class="form-group">
+      <label for="login">Pseudonyme</label>
+      <input
+        type="text"
+        id="login"
+        name="login"
+        [(ngModel)]="user.login"
+        placeholder="Entrez votre pseudonyme"
+        required
+      />
+    </div>
+
+    <!-- Type de membre -->
+    <div class="form-group">
+      <label for="memberType">Type de membre</label>
+      <select id="memberType" name="memberType" [(ngModel)]="user.memberType" required>
+        <option value="" disabled selected>Choisir un type</option>
+        <option>mère</option>
+        <option>père</option>
+        <option>enfant</option>
+        <option>élève</option>
+        <option>autre</option>
+      </select>
+    </div>
+
+    <!-- Upload de photo -->
+    <div class="form-group">
+      <label for="photo">Photo de profil</label>
+      <input
+        type="file"
+        id="photo"
+        name="photo"
+        accept="image/*"
+        (change)="onPhotoSelected($event)"
+      />
+      <img *ngIf="user.photo" [src]="'http://localhost:3000/uploads/' + user.photo" alt="Photo de profil" class="photo-preview" />
+
+    </div>
     <div class="form-group">
       <label for="gender">Sexe</label>
       <div class="gender-options">
@@ -136,7 +175,7 @@
   </form>
 
   <!-- Deuxième formulaire -->
-  <form *ngIf="currentStep === 2" (ngSubmit)="onSubmit()">
+  <form *ngIf="currentStep === 2" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
     <button type="button" class="back-btn" (click)="goToPreviousStep()">&#8592;</button>
 
     <!-- Champ pour l'adresse mail avec validation -->

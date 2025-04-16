@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';// 🔒 Pour hacher les mots de passe
 import User from '../models/user';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -15,9 +17,38 @@ export const registerUser = async (req: Request, res: Response) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+
+    // Récupérer le nom du fichier uploadé
+    const photoPath = req.file ? req.file.filename : '';
+
     // 👤 Crée un nouvel utilisateur avec mot de passe hashé
-    const newUser = new User({ email, password: hashedPassword, ...rest });
+    const newUser = new User({
+      ...rest,
+      email,
+      password: hashedPassword,
+      verificationToken,
+      photo: req.file ? req.file.filename : ''
+    });
     await newUser.save();
+
+    const verificationLink = `http://localhost:3000/verify?token=${verificationToken}`;
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: '"SmartHub" <no-reply@smarthub.com>',
+      to: email,
+      subject: 'Confirmez votre inscription',
+      html: `<p>Bienvenue ! Cliquez sur le lien ci-dessous pour valider votre compte :</p>
+             <a href="${verificationLink}">${verificationLink}</a>`,
+    });
 
     // ✅ Réponse
     res.status(201).json({ message: 'Utilisateur enregistré avec succès.' });
@@ -27,7 +58,31 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 
+export const verifyEmail = async (req: Request, res: Response) => {
+  const { token } = req.query;
 
+  try {
+    if (!token) return res.status(400).json({ message: 'Token manquant.' });
+
+    const user = await User.findOne({ verificationToken: token });
+    if (!user) {
+      return res.status(400).json({ message: "Lien de vérification invalide." });
+    }
+
+    user.isVerified = true;
+    user.verificationToken = undefined;
+    await user.save();
+
+    res.status(200).json({ message: "Votre compte a été vérifié avec succès." });
+  } catch (error) {
+    console.error('Erreur vérification email :', error);
+    res.status(500).json({ message: "Erreur serveur." });
+  }
+};
+
+
+
+// 📌 Connexion d’un utilisateur
 // 📌 Connexion d’un utilisateur
 export const loginUser = async (req: Request, res: Response) => {
   try {
@@ -37,6 +92,11 @@ export const loginUser = async (req: Request, res: Response) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Email ou mot de passe incorrect.' });
+    }
+
+    // ❗ Vérifie si le compte est vérifié
+    if (!user.isVerified) {
+      return res.status(403).json({ message: 'Veuillez confirmer votre compte avant de vous connecter.' });
     }
 
     // 🔐 Compare le mot de passe hashé
@@ -52,7 +112,7 @@ export const loginUser = async (req: Request, res: Response) => {
       { expiresIn: '2h' }
     );
 
-    // ✅ Réponse unique
+    // ✅ Réponse
     res.status(200).json({
       message: 'Connexion réussie.',
       token,
