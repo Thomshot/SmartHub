@@ -14,7 +14,6 @@ import { HttpClient } from '@angular/common/http';
 export class RegisterComponent implements OnInit {
   currentStep = 1;
 
-  // ✅ Pour afficher le message d’erreur sous le formulaire
   errorMessage: string = '';
 
   // Messages d'erreur pour les champs
@@ -26,6 +25,10 @@ export class RegisterComponent implements OnInit {
   emailError: string | null = null;
   passwordError: string | null = null;
   confirmPasswordError: string | null = null;
+  loginError: string | null = null;
+  memberTypeError: string | null = null;
+  photoError: string | null = null;
+
 
   // Date maximale pour la validation de la date de naissance
   maxBirthDate: string = new Date().toISOString().split('T')[0];
@@ -37,11 +40,19 @@ export class RegisterComponent implements OnInit {
     lastName: '',
     firstName: '',
     city: '',
-    address: '', // Renommé de "street" à "address"
+    address: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    login: '',
+    age: '',
+    memberType: '',
+    photo: ''
   };
+
+  photoPreview: string | null = null;
+  selectedPhotoFile: File | null = null;
+
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -58,6 +69,19 @@ export class RegisterComponent implements OnInit {
     this.currentStep = 1;
   }
 
+  onPhotoSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.selectedPhotoFile = input.files[0];
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.photoPreview = reader.result as string;
+      };
+      reader.readAsDataURL(this.selectedPhotoFile);
+    }
+  }
+
   onSubmit(): void {
     this.errorMessage = ''; // Reset erreur avant chaque tentative
 
@@ -66,7 +90,16 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    this.http.post('http://localhost:3000/api/register', this.user).subscribe({
+    const formData = new FormData();
+    for (const key in this.user) {
+      formData.append(key, (this.user as any)[key]);
+    }
+
+    if (this.selectedPhotoFile) {
+      formData.append('photo', this.selectedPhotoFile);
+    }
+
+    this.http.post('http://localhost:3000/api/register', formData).subscribe({
       next: (res: any) => {
         console.log('✅ Succès:', res);
         this.currentStep = 3;
