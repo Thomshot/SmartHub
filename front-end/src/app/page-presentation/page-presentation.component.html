@@ -39,6 +39,7 @@
           {{ emailError }}
         </div>
       </div>
+
       <!-- Champ de saisie pour le mot de passe avec validation -->
       <div class="form-group">
         <label for="password">Mot de passe</label>
@@ -50,18 +51,14 @@
           [(ngModel)]="loginData.password"
           (ngModelChange)="validatePassword()"
           required
-          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
         />
         <div *ngIf="passwordError" class="error-message">
           {{ passwordError }}
         </div>
       </div>
-      <!-- Bouton de soumission -->
-      <button type="submit" [disabled]="emailError || passwordError">Se connecter</button>
 
-      <div *ngIf="loginError" class="error-message">
-        {{ loginError }}
-      </div>
+      <button type="submit">Se connecter</button>
     </form>
     <p>
       Vous n'avez pas de compte ?
@@ -71,6 +68,5 @@
 </div>
 
 <footer>
-  <!-- Section pied de page -->
   <p>&copy; 2025 SmartHub. Tous droits réservés.</p>
 </footer>
