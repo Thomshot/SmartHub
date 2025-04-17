@@ -32,7 +32,7 @@ export const registerUser = async (req: Request, res: Response) => {
     });
     await newUser.save();
 
-    const verificationLink = `http://localhost:3000/verify?token=${verificationToken}`;
+    const verificationLink = `http://localhost:4200/verify?token=${verificationToken}`;
 
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -81,8 +81,6 @@ export const verifyEmail = async (req: Request, res: Response) => {
 };
 
 
-
-// 📌 Connexion d’un utilisateur
 // 📌 Connexion d’un utilisateur
 export const loginUser = async (req: Request, res: Response) => {
   try {

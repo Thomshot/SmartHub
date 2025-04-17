@@ -15,4 +15,10 @@ export const routes: Routes = [
   },
   { path: 'accueil', component: AccueilComponent },
   { path: 'register', component: RegisterComponent },
+  {
+    path: 'verify',
+    loadComponent: () => import('./emailverif/email-verification.component')
+      .then(m => m.EmailVerificationComponent)
+  }
+
 ];
