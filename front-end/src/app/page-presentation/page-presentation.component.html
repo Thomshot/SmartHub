@@ -31,7 +31,6 @@
           name="email"
           placeholder="Entrez votre adresse mail"
           [(ngModel)]="loginData.email"
-          (ngModelChange)="validateEmail()"
           required
           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
         />
@@ -49,7 +48,6 @@
           name="password"
           placeholder="Entrez votre mot de passe"
           [(ngModel)]="loginData.password"
-          (ngModelChange)="validatePassword()"
           required
           pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
         />
