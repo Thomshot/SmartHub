@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { MaterialDModule } from '../shared/material-d.module';
 import { MatSelectModule } from '@angular/material/select';
-import { MatOptionModule } from '@angular/material/core';
+import { MatOptionModule, MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-profil',
@@ -13,7 +14,9 @@ import { MatOptionModule } from '@angular/material/core';
     ReactiveFormsModule,
     MaterialDModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   templateUrl: './profil.component.html',
   styleUrls: ['./profil.component.scss']
@@ -21,19 +24,25 @@ import { MatOptionModule } from '@angular/material/core';
 export class ProfilComponent implements OnInit {
   profilForm!: FormGroup;
   avatarUrl: string = 'https://i.pravatar.cc/150?img=3';
-  roles: string[] = ['Utilisateur', 'Administrateur', 'Modérateur'];
-  userRole: string = 'Utilisateur'; // rôle fixe
+
+  // valeurs fixes non modifiables
+  memberType: string = 'père';
+  userRole: string = 'débutant';
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.profilForm = this.fb.group({
-      nom: ['Dupont', Validators.required],
-      prenom: ['Jean', Validators.required],
-      email: ['jean.dupont@example.com', [Validators.required, Validators.email]],
-      telephone: ['+33612345678', Validators.pattern('^\\+?[0-9]{7,15}$')],
+      gender: ['Femme', Validators.required],
+      birthDate: ['2025-04-03', Validators.required],
+      nom: ['Doué', Validators.required],
+      prenom: ['Matthieu', Validators.required],
+      city: ['qwerwqer', Validators.required],
+      address: ['wqerwqerwqer', Validators.required],
+      email: ['matthieu.doué@example.com', [Validators.required, Validators.email]],
+      login: ['fasdf', Validators.required],
       motDePasse: ['motdepasse', [Validators.required, Validators.minLength(6)]],
-      confirmation: ['motdepasse'],
+      confirmation: ['motdepasse']
     });
   }
 
@@ -61,7 +70,8 @@ export class ProfilComponent implements OnInit {
       }
       const profilData = {
         ...this.profilForm.value,
-        role: this.userRole
+        role: this.userRole,
+        memberType: this.memberType
       };
       console.log('Profil enregistré:', profilData);
     } else {
@@ -71,10 +81,14 @@ export class ProfilComponent implements OnInit {
 
   reinitialiser(): void {
     this.profilForm.reset({
+      gender: 'Femme',
+      birthDate: '2025-04-03',
       nom: 'Dimaria',
       prenom: 'CookieLover',
+      city: 'Paris',
+      address: '31 Rue de la Glace',
       email: 'matthieu.uranium@email.com',
-      telephone: '+33612345678',
+      login: 'dimcookie',
       motDePasse: 'password',
       confirmation: 'password'
     });

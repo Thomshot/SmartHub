@@ -7,6 +7,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card'; // ✅ Manquait pour <mat-card> et <mat-card-actions>
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatListModule } from '@angular/material/list';
 
 const AngularComponents = [
   MatButtonModule,
@@ -16,7 +18,9 @@ const AngularComponents = [
   MatFormFieldModule,
   MatSidenavModule,
   MatInputModule,     // ✅ pour les champs <input matInput>
-  MatCardModule       // ✅ pour les composants <mat-card>
+  MatCardModule,       // ✅ pour les composants <mat-card>
+  MatProgressBarModule,
+  MatListModule
 ];
 
 @NgModule({

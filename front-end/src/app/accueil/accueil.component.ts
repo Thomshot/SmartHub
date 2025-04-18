@@ -8,6 +8,7 @@ import { map, startWith } from 'rxjs/operators';
 import { OnInit } from '@angular/core';
 import { ProfilComponent } from '../profil/profil.component'; // ✅ Import du composant profil
 
+
 @Component({
   selector: 'app-accueil',
   standalone: true,
@@ -17,22 +18,25 @@ import { ProfilComponent } from '../profil/profil.component'; // ✅ Import du c
 })
 export class AccueilComponent implements OnInit {
   isMobileorTablet: boolean = false;
-  selectedIndex: number = 0;
-
+  user: string="Bonnet Ostrean";
+  shouldSidenavBeOpened(): boolean {
+    return !this.isMobileorTablet;
+  }
+ 
   constructor(private breakpointObserver: BreakpointObserver) {}
-
+ 
   ngOnInit(): void {
+   
     this.breakpointObserver.observe(['(max-width: 960px)'])
       .subscribe(result => {
         this.isMobileorTablet = result.matches;
       });
   }
-
-  shouldSidenavBeOpened(): boolean {
+  selectedIndex:number=0;
+  onTabChange(index:number){
+    this.selectedIndex=index;
+  }
+  closeSidenav():boolean {
     return !this.isMobileorTablet;
   }
-
-  onTabChange(index: number): void {
-    this.selectedIndex = index;
   }
-}

@@ -1,9 +1,6 @@
 <div class="profil-container">
     <mat-card class="profil-card">
       <mat-card-header>
-        <div mat-card-avatar class="avatar">
-          <img [src]="avatarUrl" alt="Avatar utilisateur" />
-        </div>
         <mat-card-title>Mon Profil</mat-card-title>
         <mat-card-subtitle>Gestion de mes informations personnelles</mat-card-subtitle>
       </mat-card-header>
@@ -17,6 +14,24 @@
             <button mat-button color="primary" (click)="triggerFileInput()">Changer la photo</button>
           </div>
   
+          <!-- Genre -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Genre</mat-label>
+            <mat-select formControlName="genre">
+              <mat-option value="Femme">Femme</mat-option>
+              <mat-option value="Homme">Homme</mat-option>
+              <mat-option value="Autre">Autre</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <!-- Date de naissance -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Date de naissance</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="birthDate" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+  
           <!-- Nom -->
           <mat-form-field appearance="outline" class="form-field full-width">
             <mat-label>Nom</mat-label>
@@ -27,6 +42,18 @@
           <mat-form-field appearance="outline" class="form-field full-width">
             <mat-label>Prénom</mat-label>
             <input matInput formControlName="prenom" />
+          </mat-form-field>
+  
+          <!-- Ville -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Ville</mat-label>
+            <input matInput formControlName="ville" />
+          </mat-form-field>
+  
+          <!-- Adresse -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Adresse</mat-label>
+            <input matInput formControlName="adresse" />
           </mat-form-field>
   
           <!-- Email -->
@@ -51,6 +78,18 @@
           <mat-form-field appearance="outline" class="form-field full-width">
             <mat-label>Confirmation du mot de passe</mat-label>
             <input matInput type="password" formControlName="confirmation" />
+          </mat-form-field>
+  
+          <!-- Login -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Login</mat-label>
+            <input matInput formControlName="login" />
+          </mat-form-field>
+  
+          <!-- MemberType (lecture seule) -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Type de membre</mat-label>
+            <input matInput [value]="memberType" disabled />
           </mat-form-field>
   
           <!-- Rôle (lecture seule) -->

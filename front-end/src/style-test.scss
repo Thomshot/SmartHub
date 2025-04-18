@@ -1,5 +1,35 @@
 .smarthub-accueil {
     background-color: white;
+    .header {
+        .mat-icon.material-icons{
+            color: white;
+        }
+        background-color:#111;
+        .mat-mdc-form-field {
+            border-radius: 10px;
+            max-height: 60px;
+            .mat-mdc-text-field-wrapper{
+                
+                border: 2px solid#ff9800;
+                background-color: #222;
+                mat-icon{
+                    position: absolute;
+                    right: -8px;
+                }
+            }
+            .mat-mdc-form-field-subscript-wrapper {
+                display: none;
+            }
+            .mdc-line-ripple {
+                display: none;
+            }
+            .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input {
+                caret-color: #ff9800;
+                color: white;
+            }
+        }
+       
+    }
 }
 .mat-drawer-container {
     width: 100%;
@@ -12,10 +42,11 @@
   .mat-sidenav {
     visibility: visible !important;
     display: block !important;
-    width: 25%;
+    width: 15% !important;
     height: 100vh;
-    background-color: black !important;
+    background-color: #111 !important;
     border-right: 4px solid #ff9800!important;
+    border-radius: 0 !important ;
     .mat-mdc-tab-group{
         .mat-ripple{
             display: none;
@@ -27,19 +58,226 @@
         padding: 1rem;
         .mat-mdc-tab{
             height: 48px;
+            &:hover{
+                .mdc-tab__text-label {
+                    color: white;
+                }
+            }
+            .mdc-tab__text-label {
+                color: white;
+            }
+            
             &.mdc-tab--active{
             background-color: #ff9800;
-            color: black;
+       
             font-size: 1rem;
             border-radius:6px;
             cursor: pointer;
             transition:background-color 0.3s ease;
+            .mdc-tab__text-label {
+                color: black;
+                font-weight: 600;
+            }
         }
     }
 }
 .mat-mdc-tab-label-container{
     border-bottom: none;
 }
+.mdc-tab-indicator {
+    display: none;
+}
     }
 }
 
+.mat-drawer-content {
+    background-color: #111;
+    color: white;
+    h1 {
+        span{
+            color: #ff9800;
+        }
+    }
+}
+
+.mat-mdc-card {
+    &:hover{
+        border-color: #ffc166 !important;
+    }
+    background-color: #222 !important;
+    border: 2px solid #ff9800 !important;
+    .mat-mdc-card-title{
+        color: #ff9800;
+    }
+    .mdc-button{
+        padding:15px 30px;
+        width: 100%;
+        background-color: #ff9800;
+        border-radius:10px;
+        &:hover{
+            background-color:#ffc166 ;
+        }
+        .mdc-button__label{
+            color: black;
+            font-weight: 600;
+        }
+    }
+    .mat-mdc-progress-bar{
+        height: 30px;
+        border-radius: 15px;
+        .mdc-linear-progress__buffer {
+            height: 30px;
+        }
+        .mdc-linear-progress__bar {
+            height: 30px;
+        }
+        .mdc-linear-progress__bar-inner {
+            border-width:30px;
+            border-color: #ff9800;
+        }
+        .mdc-linear-progress__buffer-bar {
+            background-color: black;
+        }
+    }
+}
+
+
+        .profil-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem;
+            background-color: #000000;
+            min-height: 100vh;
+          
+          
+          .profil-card {
+            background-color: #141414;
+            color: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+            border: 2px solid #ffa500;
+          }
+          
+          mat-card-header {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 0;
+          }
+          
+          mat-card-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ffa500;
+          }
+          
+          mat-card-subtitle {
+            font-size: 14px;
+            color: #ccc;
+          }
+          
+          .avatar-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1rem 0;
+          }
+          
+          .avatar-large {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid #ffa500;
+            object-fit: cover;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+          }
+          
+          button[mat-button] {
+            background-color: #ffa500;
+            color: black;
+            font-weight: bold;
+            margin-top: 0.5rem;
+            border-radius: 10px;
+          }
+          
+          mat-card-content {
+            padding: 1rem 2rem;
+          }
+          
+          .form-field {
+            width: 100%;
+            margin-bottom: 1.5rem;
+          }
+          
+          mat-form-field {
+            width: 100%;
+          }
+          
+          mat-card-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding: 1rem 2rem;
+          }
+          
+          button[mat-stroked-button] {
+            border-color: #ffa500;
+            color: #ffa500;
+          }
+          
+          button[mat-raised-button] {
+            background-color: #ffa500;
+            color: #000;
+            font-weight: bold;
+          }
+
+          
+
+          .mat-mdc-form-field {
+            .mat-mdc-text-field-wrapper {
+              background-color: transparent;
+              border-radius: 4px;
+            }
+          
+            .mat-mdc-input-element,
+            .mat-mdc-floating-label {
+              color: white !important;
+              caret-color: white;
+            }
+          
+            .mat-mdc-form-field-outline,
+            .mat-mdc-form-field-outline-thick,
+            .mat-mdc-form-field-outline-start,
+            .mat-mdc-form-field-outline-end {
+              border-color: white !important;
+            }
+          
+            input::placeholder {
+              color: rgba(255, 255, 255, 0.6);
+            }
+          
+            // ✅ Pour mat-select
+            .mat-mdc-select-value-text {
+              color: white !important;
+            }
+          
+            // ✅ Pour le placeholder (avant qu’une valeur soit sélectionnée)
+            .mat-mdc-select-placeholder {
+              color: rgba(255, 255, 255, 0.6) !important;
+            }
+          }
+          
+          // ✅ Pour les options dans la dropdown
+          .mat-mdc-select-panel {
+            .mdc-list-item__primary-text {
+              color: white !important;
+            }
+          }
+          
+        
+          
+        }
