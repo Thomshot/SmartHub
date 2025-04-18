@@ -6,10 +6,13 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { OnInit } from '@angular/core';
+import { ProfilComponent } from '../profil/profil.component'; // ✅ Import du composant profil
+
+
 @Component({
   selector: 'app-accueil',
   standalone: true,
-  imports: [MaterialDModule, CommonModule],
+  imports: [MaterialDModule, CommonModule, ProfilComponent], // ✅ Ajout ici
   templateUrl: './accueil.component.html',
   styleUrls: ['./accueil.component.scss']
 })
@@ -19,11 +22,11 @@ export class AccueilComponent implements OnInit {
   shouldSidenavBeOpened(): boolean {
     return !this.isMobileorTablet;
   }
-
+ 
   constructor(private breakpointObserver: BreakpointObserver) {}
-
+ 
   ngOnInit(): void {
-    
+   
     this.breakpointObserver.observe(['(max-width: 960px)'])
       .subscribe(result => {
         this.isMobileorTablet = result.matches;
@@ -37,4 +40,3 @@ export class AccueilComponent implements OnInit {
     return !this.isMobileorTablet;
   }
   }
-

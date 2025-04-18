@@ -1,0 +1,109 @@
+<div class="profil-container">
+    <mat-card class="profil-card">
+      <mat-card-header>
+        <mat-card-title>Mon Profil</mat-card-title>
+        <mat-card-subtitle>Gestion de mes informations personnelles</mat-card-subtitle>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <form [formGroup]="profilForm">
+          <!-- Avatar -->
+          <div class="avatar-section">
+            <img [src]="avatarUrl" class="avatar-large" alt="Avatar" />
+            <input type="file" id="fileUpload" (change)="onFileSelected($event)" hidden />
+            <button mat-button color="primary" (click)="triggerFileInput()">Changer la photo</button>
+          </div>
+  
+          <!-- Genre -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Genre</mat-label>
+            <mat-select formControlName="genre">
+              <mat-option value="Femme">Femme</mat-option>
+              <mat-option value="Homme">Homme</mat-option>
+              <mat-option value="Autre">Autre</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <!-- Date de naissance -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Date de naissance</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="birthDate" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+  
+          <!-- Nom -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Nom</mat-label>
+            <input matInput formControlName="nom" />
+          </mat-form-field>
+  
+          <!-- Prénom -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Prénom</mat-label>
+            <input matInput formControlName="prenom" />
+          </mat-form-field>
+  
+          <!-- Ville -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Ville</mat-label>
+            <input matInput formControlName="ville" />
+          </mat-form-field>
+  
+          <!-- Adresse -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Adresse</mat-label>
+            <input matInput formControlName="adresse" />
+          </mat-form-field>
+  
+          <!-- Email -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+          </mat-form-field>
+  
+          <!-- Téléphone -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Téléphone</mat-label>
+            <input matInput formControlName="telephone" />
+          </mat-form-field>
+  
+          <!-- Mot de passe -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Mot de passe</mat-label>
+            <input matInput type="password" formControlName="motDePasse" />
+          </mat-form-field>
+  
+          <!-- Confirmation mot de passe -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Confirmation du mot de passe</mat-label>
+            <input matInput type="password" formControlName="confirmation" />
+          </mat-form-field>
+  
+          <!-- Login -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Login</mat-label>
+            <input matInput formControlName="login" />
+          </mat-form-field>
+  
+          <!-- MemberType (lecture seule) -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Type de membre</mat-label>
+            <input matInput [value]="memberType" disabled />
+          </mat-form-field>
+  
+          <!-- Rôle (lecture seule) -->
+          <mat-form-field appearance="outline" class="form-field full-width">
+            <mat-label>Rôle</mat-label>
+            <input matInput [value]="userRole" disabled />
+          </mat-form-field>
+        </form>
+      </mat-card-content>
+  
+      <mat-card-actions align="end">
+        <button mat-stroked-button color="warn" (click)="reinitialiser()">Réinitialiser</button>
+        <button mat-raised-button color="primary" (click)="enregistrer()">Enregistrer</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+  
