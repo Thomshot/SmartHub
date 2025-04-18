@@ -13,9 +13,10 @@ const userSchema = new mongoose.Schema({
   login: { type: String },
   memberType: { type: String },
   photo: { type: String, default: '' },
-  role: { type: String, default: 'débutant', enum: ['débutant', 'intermédiaire', 'avancé', 'experte', 'admin'] },
+  role: { type: String, default: 'débutant', enum: ['débutant', 'intermédiaire', 'avancé', 'expert'] },
   isVerified: { type: Boolean, default: false },
-  verificationToken: { type: String }
+  verificationToken: { type: String },
+  userType: { type: String, default: 'simple', enum: ['simple', 'complexe', 'administrateur'] }
 }, { timestamps: true });
 
 export default mongoose.model('User', userSchema);

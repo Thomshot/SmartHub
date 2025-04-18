@@ -7,7 +7,7 @@ import nodemailer from 'nodemailer';
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
-    const { email, password, ...rest } = req.body;
+    const { email, password, userType = 'simple', ...rest } = req.body; // Default to "simple"
 
     // 🔍 Vérifie si l'utilisateur existe déjà
     const existing = await User.findOne({ email });
@@ -27,6 +27,7 @@ export const registerUser = async (req: Request, res: Response) => {
       ...rest,
       email,
       password: hashedPassword,
+      userType, // Assign userType
       verificationToken,
       photo: req.file ? req.file.filename : ''
     });

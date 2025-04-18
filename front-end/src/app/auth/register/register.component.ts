@@ -48,7 +48,8 @@ export class RegisterComponent implements OnInit {
     login: '',
     age: '',
     memberType: '',
-    photo: ''
+    photo: '',
+    userType: 'simple', // Forcé à "simple"
   };
 
   photoPreview: string | null = null;
@@ -73,7 +74,7 @@ export class RegisterComponent implements OnInit {
     this.loginError = this.user.login ? null : 'Le champ "Pseudonyme" est obligatoire.';
     this.birthDateError = this.user.birthDate ? null : 'Le champ "Date de naissance" est obligatoire.';
     this.validateGender(); // Valide le champ "Sexe"
-  
+
     // Vérifie si tous les champs sont valides
     if (
       !this.user.lastName ||
@@ -88,7 +89,7 @@ export class RegisterComponent implements OnInit {
       this.errorMessage = 'Veuillez remplir tous les champs obligatoires.';
       return; // Empêche le passage à l'étape suivante
     }
-  
+
     // Passe à l'étape suivante si tout est valide
     this.currentStep = 2;
   }
@@ -122,7 +123,7 @@ export class RegisterComponent implements OnInit {
   removePhoto(): void {
     this.photoPreview = null;
     this.selectedPhotoFile = null;
-  
+
     // Réinitialise l'input file
     const fileInput = document.getElementById('photo') as HTMLInputElement;
     if (fileInput) {
@@ -146,6 +147,8 @@ export class RegisterComponent implements OnInit {
     if (this.selectedPhotoFile) {
       formData.append('photo', this.selectedPhotoFile);
     }
+
+    formData.append('userType', this.user.userType); // Inclure userType (toujours "simple")
 
     this.http.post('http://localhost:3000/api/register', formData).subscribe({
       next: (res: any) => {
