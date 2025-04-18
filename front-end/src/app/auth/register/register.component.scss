@@ -106,20 +106,22 @@
   }
 
   .back-btn {
-    all: unset; /* ✅ Réinitialise TOUS les styles natifs et hérités */
-    color: #ff9800;
-    font-size: 2.2rem;
-    font-weight: 900;
-    cursor: pointer;
     position: absolute;
-    top: 20px;
-    left: 20px;
-    line-height: 1;
-    transition: color 0.3s ease;
+    top: 10px;
+    left: 10px;
+    background-color: #ff9800; /* Couleur orange */
+    color: #fff; /* Texte blanc */
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
   }
-
+  
   .back-btn:hover {
-    color: #e67e22;
+    background-color: #e67e22; /* Couleur orange plus foncée au survol */
   }
 
   .confirmation-message {
@@ -154,3 +156,81 @@
     margin-top: 10px;
     font-weight: bold;
   }
+
+/* Style spécifique pour le champ "Type de membre" */
+.form-group select#memberType {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  color: #fff; /* Texte blanc */
+  background-color: #222; /* Fond sombre */
+  border: 2px solid #ff9800; /* Bordure orange */
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-group select#memberType:focus {
+  border-color: #e67e22; /* Bordure orange plus foncée au focus */
+}
+
+/* Style spécifique pour le champ "Photo de profil" */
+.form-group input[type="file"] {
+  display: none; /* Cache l'input natif */
+}
+
+.form-group .custom-file-button {
+  background-color: #ff9800; /* Couleur orange */
+  color: #fff; /* Texte blanc */
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-group .custom-file-button:hover {
+  background-color: #e67e22; /* Couleur orange plus foncée au survol */
+}
+
+/* Conteneur pour l'aperçu de la photo */
+.photo-preview-container {
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+/* Aperçu de la photo */
+.photo-preview {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Bouton pour supprimer la photo */
+.delete-photo-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #ff9800; /* Couleur orange du site */
+  color: #fff; /* Texte blanc */
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+}
+
+.delete-photo-button:hover {
+  background-color: #e67e22; /* Couleur orange plus foncée au survol */
+}

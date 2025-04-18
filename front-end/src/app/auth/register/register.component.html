@@ -1,4 +1,7 @@
 <div class="register-form-container">
+
+  <button type="button" class="back-btn" (click)="goBack()">&#8592; Retour</button>
+
   <h2>Formulaire d'inscription</h2>
   <!-- Premier formulaire -->
   <form *ngIf="currentStep === 1">
@@ -13,6 +16,10 @@
         placeholder="Entrez votre pseudonyme"
         required
       />
+      <div *ngIf="loginError" class="error-message">
+        {{ loginError }}
+      </div>
+
     </div>
 
     <!-- Type de membre -->
@@ -20,27 +27,30 @@
       <label for="memberType">Type de membre</label>
       <select id="memberType" name="memberType" [(ngModel)]="user.memberType" required>
         <option value="" disabled selected>Choisir un type</option>
-        <option>mère</option>
-        <option>père</option>
-        <option>enfant</option>
-        <option>élève</option>
-        <option>autre</option>
+        <option>Mère</option>
+        <option>Père</option>
+        <option>Enfant</option>
+        <option>Élève</option>
+        <option>Autre</option>
       </select>
+      <div *ngIf="memberTypeError" class="error-message">
+        {{ memberTypeError }}
+      </div>
     </div>
 
-    <!-- Upload de photo -->
+    <!-- Photo de profil -->
     <div class="form-group">
       <label for="photo">Photo de profil</label>
-      <input
-        type="file"
-        id="photo"
-        name="photo"
-        accept="image/*"
-        (change)="onPhotoSelected($event)"
-      />
-      <img *ngIf="user.photo" [src]="'http://localhost:3000/uploads/' + user.photo" alt="Photo de profil" class="photo-preview" />
-
+      <input type="file" id="photo" name="photo" accept="image/*" (change)="onPhotoSelected($event)" />
+      <button type="button" class="custom-file-button" (click)="triggerFileInput()">
+        Choisir un fichier
+      </button>
+      <div class="photo-preview-container" *ngIf="photoPreview">
+        <img [src]="photoPreview" alt="Aperçu de la photo" class="photo-preview" />
+        <button type="button" class="delete-photo-button" (click)="removePhoto()">×</button>
+      </div>
     </div>
+
     <div class="form-group">
       <label for="gender">Sexe</label>
       <div class="gender-options">
@@ -78,6 +88,9 @@
           [(ngModel)]="user.otherGender"
           placeholder="Précisez"
         />
+      </div>
+      <div *ngIf="genderError" class="error-message">
+        {{ genderError }}
       </div>
     </div>
 
@@ -176,7 +189,7 @@
 
   <!-- Deuxième formulaire -->
   <form *ngIf="currentStep === 2" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
-    <button type="button" class="back-btn" (click)="goToPreviousStep()">&#8592;</button>
+    <button type="button" class="back-btn" (click)="goToPreviousStep()">&#8592; Retour</button>
 
     <!-- Champ pour l'adresse mail avec validation -->
     <div class="form-group">

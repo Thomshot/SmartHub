@@ -28,6 +28,7 @@ export class RegisterComponent implements OnInit {
   loginError: string | null = null;
   memberTypeError: string | null = null;
   photoError: string | null = null;
+  genderError: string | null = null;
 
 
   // Date maximale pour la validation de la date de naissance
@@ -62,6 +63,33 @@ export class RegisterComponent implements OnInit {
   }
 
   goToNextStep(): void {
+    // Réinitialise les messages d'erreur
+    this.errorMessage = '';
+    this.lastNameError = this.user.lastName ? null : 'Le champ "Nom" est obligatoire.';
+    this.firstNameError = this.user.firstName ? null : 'Le champ "Prénom" est obligatoire.';
+    this.cityError = this.user.city ? null : 'Le champ "Ville" est obligatoire.';
+    this.addressError = this.user.address ? null : 'Le champ "Adresse" est obligatoire.';
+    this.memberTypeError = this.user.memberType ? null : 'Le champ "Type de membre" est obligatoire.';
+    this.loginError = this.user.login ? null : 'Le champ "Pseudonyme" est obligatoire.';
+    this.birthDateError = this.user.birthDate ? null : 'Le champ "Date de naissance" est obligatoire.';
+    this.validateGender(); // Valide le champ "Sexe"
+  
+    // Vérifie si tous les champs sont valides
+    if (
+      !this.user.lastName ||
+      !this.user.firstName ||
+      !this.user.city ||
+      !this.user.address ||
+      !this.user.memberType ||
+      !this.user.login ||
+      !this.user.birthDate ||
+      !this.user.gender
+    ) {
+      this.errorMessage = 'Veuillez remplir tous les champs obligatoires.';
+      return; // Empêche le passage à l'étape suivante
+    }
+  
+    // Passe à l'étape suivante si tout est valide
     this.currentStep = 2;
   }
 
@@ -69,16 +97,36 @@ export class RegisterComponent implements OnInit {
     this.currentStep = 1;
   }
 
+  goBack(): void {
+    this.router.navigate(['/']); // Redirige vers la page d'accueil ou une autre page
+  }
+
+  triggerFileInput(): void {
+    const fileInput = document.getElementById('photo') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+
   onPhotoSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
-      this.selectedPhotoFile = input.files[0];
-
       const reader = new FileReader();
-      reader.onload = () => {
-        this.photoPreview = reader.result as string;
+      reader.onload = (e: any) => {
+        this.photoPreview = e.target.result;
       };
-      reader.readAsDataURL(this.selectedPhotoFile);
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  removePhoto(): void {
+    this.photoPreview = null;
+    this.selectedPhotoFile = null;
+  
+    // Réinitialise l'input file
+    const fileInput = document.getElementById('photo') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
     }
   }
 
@@ -127,6 +175,12 @@ export class RegisterComponent implements OnInit {
     if (value.length > 5) value = value.slice(0, 5) + '/' + value.slice(5);
     input.value = value;
     this.user.birthDate = value;
+  }
+
+  validateGender(): void {
+    this.genderError = this.user.gender
+      ? null
+      : 'Le champ "Sexe" est obligatoire.';
   }
 
   // Validation du champ nom

@@ -129,24 +129,27 @@ header {
 
 .discover-smarthub .description-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column; /* Place les éléments en colonne */
   justify-content: center;
-  align-items: center;
-  gap: 20px;
+  align-items: center; /* Centre les éléments horizontalement */
+  gap: 20px; /* Espace entre l'image et le texte */
+  text-align: center; /* Centre le texte */
 }
 
 .discover-smarthub .text-content {
-  max-width: 500px;
+  max-width: 500px; /* Limite la largeur du texte */
   font-size: 1.1rem;
   line-height: 1.6;
   color: #ccc;
 }
 
 .discover-smarthub .image-content img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3);
+  max-width: 30%; /* Ajuste la taille de l'image */
+  height: auto; /* Maintient les proportions */
+  border-radius: 10px; /* Coins arrondis */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre subtile */
+  margin: 0 auto; /* Centre l'image horizontalement */
+  display: block; /* S'assure que l'image est un bloc */
 }
 
 .description {
