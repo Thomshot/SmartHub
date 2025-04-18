@@ -16,7 +16,8 @@ const userSchema = new mongoose.Schema({
   role: { type: String, default: 'débutant', enum: ['débutant', 'intermédiaire', 'avancé', 'expert'] },
   isVerified: { type: Boolean, default: false },
   verificationToken: { type: String },
-  userType: { type: String, default: 'simple', enum: ['simple', 'complexe', 'administrateur'] }
+  userType: { type: String, default: 'simple', enum: ['simple', 'complexe', 'administrateur'] },
+  points: { type: Number, default: 0 }, // Points cumulés par l'utilisateur
 }, { timestamps: true });
 
 export default mongoose.model('User', userSchema);

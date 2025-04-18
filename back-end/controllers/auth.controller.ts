@@ -104,6 +104,22 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Email ou mot de passe incorrect.' });
     }
 
+    // Mise à jour des points pour la connexion
+    user.points += 0.25;
+
+    // Vérification du rôle en fonction des points
+    if (user.points >= 7) {
+      user.role = 'expert';
+    } else if (user.points >= 5) {
+      user.role = 'avancé';
+    } else if (user.points >= 3) {
+      user.role = 'intermédiaire';
+    } else {
+      user.role = 'débutant';
+    }
+
+    await user.save();
+
     // 🔑 Crée un token JWT
     const token = jwt.sign(
       { id: user._id, email: user.email },
