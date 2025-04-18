@@ -143,3 +143,42 @@ export const loginUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Erreur serveur.' });
   }
 };
+
+export const updatePoints = async (req: Request, res: Response) => {
+  try {
+    const { adminId, userId, points } = req.body;
+
+    // Vérifier si l'utilisateur est un administrateur
+    const admin = await User.findById(adminId);
+    if (!admin || admin.userType !== 'administrateur') {
+      return res.status(403).json({ message: 'Accès refusé. Seuls les administrateurs peuvent modifier les points.' });
+    }
+
+    // Trouver l'utilisateur cible
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+    }
+
+    // Mettre à jour les points
+    user.points += points;
+
+    // Vérification du rôle en fonction des points
+    if (user.points >= 7) {
+      user.role = 'expert';
+    } else if (user.points >= 5) {
+      user.role = 'avancé';
+    } else if (user.points >= 3) {
+      user.role = 'intermédiaire';
+    } else {
+      user.role = 'débutant';
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: 'Points mis à jour avec succès.', user });
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour des points :', error);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+};
