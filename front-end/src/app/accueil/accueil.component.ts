@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialDModule } from '../shared/material-d.module';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule } from '@angular/forms'; // ✅ Import FormsModule
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { OnInit } from '@angular/core';
@@ -12,14 +12,17 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-accueil',
   standalone: true,
-  imports: [MaterialDModule, CommonModule, ProfilComponent], // ✅ Ajout ici
-  templateUrl: './accueil.component.html',
-  styleUrls: ['./accueil.component.scss']
+  imports: [MaterialDModule, CommonModule, ProfilComponent, FormsModule], // ✅ Add FormsModule here
+  templateUrl: './accueil.component.html', // Ensure this path is correct
+  styleUrls: ['./accueil.component.scss'] // Ensure this path is correct
 })
 export class AccueilComponent implements OnInit {
   isMobileorTablet: boolean = false;
   user: string="Bonnet Ostrean";
   selectedIndex:number=0;
+  searchQuery: string = '';
+  searchResults: any[] = [];
+  selectedDevice: any = null; // Pour afficher les détails d'un objet
 
   constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient) {}
 
@@ -53,5 +56,21 @@ export class AccueilComponent implements OnInit {
 
   onConsultation(): void {
     this.recordAction(1); // 1 action = 0.5 points
+  }
+
+  searchDevice(): void {
+    if (!this.searchQuery.trim()) {
+      this.searchResults = [];
+      return;
+    }
+
+    this.http.get<any[]>(`http://localhost:3000/api/devices/search?query=${this.searchQuery}`)
+      .subscribe({
+        next: (results) => {
+          console.log('Résultats de la recherche :', results); // ✅ Inspectez les données ici
+          this.searchResults = results;
+        },
+        error: (err) => console.error('Erreur recherche :', err)
+      });
   }
 }

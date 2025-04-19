@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import authRoutes from './routes/auth.routes';;
+import authRoutes from './routes/auth.routes';
+import deviceRoutes from './routes/device.routes';
 import path from 'path';
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ✅ Routes principales
 app.use('/api', authRoutes);
+app.use('/api/devices', deviceRoutes); // Attach the routes to the application
 
 // ✅ Connexion MongoDB
 mongoose.connect(process.env.MONGO_URI!)

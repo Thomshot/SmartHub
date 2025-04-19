@@ -1,64 +1,97 @@
-  <div class="smarthub-accueil">
-      <mat-sidenav-container class="example-container">
-          <mat-sidenav #sidenav [mode]="isMobileorTablet ? 'over' : 'side'" [opened]="shouldSidenavBeOpened()">
-            <mat-icon class="icon-logo"></mat-icon>
-            <mat-tab-group (selectedIndexChange)="onTabChange($event)">
-              <mat-tab><ng-template mat-tab-label><span>Accueil</span></ng-template></mat-tab>
-              <mat-tab><ng-template mat-tab-label><span>Creation objet</span></ng-template></mat-tab>
-              <mat-tab><ng-template mat-tab-label><span>Gestion objet</span></ng-template></mat-tab>
-              <mat-tab><ng-template mat-tab-label><span>Gestion profil</span></ng-template></mat-tab>
-            </mat-tab-group>
-          </mat-sidenav>
-          <mat-sidenav-content>
-              <div class="header d-flex justify-content-between align-items-center p-3">
-                <div class="d-flex gap-1 align-items-center">
-                  <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
-                    <mat-form-field class="example-full-width">
-                      <input matInput>
-                      <mat-icon class="icon-loupe"></mat-icon>
-                    </mat-form-field>
-                </div>
-                <div>
-                  <mat-icon class="icon-profil">profil</mat-icon>
-                </div>
+<div class="smarthub-accueil">
+  <mat-sidenav-container class="example-container">
+    <mat-sidenav #sidenav [mode]="isMobileorTablet ? 'over' : 'side'" [opened]="shouldSidenavBeOpened()">
+      <mat-icon class="icon-logo"></mat-icon>
+      <mat-tab-group (selectedIndexChange)="onTabChange($event)">
+        <mat-tab><ng-template mat-tab-label><span>Accueil</span></ng-template></mat-tab>
+        <mat-tab><ng-template mat-tab-label><span>Creation objet</span></ng-template></mat-tab>
+        <mat-tab><ng-template mat-tab-label><span>Gestion objet</span></ng-template></mat-tab>
+        <mat-tab><ng-template mat-tab-label><span>Gestion profil</span></ng-template></mat-tab>
+      </mat-tab-group>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="header d-flex justify-content-between align-items-center p-3">
+        <div class="d-flex gap-1 align-items-center">
+          <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+          <mat-form-field class="example-full-width">
+            <input matInput [(ngModel)]="searchQuery" (input)="searchDevice()" placeholder="Entrez le nom de l'objet">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-icon class="icon-profil">profil</mat-icon>
+        </div>
+      </div>
+      <div *ngIf="selectedIndex === 0">
+        <div class="p-4">
+          <h1>Bonjour <span>{{user}}</span></h1>
+          <div class="d-flex justify-content-around">
+            <mat-card appearance="outlined" class="w-25">
+              <mat-card-header>
+                <mat-card-title>Utilisateur</mat-card-title>
+              </mat-card-header>
+              <mat-list role="list">
+                <mat-list-item role="listitem"><button mat-button>Utilisateur 1</button></mat-list-item>
+                <mat-list-item role="listitem"><button mat-button>Utilisateur 2</button></mat-list-item>
+                <mat-list-item role="listitem"><button mat-button>Utilisateur 3</button></mat-list-item>
+              </mat-list>
+            </mat-card>
+            <mat-card appearance="outlined" class="w-25">
+              <mat-card-header>
+                <mat-card-title>Progression Niveau</mat-card-title>
+              </mat-card-header>
+              <div class="p-3 d-flex justify-content-center flex-column gap-3">
+                <span>Vouz avez 1 point sur 10</span>
+                <mat-progress-bar value="10"></mat-progress-bar>
+                <span>il ne vous reste plus que 9 point pour monter de niveau </span>
               </div>
-          <div *ngIf="selectedIndex ===0">
-            <div class="p-4">
-              <h1>Bonjour <span>{{user}}</span></h1>
-              <div class="d-flex justify-content-around">
-              <mat-card appearance="outlined" class="w-25">
-                <mat-card-header>
-                  <mat-card-title>Utilisateur</mat-card-title>
-                </mat-card-header>
-                <mat-list role="list">
-                  <mat-list-item role="listitem"><button mat-button>Utilisateur 1</button></mat-list-item>
-                  <mat-list-item role="listitem"><button mat-button>Utilisateur 2</button></mat-list-item>
-                  <mat-list-item role="listitem"><button mat-button>Utilisateur 3</button></mat-list-item>
-                </mat-list>
-                
-              </mat-card>
-              <mat-card appearance="outlined" class="w-25">
-                <mat-card-header>
-                  <mat-card-title>Progression Niveau</mat-card-title>
-                </mat-card-header>
-                <div class="p-3 d-flex justify-content-center flex-column gap-3">
-                  <span>Vouz avez 1 point sur 10</span>
-                  <mat-progress-bar value="10"></mat-progress-bar>
-                  <span>il ne vous reste plus que 9 point pour monter de niveau </span>
-                </div>
-                <mat-card-actions>
-                  <button mat-button>Status actuel</button>
-                </mat-card-actions>
-              </mat-card>
-            </div>
-            </div>
+              <mat-card-actions>
+                <button mat-button>Status actuel</button>
+              </mat-card-actions>
+            </mat-card>
           </div>
-          <div *ngIf="selectedIndex ===1">
-              <span>B</span>
+          <div class="search-container">
+            <mat-form-field class="example-full-width">
+              <mat-label>Rechercher un objet</mat-label>
+              <input matInput [(ngModel)]="searchQuery" placeholder="Entrez le nom de l'objet">
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="searchDevice()">Rechercher</button>
           </div>
-          <div *ngIf="selectedIndex === 3">
-            <app-profil></app-profil>
+          <div *ngIf="searchResults.length > 0" class="search-results">
+            <h3>Résultats de la recherche :</h3>
+            <mat-list>
+              <mat-list-item *ngFor="let device of searchResults">
+                <h4 mat-line>Nom : {{ device.nom || 'Non disponible' }}</h4>
+                <p mat-line>Type : {{ device.type || 'Non disponible' }}</p>
+                <p *ngIf="device.statutActuel" mat-line>Statut actuel : {{ device.statutActuel }}</p>
+                <p *ngIf="device.connectivite" mat-line>Connectivité : {{ device.connectivite }}</p>
+                <p *ngIf="device.etatDeBatterie" mat-line>État de batterie : {{ device.etatDeBatterie }}</p>
+                <p *ngIf="device.derniereInteraction" mat-line>Dernière interaction : {{ device.derniereInteraction | date:'medium' }}</p>
+              </mat-list-item>
+            </mat-list>
           </div>
-          </mat-sidenav-content>
-        </mat-sidenav-container>
-  </div>3
+          <div *ngIf="selectedDevice" class="device-details">
+            <h3>Détails de l'objet :</h3>
+            <p><strong>ID unique :</strong> {{ selectedDevice.idUnique || 'Non disponible' }}</p>
+            <p><strong>Nom :</strong> {{ selectedDevice.nom || 'Non disponible' }}</p>
+            <p><strong>Type :</strong> {{ selectedDevice.type || 'Non disponible' }}</p>
+            <p *ngIf="selectedDevice.temperatureActuelle"><strong>Température actuelle :</strong> {{ selectedDevice.temperatureActuelle }}°C</p>
+            <p *ngIf="selectedDevice.temperatureCible"><strong>Température cible :</strong> {{ selectedDevice.temperatureCible }}°C</p>
+            <p *ngIf="selectedDevice.mode"><strong>Mode :</strong> {{ selectedDevice.mode }}</p>
+            <p *ngIf="selectedDevice.connectivite"><strong>Connectivité :</strong> {{ selectedDevice.connectivite }}</p>
+            <p *ngIf="selectedDevice.etatDeBatterie"><strong>État de batterie :</strong> {{ selectedDevice.etatDeBatterie }}</p>
+            <p *ngIf="selectedDevice.derniereInteraction"><strong>Dernière interaction :</strong> {{ selectedDevice.derniereInteraction | date:'medium' }}</p>
+          </div>
+          <div *ngIf="searchResults.length === 0 && searchQuery.trim()" class="no-results">
+            <p>Aucun résultat trouvé.</p>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="selectedIndex === 1">
+        <span>B</span>
+      </div>
+      <div *ngIf="selectedIndex === 3">
+        <app-profil></app-profil>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
