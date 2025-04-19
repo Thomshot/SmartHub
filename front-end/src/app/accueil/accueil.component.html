@@ -8,6 +8,7 @@
         <mat-tab><ng-template mat-tab-label><span>Gestion objet</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Gestion profil</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Recherche d'objets</span></ng-template></mat-tab>
+        <mat-tab><ng-template mat-tab-label><span>Recherche d'outils/services</span></ng-template></mat-tab>
       </mat-tab-group>
     </mat-sidenav>
     <mat-sidenav-content>
@@ -75,6 +76,32 @@
                 <p *ngIf="device.connectivite" mat-line>Connectivité : {{ device.connectivite }}</p>
                 <p *ngIf="device.etatDeBatterie" mat-line>État de batterie : {{ device.etatDeBatterie }}</p>
                 <p *ngIf="device.derniereInteraction" mat-line>Dernière interaction : {{ device.derniereInteraction | date:'medium' }}</p>
+              </mat-list-item>
+            </mat-list>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="selectedIndex === 5">
+        <div class="p-4">
+          <h1>Recherche d'outils/services</h1>
+          <div class="search-container">
+            <mat-form-field class="example-full-width">
+              <mat-label>Rechercher un outil/service</mat-label>
+              <input matInput [(ngModel)]="serviceSearchQuery" placeholder="Entrez le nom de l'outil/service">
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="searchService()">Rechercher</button>
+          </div>
+          <div *ngIf="serviceSearchResults.length > 0" class="search-results">
+            <h3>Résultats de la recherche :</h3>
+            <mat-list>
+              <mat-list-item *ngFor="let service of serviceSearchResults">
+                <h4 mat-line>Nom : {{ service.nom || 'Non disponible' }}</h4>
+                <p mat-line>Type : {{ service.type || 'Non disponible' }}</p>
+                <p mat-line>Statut actuel : {{ service.statutActuel || 'Non disponible' }}</p>
+                <p mat-line>États : {{ service.etats?.join(', ') || 'Non disponible' }}</p>
+                <p mat-line>Description : {{ service.description || 'Non disponible' }}</p>
+                <p mat-line>Tarif : {{ service.tarif || 'Non disponible' }}</p>
+                <p mat-line>Dernière mise à jour : {{ service.derniereMiseAJour | date:'medium' || 'Non disponible' }}</p>
               </mat-list-item>
             </mat-list>
           </div>

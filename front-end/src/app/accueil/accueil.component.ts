@@ -23,6 +23,8 @@ export class AccueilComponent implements OnInit {
   searchQuery: string = '';
   searchResults: any[] = [];
   selectedDevice: any = null; // Pour afficher les détails d'un objet
+  serviceSearchQuery: string = '';
+  serviceSearchResults: any[] = [];
 
   constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient) {}
 
@@ -68,6 +70,22 @@ export class AccueilComponent implements OnInit {
       .subscribe({
         next: (results) => this.searchResults = results,
         error: (err) => console.error('Erreur recherche :', err)
+      });
+  }
+
+  searchService(): void {
+    if (!this.serviceSearchQuery.trim()) {
+      this.serviceSearchResults = [];
+      return;
+    }
+
+    this.http.get<any[]>(`http://localhost:3000/api/services/search?query=${this.serviceSearchQuery}`)
+      .subscribe({
+        next: (results) => {
+          console.log('Résultats de la recherche d\'outils/services :', results); // ✅ Vérifiez les résultats ici
+          this.serviceSearchResults = results;
+        },
+        error: (err) => console.error('Erreur recherche outils/services :', err)
       });
   }
 }

@@ -170,7 +170,8 @@ footer {
 }
 
 .search-results {
-  max-height: 300px;
+  margin-top: 1rem;
+  max-height: 600px; /* Augmentez la hauteur maximale */
   overflow-y: auto;
   padding: 1rem;
   border: 1px solid #ff9800; /* Bordure orange */
@@ -207,7 +208,7 @@ footer {
   border: 1px solid #ff9800; /* Bordure orange */
   border-radius: 4px;
   margin-bottom: 0.5rem;
-  padding: 0.5rem;
+  padding: 1rem; /* Augmentez l'espace interne */
 
   h4 {
     color: #fff; /* Titre en blanc */
