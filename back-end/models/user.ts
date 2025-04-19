@@ -20,4 +20,4 @@ const userSchema = new mongoose.Schema({
   points: { type: Number, default: 0 }, // Points cumulés par l'utilisateur
 }, { timestamps: true });
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema, 'users'); // Explicitly use the "users" collection

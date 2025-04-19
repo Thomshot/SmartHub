@@ -25,6 +25,8 @@ export class AccueilComponent implements OnInit {
   selectedDevice: any = null; // Pour afficher les détails d'un objet
   serviceSearchQuery: string = '';
   serviceSearchResults: any[] = [];
+  userSearchQuery: string = '';
+  userSearchResults: any[] = [];
 
   constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient) {}
 
@@ -86,6 +88,28 @@ export class AccueilComponent implements OnInit {
           this.serviceSearchResults = results;
         },
         error: (err) => console.error('Erreur recherche outils/services :', err)
+      });
+  }
+
+  searchUser(): void {
+    console.log('Searching for user with login:', this.userSearchQuery);
+
+    if (!this.userSearchQuery.trim()) {
+      console.log('Search query is empty.');
+      this.userSearchResults = [];
+      return;
+    }
+
+    this.http.get<any>(`http://localhost:3000/api/users/search?login=${this.userSearchQuery}`)
+      .subscribe({
+        next: (result) => {
+          console.log('Search result:', result);
+          this.userSearchResults = result ? [result] : [];
+        },
+        error: (err) => {
+          console.error('Error during user search:', err);
+          this.userSearchResults = [];
+        }
       });
   }
 }

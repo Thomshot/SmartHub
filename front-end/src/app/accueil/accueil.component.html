@@ -9,6 +9,7 @@
         <mat-tab><ng-template mat-tab-label><span>Gestion profil</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Recherche d'objets</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Recherche d'outils/services</span></ng-template></mat-tab>
+        <mat-tab><ng-template mat-tab-label><span>Recherche d'utilisateurs</span></ng-template></mat-tab>
       </mat-tab-group>
     </mat-sidenav>
     <mat-sidenav-content>
@@ -104,6 +105,36 @@
                 <p *ngIf="service.derniereMiseAJour" mat-line>Dernière mise à jour : {{ service.derniereMiseAJour | date:'medium' }}</p>
               </mat-list-item>
             </mat-list>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="selectedIndex === 6">
+        <div class="p-4">
+          <h1>Recherche d'utilisateurs</h1>
+          <div class="search-container">
+            <mat-form-field class="example-full-width">
+              <mat-label>Rechercher un utilisateur</mat-label>
+              <input matInput [(ngModel)]="userSearchQuery" placeholder="Entrez le login de l'utilisateur">
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="searchUser()">Rechercher</button>
+          </div>
+          <div *ngIf="userSearchResults && userSearchResults.length > 0" class="search-results">
+            <h3>Résultat de la recherche :</h3>
+            <mat-list>
+              <mat-list-item>
+                <h4 mat-line>Nom : {{ userSearchResults[0].firstName || 'Non disponible' }} {{ userSearchResults[0].lastName || 'Non disponible' }}</h4>
+                <p mat-line>Email : {{ userSearchResults[0].email || 'Non disponible' }}</p>
+                <p mat-line>Login : {{ userSearchResults[0].login || 'Non disponible' }}</p>
+                <p *ngIf="userSearchResults[0].memberType" mat-line>Type de membre : {{ userSearchResults[0].memberType }}</p>
+                <p *ngIf="userSearchResults[0].role" mat-line>Rôle : {{ userSearchResults[0].role }}</p>
+                <p *ngIf="userSearchResults[0].city" mat-line>Ville : {{ userSearchResults[0].city }}</p>
+                <p *ngIf="userSearchResults[0].points !== undefined" mat-line>Points : {{ userSearchResults[0].points }}</p>
+                <p *ngIf="userSearchResults[0].createdAt" mat-line>Date d'inscription : {{ userSearchResults[0].createdAt | date:'medium' }}</p>
+              </mat-list-item>
+            </mat-list>
+          </div>
+          <div *ngIf="userSearchResults && userSearchResults.length === 0" class="no-results">
+            <p>Aucun utilisateur trouvé avec ce login.</p>
           </div>
         </div>
       </div>
