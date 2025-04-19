@@ -80,6 +80,9 @@
               </mat-list-item>
             </mat-list>
           </div>
+          <div *ngIf="searchTriggered && searchResults.length === 0" class="no-results">
+            <p>Aucun objet trouvé avec ce nom.</p>
+          </div>
         </div>
       </div>
       <div *ngIf="selectedIndex === 5">
@@ -105,6 +108,9 @@
                 <p *ngIf="service.derniereMiseAJour" mat-line>Dernière mise à jour : {{ service.derniereMiseAJour | date:'medium' }}</p>
               </mat-list-item>
             </mat-list>
+          </div>
+          <div *ngIf="serviceSearchTriggered && serviceSearchResults.length === 0" class="no-results">
+            <p>Aucun outil/service trouvé avec ce nom.</p>
           </div>
         </div>
       </div>
@@ -133,7 +139,7 @@
               </mat-list-item>
             </mat-list>
           </div>
-          <div *ngIf="userSearchResults && userSearchResults.length === 0" class="no-results">
+          <div *ngIf="userSearchTriggered && userSearchResults.length === 0" class="no-results">
             <p>Aucun utilisateur trouvé avec ce login.</p>
           </div>
         </div>

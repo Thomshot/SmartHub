@@ -22,11 +22,14 @@ export class AccueilComponent implements OnInit {
   selectedIndex: number = 0; // Index pour gérer les onglets
   searchQuery: string = '';
   searchResults: any[] = [];
+  searchTriggered: boolean = false;
   selectedDevice: any = null; // Pour afficher les détails d'un objet
   serviceSearchQuery: string = '';
   serviceSearchResults: any[] = [];
+  serviceSearchTriggered: boolean = false;
   userSearchQuery: string = '';
   userSearchResults: any[] = [];
+  userSearchTriggered: boolean = false;
 
   constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient) {}
 
@@ -63,6 +66,7 @@ export class AccueilComponent implements OnInit {
   }
 
   searchDevice(): void {
+    this.searchTriggered = true; // Set the flag to true when search is triggered
     if (!this.searchQuery.trim()) {
       this.searchResults = [];
       return;
@@ -71,11 +75,15 @@ export class AccueilComponent implements OnInit {
     this.http.get<any[]>(`http://localhost:3000/api/devices/search?query=${this.searchQuery}`)
       .subscribe({
         next: (results) => this.searchResults = results,
-        error: (err) => console.error('Erreur recherche :', err)
+        error: (err) => {
+          console.error('Error during device search:', err);
+          this.searchResults = [];
+        }
       });
   }
 
   searchService(): void {
+    this.serviceSearchTriggered = true; // Set the flag to true when search is triggered
     if (!this.serviceSearchQuery.trim()) {
       this.serviceSearchResults = [];
       return;
@@ -83,15 +91,16 @@ export class AccueilComponent implements OnInit {
 
     this.http.get<any[]>(`http://localhost:3000/api/services/search?query=${this.serviceSearchQuery}`)
       .subscribe({
-        next: (results) => {
-          console.log('Résultats de la recherche d\'outils/services :', results); // ✅ Vérifiez les résultats ici
-          this.serviceSearchResults = results;
-        },
-        error: (err) => console.error('Erreur recherche outils/services :', err)
+        next: (results) => this.serviceSearchResults = results,
+        error: (err) => {
+          console.error('Error during service search:', err);
+          this.serviceSearchResults = [];
+        }
       });
   }
 
   searchUser(): void {
+    this.userSearchTriggered = true; // Set the flag to true when search is triggered
     console.log('Searching for user with login:', this.userSearchQuery);
 
     if (!this.userSearchQuery.trim()) {
@@ -102,10 +111,7 @@ export class AccueilComponent implements OnInit {
 
     this.http.get<any>(`http://localhost:3000/api/users/search?login=${this.userSearchQuery}`)
       .subscribe({
-        next: (result) => {
-          console.log('Search result:', result);
-          this.userSearchResults = result ? [result] : [];
-        },
+        next: (result) => this.userSearchResults = result ? [result] : [],
         error: (err) => {
           console.error('Error during user search:', err);
           this.userSearchResults = [];
