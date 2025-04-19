@@ -97,11 +97,11 @@
               <mat-list-item *ngFor="let service of serviceSearchResults">
                 <h4 mat-line>Nom : {{ service.nom || 'Non disponible' }}</h4>
                 <p mat-line>Type : {{ service.type || 'Non disponible' }}</p>
-                <p mat-line>Statut actuel : {{ service.statutActuel || 'Non disponible' }}</p>
-                <p mat-line>États : {{ service.etats?.join(', ') || 'Non disponible' }}</p>
-                <p mat-line>Description : {{ service.description || 'Non disponible' }}</p>
-                <p mat-line>Tarif : {{ service.tarif || 'Non disponible' }}</p>
-                <p mat-line>Dernière mise à jour : {{ service.derniereMiseAJour | date:'medium' || 'Non disponible' }}</p>
+                <p *ngIf="service.statutActuel" mat-line>Statut actuel : {{ service.statutActuel }}</p>
+                <p *ngIf="service.etats" mat-line>États : {{ service.etats.join(', ') }}</p>
+                <p *ngIf="service.description" mat-line>Description : {{ service.description }}</p>
+                <p *ngIf="service.tarif" mat-line>Tarif : {{ service.tarif }}</p>
+                <p *ngIf="service.derniereMiseAJour" mat-line>Dernière mise à jour : {{ service.derniereMiseAJour | date:'medium' }}</p>
               </mat-list-item>
             </mat-list>
           </div>

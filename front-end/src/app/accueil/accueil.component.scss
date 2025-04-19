@@ -171,13 +171,13 @@ footer {
 
 .search-results {
   margin-top: 1rem;
-  max-height: 600px; /* Augmentez la hauteur maximale */
+  max-height: 600px;
   overflow-y: auto;
   padding: 1rem;
-  border: 1px solid #ff9800; /* Bordure orange */
+  border: 1px solid #ff9800;
   border-radius: 8px;
-  background-color: #111; /* Fond noir */
-  color: #fff; /* Texte blanc */
+  background-color: #111;
+  color: #fff;
 }
 
 .no-results {
@@ -204,21 +204,21 @@ footer {
 }
 
 .mat-list-item {
-  background-color: #222; /* Fond légèrement plus clair */
-  border: 1px solid #ff9800; /* Bordure orange */
+  background-color: #222;
+  border: 1px solid #ff9800;
   border-radius: 4px;
   margin-bottom: 0.5rem;
-  padding: 1rem; /* Augmentez l'espace interne */
+  padding: 1rem;
 
   h4 {
-    color: #fff; /* Titre en blanc */
+    color: #fff;
   }
 
   p {
-    color: #fff; /* Texte secondaire en blanc */
+    color: #fff;
   }
 
   &:hover {
-    background-color: #333; /* Fond plus clair au survol */
+    background-color: #333;
   }
 }
