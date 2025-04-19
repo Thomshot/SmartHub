@@ -18,8 +18,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AccueilComponent implements OnInit {
   isMobileorTablet: boolean = false;
-  user: string="Bonnet Ostrean";
-  selectedIndex:number=0;
+  user: string = "Bonnet Ostrean";
+  selectedIndex: number = 0; // Index pour gérer les onglets
   searchQuery: string = '';
   searchResults: any[] = [];
   selectedDevice: any = null; // Pour afficher les détails d'un objet
@@ -37,11 +37,11 @@ export class AccueilComponent implements OnInit {
     return !this.isMobileorTablet;
   }
 
-  onTabChange(index:number){
-    this.selectedIndex=index;
+  onTabChange(index: number): void {
+    this.selectedIndex = index;
   }
 
-  closeSidenav():boolean {
+  closeSidenav(): boolean {
     return !this.isMobileorTablet;
   }
 
@@ -66,10 +66,7 @@ export class AccueilComponent implements OnInit {
 
     this.http.get<any[]>(`http://localhost:3000/api/devices/search?query=${this.searchQuery}`)
       .subscribe({
-        next: (results) => {
-          console.log('Résultats de la recherche :', results); // ✅ Inspectez les données ici
-          this.searchResults = results;
-        },
+        next: (results) => this.searchResults = results,
         error: (err) => console.error('Erreur recherche :', err)
       });
   }

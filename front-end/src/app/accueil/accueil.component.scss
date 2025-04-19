@@ -48,6 +48,15 @@ header {
       }
     }
   }
+
+  .example-full-width {
+    width: auto;
+    margin-right: 1rem;
+  }
+
+  button {
+    margin-left: 0.5rem;
+  }
 }
 
 /* Section Hero avec image de fond */
@@ -201,11 +210,11 @@ footer {
   padding: 0.5rem;
 
   h4 {
-    color: #ff9800; /* Titre en orange */
+    color: #fff; /* Titre en blanc */
   }
 
   p {
-    color: #ccc; /* Texte secondaire en gris clair */
+    color: #fff; /* Texte secondaire en blanc */
   }
 
   &:hover {
