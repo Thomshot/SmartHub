@@ -61,6 +61,10 @@ export class PagePresentationComponent {
     this.http.post('http://localhost:3000/api/login', { email, password }).subscribe({
       next: (res: any) => {
         console.log('✅ Connexion réussie', res);
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('userId', res.user.id);
+        localStorage.setItem('userName', `${res.user.firstName} ${res.user.lastName}`);
+        localStorage.setItem('userEmail', res.user.email);
         this.router.navigate(['/accueil']);
         this.closeLoginPopup();
       },

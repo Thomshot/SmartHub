@@ -38,6 +38,13 @@ export class AccueilComponent implements OnInit {
       .subscribe(result => {
         this.isMobileorTablet = result.matches;
       });
+      const name = localStorage.getItem('userName');
+    const email = localStorage.getItem('userEmail');
+    const id = localStorage.getItem('userId');
+
+    if (name && email && id) {
+      console.log(`✅ Connecté en tant que ${name} <${email}> (ID: ${id})`);
+    }
   }
 
   shouldSidenavBeOpened(): boolean {
