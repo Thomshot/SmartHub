@@ -1,35 +1,26 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import User from '../models/user';
+import asyncHandler from 'express-async-handler';
 
-export const recordAction = async (req: Request, res: Response) => {
-  try {
-    const { userId, actionCount } = req.body; // `actionCount` représente le nombre d'actions effectuées
+export const recordAction = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const { userId, actionCount } = req.body;
     const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(404).json({ message: 'Utilisateur non trouvé.' });
+      res.status(404).json({ message: 'Utilisateur non trouvé.' });
+      return;
     }
 
-    // Mise à jour des points et des actions
-    const pointsEarned = actionCount * 0.5; // 0.5 points par action
-    user.points += pointsEarned;
+    const points = actionCount * 0.5;
+    user.points += points;
 
-    // Vérification du rôle en fonction des points
-    if (user.points >= 7) {
-      user.role = 'expert';
-    } else if (user.points >= 5) {
-      user.role = 'avancé';
-    } else if (user.points >= 3) {
-      user.role = 'intermédiaire';
-    } else {
-      user.role = 'débutant';
-    }
+    user.role = user.points >= 7 ? 'expert' :
+                user.points >= 5 ? 'avancé' :
+                user.points >= 3 ? 'intermédiaire' : 'débutant';
 
     await user.save();
 
     res.status(200).json({ message: 'Action enregistrée avec succès.', user });
-  } catch (error) {
-    console.error('Erreur lors de l\'enregistrement de l\'action :', error);
-    res.status(500).json({ message: 'Erreur serveur.' });
   }
-};
+);
