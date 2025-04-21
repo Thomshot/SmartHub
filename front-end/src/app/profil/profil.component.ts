@@ -47,7 +47,7 @@ export class ProfilComponent implements OnInit {
     this.userService.getProfile(userId).subscribe({
       next: (user) => {
         this.profilForm = this.fb.group({
-          gender: [user.gender || '', Validators.required],
+          gender: [String(user.gender) || '', Validators.required],
           birthDate: [user.birthDate || '', Validators.required],
           nom: [user.lastName || '', Validators.required],
           prenom: [user.firstName || '', Validators.required],

@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ProfilComponent } from '../profil/profil.component';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-accueil',
@@ -35,7 +36,8 @@ export class AccueilComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -64,6 +66,11 @@ export class AccueilComponent implements OnInit {
 
   onTabChange(index: number): void {
     this.selectedIndex = index;
+
+    if (index === 0) {
+      window.scrollTo(0, 0);
+      console.log("🟢 Accueil affiché !");
+    }
   }
 
   closeSidenav(): boolean {
@@ -117,6 +124,19 @@ export class AccueilComponent implements OnInit {
           this.serviceSearchResults = [];
         }
       });
+  }
+
+  logout() {
+    localStorage.clear();
+    window.location.href = '/';
+  }
+
+  goToProfile(): void {
+    this.selectedIndex = 3;
+    if (this.isMobileorTablet) {
+      const sidenavEl = document.querySelector('mat-sidenav') as any;
+      sidenavEl?.close?.();
+    }
   }
 
   searchUser(): void {

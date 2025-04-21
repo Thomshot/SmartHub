@@ -1,8 +1,10 @@
 <div class="smarthub-accueil">
   <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav [mode]="isMobileorTablet ? 'over' : 'side'" [opened]="shouldSidenavBeOpened()">
-      <mat-icon class="icon-logo"></mat-icon>
-      <mat-tab-group (selectedIndexChange)="onTabChange($event)">
+      <div class="logo-container">
+        <img src="assets/images/smarthub.png" alt="SmartHub Logo" class="logo-img" />
+      </div>
+      <mat-tab-group [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
         <mat-tab><ng-template mat-tab-label><span>Accueil</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Creation objet</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Gestion objet</span></ng-template></mat-tab>
@@ -17,8 +19,9 @@
         <div class="d-flex gap-1 align-items-center">
           <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
         </div>
-        <div>
-          <mat-icon class="icon-profil">profil</mat-icon>
+        <div class="d-flex gap-2 align-items-center">
+          <mat-icon class="icon-profil" (click)="goToProfile()">person</mat-icon>
+          <button mat-button color="warn" (click)="logout()">Déconnexion</button>
         </div>
       </div>
       <div *ngIf="selectedIndex === 0">
