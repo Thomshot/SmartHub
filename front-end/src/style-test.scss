@@ -5,30 +5,11 @@
             color: white;
         }
         background-color:#111;
-        .mat-mdc-form-field {
-            border-radius: 10px;
-            max-height: 60px;
-            .mat-mdc-text-field-wrapper{
-                
-                border: 2px solid#ff9800;
-                background-color: #222;
-                mat-icon{
-                    position: absolute;
-                    right: -8px;
-                }
-            }
-            .mat-mdc-form-field-subscript-wrapper {
-                display: none;
-            }
-            .mdc-line-ripple {
-                display: none;
-            }
-            .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input {
-                caret-color: #ff9800;
-                color: white;
-            }
-        }
        
+       
+    }
+    .icon-profil {
+        background: url(assets/images/profil.svg);
     }
 }
 .mat-drawer-container {
@@ -281,3 +262,140 @@
         
           
         }
+
+
+.cdk-overlay-backdrop{
+    background-color: #000;
+    opacity: 0.8 !important;
+}
+.cdk-global-overlay-wrapper{
+    .mat-mdc-dialog-panel {
+        max-width: 90% !important;
+        .mat-mdc-dialog-container{
+            max-width: none !important;
+        }
+    }
+    .mat-mdc-dialog-surface {
+      background-color:#111;
+      .mat-stepper-horizontal {
+        background: none !important;
+        .mat-step-label {
+          color: white;
+        }
+        .mat-step-icon {
+          background-color: #ff9800;
+        }
+      } 
+      .mat-mdc-dialog-title {
+        color: white;
+      }
+    }
+    .mat-mdc-dialog-surface,.mat-horizontal-stepper-wrapper{
+        gap: 1rem ;
+    }
+    
+}
+
+
+.icon-filtre {
+  background: url(assets/images/filtre.svg);
+}
+.icon-loupe {
+  background: url(assets/images/loupe.svg);
+}
+.mat-mdc-form-field {
+  border-radius: 10px;
+  max-height: 60px;
+  .mat-mdc-text-field-wrapper{
+      
+      border: 2px solid#ff9800;
+      background-color: #222 !important;
+      mat-icon{
+          position: absolute;
+          right: -8px;
+      }
+  }
+  .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+  }
+  .mdc-line-ripple {
+      display: none;
+  }
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-text-field__input {
+      caret-color: #ff9800;
+      color: white;
+  }
+}
+//////////////////////////////////////////////
+.filtre-dialog {
+  .mat-mdc-dialog-surface {
+    padding: 15px;
+    border-radius: 0;
+    background-color: #222;
+    color: white !important;
+  }
+
+  .mat-mdc-checkbox {
+    .mdc-label {
+      color: white;
+    }
+    .mdc-checkbox__background {
+      border-color:white!important ;
+    }
+    &.mat-mdc-checkbox-checked{
+      .mdc-label {
+        font-weight: 700;
+      }
+      .mdc-checkbox__background {
+        background-color:#ff9800 !important;
+        border-color:#ff9800 !important ;
+      }
+    }
+    .mdc-checkbox__ripple {
+      display: none;
+    }
+    }
+  }
+  .mat-mdc-button {
+    padding: 8px 15px !important;
+    background-color: #ff9800 !important;
+    &:hover{
+      background-color: #ffc166 !important;
+    }
+    color: #000 !important;
+    font-weight: 600 !important;
+  }
+  .mdc-button--raised {
+    box-shadow: none !important;
+    background-color: transparent!important;
+    border:2px solid #ff9800!important;
+    .mat-mdc-button-persistent-ripple {
+      display: none;
+    }
+    .mdc-button__label {
+      color: #ff9800;
+      font-weight: 600;
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px; /* largeur verticale */
+   /* hauteur horizontale */
+  }
+  
+  /* Fond de la scrollbar */
+  ::-webkit-scrollbar-track {
+    background: #ff9800 !important;
+    border-radius: 10px !important;
+  }
+  .icon-objet {
+    background: url(assets/images/aspirateur.jpg);
+  }
+.creation-objet {
+  .mdc-button {
+    position: absolute;
+    right: 50%;
+    bottom: 0;
+  }
+}
+

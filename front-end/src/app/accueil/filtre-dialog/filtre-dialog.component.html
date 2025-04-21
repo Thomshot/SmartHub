@@ -1,0 +1,42 @@
+<div class="filtre-panel">
+    <h2>Filtres</h2>
+    <mat-dialog-content>
+    <!-- Pièce -->
+    <section>
+      <h3>Pièce</h3>
+      <mat-checkbox *ngFor="let room of filtres.pieces" [(ngModel)]="room.checked">
+        {{ room.label }}
+      </mat-checkbox>
+    </section>
+  
+    <!-- État -->
+    <section>
+      <h3>État</h3>
+      <mat-checkbox *ngFor="let etat of filtres.etats" [(ngModel)]="etat.checked">
+        {{ etat.label }}
+      </mat-checkbox>
+    </section>
+  
+    <!-- Connectivité -->
+    <section>
+      <h3>Connectivité</h3>
+      <mat-checkbox *ngFor="let net of filtres.connectivite" [(ngModel)]="net.checked">
+        {{ net.label }}
+      </mat-checkbox>
+    </section>
+  
+    <!-- Type d’objet -->
+    <section>
+      <h3>Catégorie</h3>
+      <mat-checkbox *ngFor="let type of filtres.types" [(ngModel)]="type.checked">
+        {{ type.label }}
+      </mat-checkbox>
+    </section>
+</mat-dialog-content>
+    <!-- Actions -->
+    <mat-dialog-actions class="d-flex justify-content-between">
+      <button mat-raised-button (click)="fermer()">Annuler</button>
+      <button mat-button (click)="appliquerFiltres()">Appliquer</button>
+    </mat-dialog-actions>
+   
+  </div>

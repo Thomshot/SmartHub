@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component,inject } from '@angular/core';
+import { ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialDModule } from '../shared/material-d.module';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -8,15 +9,21 @@ import { map, startWith } from 'rxjs/operators';
 import { OnInit } from '@angular/core';
 import { ProfilComponent } from '../profil/profil.component'; // ✅ Import du composant profil
 import { HttpClient } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import { AjoutObjetDialogComponent } from './ajout-objet-dialog/ajout-objet-dialog.component';
+import { FiltreDialogComponent } from './filtre-dialog/filtre-dialog.component';
+import { ProgressionNiveauDialogComponent } from './progression-niveau-dialog/progression-niveau-dialog.component';
 
 @Component({
   selector: 'app-accueil',
   standalone: true,
-  imports: [MaterialDModule, CommonModule, ProfilComponent, FormsModule], // ✅ Add FormsModule here
+  imports: [MaterialDModule, CommonModule, ProfilComponent, FormsModule,RouterModule], // ✅ Add FormsModule here
   templateUrl: './accueil.component.html', // Ensure this path is correct
   styleUrls: ['./accueil.component.scss'] // Ensure this path is correct
 })
 export class AccueilComponent implements OnInit {
+
   isMobileorTablet: boolean = false;
   user: string = "Bonnet Ostrean";
   selectedIndex: number = 0; // Index pour gérer les onglets
@@ -26,7 +33,37 @@ export class AccueilComponent implements OnInit {
   serviceSearchQuery: string = '';
   serviceSearchResults: any[] = [];
 
-  constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient) {}
+  constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient) {
+  }
+  readonly dialog = inject(MatDialog);
+
+  openDialog() {
+    const dialogRef = this.dialog.open(AjoutObjetDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+  filtreDialog() {
+    const dialogRef = this.dialog.open(FiltreDialogComponent,{
+      panelClass: 'filtre-dialog',
+      position:{right:'0'},
+      height:'100vh',
+      width:'30%',
+    } );
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+  statusDialog() {
+    const dialogRef = this.dialog.open(ProgressionNiveauDialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+  
 
   ngOnInit(): void {
     this.breakpointObserver.observe(['(max-width: 960px)'])

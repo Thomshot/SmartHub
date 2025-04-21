@@ -1,0 +1,126 @@
+<h2 mat-dialog-title>Création de l'objet</h2>
+
+<mat-dialog-content>
+  <mat-stepper #stepper [linear]="true">
+    <mat-step [stepControl]="firstFormGroup">
+      <form [formGroup]="firstFormGroup">
+        <ng-template matStepLabel>Type d'objet</ng-template>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Type d'objet</mat-label>
+          <input type="text"
+                 matInput
+                 placeholder="Ex : Lampe"
+                 [matAutocomplete]="auto"
+                 formControlName="firstCtrl"
+                 required>
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{ option }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <div>
+          <button mat-button matStepperNext>Suivant</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondFormGroup">
+      <form [formGroup]="secondFormGroup">
+        <ng-template matStepLabel>Détails de l'objet</ng-template>
+        <div class="d-flex gap-1">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Nom de l'objet</mat-label>
+          <input matInput formControlName="objectName" placeholder="Ex : Frigo Cuisine" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Pièce</mat-label>
+          <mat-select formControlName="room" required>
+            <mat-option *ngFor="let room of rooms" [value]="room">{{ room }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Marque / Modèle</mat-label>
+          <input matInput formControlName="brand" placeholder="Ex : Samsung Smart Fridge">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Identifiant unique (optionnel)</mat-label>
+          <input matInput formControlName="id" placeholder="ex : FRG-1234-ABCD">
+        </mat-form-field>
+      </div>
+        <div class="mt-4">
+          <label>Photo de l’objet</label>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+        </div>
+        <div *ngIf="previewUrl" style="margin-top: 10px;">
+          <img [src]="previewUrl" alt="Aperçu de l’objet" style="max-width: 100%; border-radius: 8px;">
+        </div>
+        <div class="mt-4">
+          <button mat-button matStepperPrevious>Précédent</button>
+          <button mat-button matStepperNext>Suivant</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="thirdFormGroup">
+      <form [formGroup]="thirdFormGroup">
+        <ng-template matStepLabel>Connectivité</ng-template>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Adresse IP (optionnel)</mat-label>
+          <input matInput formControlName="ip" placeholder="192.168.1.42">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Adresse MAC (optionnel)</mat-label>
+          <input matInput formControlName="mac" placeholder="00:1A:2B:3C:4D:5E">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Protocole</mat-label>
+          <mat-select formControlName="protocol">
+            <mat-option value="Wi-Fi">Wi-Fi</mat-option>
+            <mat-option value="Bluetooth">Bluetooth</mat-option>
+            <mat-option value="Zigbee">Zigbee</mat-option>
+            <mat-option value="Z-Wave">Z-Wave</mat-option>
+            <mat-option value="Ethernet">Ethernet</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="mt-4">
+          <button mat-button matStepperPrevious>Précédent</button>
+          <button mat-button matStepperNext>Suivant</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <!-- Étape 4 : Validation -->
+    <mat-step>
+      <ng-template matStepLabel>Validation</ng-template>
+      <p>Résumé de l'objet que vous voulez ajouter :</p>
+
+      <div>
+        <p><strong>Type :</strong> {{ firstFormGroup.get('firstCtrl')?.value }}</p>
+        <p><strong>Nom :</strong> {{ secondFormGroup.get('objectName')?.value }}</p>
+        <p><strong>Pièce :</strong> {{ secondFormGroup.get('room')?.value }}</p>
+        <p><strong>Marque / Modèle :</strong> {{ secondFormGroup.get('brand')?.value }}</p>
+        <p><strong>Adresse IP :</strong> {{ thirdFormGroup.get('ip')?.value }}</p>
+        <p><strong>Protocole :</strong> {{ thirdFormGroup.get('protocol')?.value }}</p>
+
+        <div *ngIf="previewUrl">
+          <p><strong>Image :</strong></p>
+          <img [src]="previewUrl" alt="Image de l'objet" style="max-width: 100%; border-radius: 8px;">
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <button mat-button matStepperPrevious>Précédent</button>
+        <button mat-raised-button color="primary" (click)="submitObject()">Créer l'objet</button>
+      </div>
+    </mat-step>
+
+  </mat-stepper>
+</mat-dialog-content>

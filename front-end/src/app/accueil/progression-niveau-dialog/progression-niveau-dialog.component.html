@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Vous êtes <span>{{ niveauUser }}</span></h2>
+
+<mat-dialog-content>
+  <mat-radio-group class="d-flex gap-3" [(ngModel)]="selectedNiveau">
+    <mat-card class="p-2">
+      <mat-card-title>Débutant</mat-card-title>
+      <mat-card-content>
+        <ol>
+          <li>1 création d'objet par jour</li>
+          <li>Consulter les objets existants</li>
+          <li>Accès limité aux fonctionnalités</li>
+        </ol>
+        <mat-radio-button value="debutant">Choisir ce niveau</mat-radio-button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="p-2">
+      <mat-card-title>Intermédiaire</mat-card-title>
+      <mat-card-content>
+        <ol>
+          <li>Création de plusieurs objets par jour</li>
+          <li>Gestion de ses propres objets</li>
+          <li>Plus de flexibilité que le niveau débutant</li>
+        </ol>
+        <mat-radio-button value="intermediaire">Choisir ce niveau</mat-radio-button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="p-2">
+      <mat-card-title>Expert</mat-card-title>
+      <mat-card-content>
+        <ol>
+          <li>Création et gestion illimitées</li>
+          <li>Peut gérer et supprimer les objets des autres</li>
+          <li>Peut gérer les utilisateurs</li>
+          <li>Accès complet à toutes les fonctionnalités</li>
+        </ol>
+        <mat-radio-button value="expert">Choisir ce niveau</mat-radio-button>
+      </mat-card-content>
+    </mat-card>
+  </mat-radio-group>
+</mat-dialog-content>
