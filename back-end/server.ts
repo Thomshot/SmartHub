@@ -34,6 +34,16 @@ mongoose.connect(process.env.MONGO_URI!)
   .then(() => console.log('✅ Connecté à MongoDB'))
   .catch(err => console.error('❌ Erreur MongoDB:', err));
 
+mongoose.connection.on('connected', () => {
+  console.log('📡 Connexion MongoDB établie.');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('❌ Erreur de connexion MongoDB :', err);
+});
+
+mongoose.set('debug', true); // Active les logs des requêtes MongoDB
+
 // ✅ Démarrage du serveur
 app.listen(port, () => {
   console.log(`✅ Serveur Express lancé sur http://localhost:${port}`);

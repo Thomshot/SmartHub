@@ -3,6 +3,8 @@ import { FormBuilder, Validators, FormControl, FormGroup, FormsModule, ReactiveF
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -42,6 +44,8 @@ import {
 export class AjoutObjetDialogComponent implements OnInit {
 
   private _formBuilder = inject(FormBuilder);
+  private http = inject(HttpClient);
+  private snackBar = inject(MatSnackBar);
 
   isLinear = true;
 
@@ -78,7 +82,7 @@ export class AjoutObjetDialogComponent implements OnInit {
   ngOnInit(): void {
     // Étape 1 : Choix du type d’objet
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required],
+      firstCtrl: ['', [Validators.required]], // Validation correcte pour le champ "Type d'objet"
     });
 
     // Étape 2 : Détails de l’objet
@@ -120,13 +124,35 @@ export class AjoutObjetDialogComponent implements OnInit {
   }
 
   submitObject(): void {
-    console.log('Objet créé ✅');
-    console.log({
-      type: this.myControl.value,
-      ...this.firstFormGroup.value,
+    if (!this.firstFormGroup.valid || !this.secondFormGroup.valid) {
+      this.snackBar.open('Veuillez remplir tous les champs obligatoires.', 'Fermer', { duration: 3000 });
+      return;
+    }
+
+    const objectData = {
+      idUnique: this.secondFormGroup.value.id || `Device-${Date.now()}`,
+      nom: this.secondFormGroup.value.objectName,
+      type: this.firstFormGroup.value.firstCtrl, // Récupération correcte du champ "Type d'objet"
+      statutActuel: 'Inactif',
+      couleurActuelle: 'N/A',
+      connectivite: this.thirdFormGroup.value.protocol || 'N/A',
+      etats: ['Inactif', 'Actif'],
+      fonctionnalités: ['Fonctionnalité 1', 'Fonctionnalité 2'],
+      luminosite: 'N/A',
       ...this.secondFormGroup.value,
       ...this.thirdFormGroup.value,
-      image: this.previewUrl
+    };
+
+    this.http.post('http://localhost:3000/api/devices/create', objectData).subscribe({
+      next: () => {
+        console.log('Objet ajouté à la base de données ✅');
+        this.snackBar.open('Objet créé avec succès !', 'Fermer', { duration: 3000 });
+      },
+      error: (err) => {
+        console.error('Erreur lors de l\'ajout de l\'objet :', err);
+        const errorMessage = err.error?.message || 'Erreur serveur.';
+        this.snackBar.open(`Erreur : ${errorMessage}`, 'Fermer', { duration: 3000 });
+      },
     });
   }
 }

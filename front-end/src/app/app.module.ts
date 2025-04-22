@@ -7,7 +7,8 @@ import { HomeComponent } from './home/home.component';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { AccueilComponent } from './accueil/accueil.component';
-import { ProfilComponent } from './profil/profil.component'; 
+import { ProfilComponent } from './profil/profil.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { ProfilComponent } from './profil/profil.component';
     BrowserModule,
     MaterialDModule,
     HttpClientModule,
+    MatSnackBarModule,
 
   ],
   providers: [],

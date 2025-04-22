@@ -23,4 +23,6 @@ const deviceSchema = new mongoose.Schema({
   dernièreInteraction: { type: Date, default: Date.now }
 });
 
+console.log('✅ Modèle Device chargé avec succès.');
+
 export default mongoose.model('Device', deviceSchema);
