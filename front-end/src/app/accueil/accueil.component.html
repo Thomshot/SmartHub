@@ -19,25 +19,24 @@
         <div class="d-flex gap-1 align-items-center">
           <mat-icon class="menu-btn" (click)="sidenav.toggle()">menu</mat-icon>
         </div>
-<<<<<<< HEAD
+
         <div>
-          <mat-icon class="icon-profil" [matMenuTriggerFor]="menu">profil</mat-icon>
+         <!-- <mat-icon class="icon-profil" [matMenuTriggerFor]="menu">profil</mat-icon>
           <mat-menu #menu="matMenu">
             <button mat-menu-item [routerLink]="'/'">Deconnexion</button>
             <button mat-menu-item (click)="selectedIndex = 3">gestion Profil</button>
-          </mat-menu>
-=======
-        <div class="d-flex gap-2 align-items-center">
-          <mat-icon class="icon-profil" (click)="goToProfile()">person</mat-icon>
-          <button class="logout-btn" (click)="logout()">Déconnexion</button>
->>>>>>> 8b92d6da6fed73f7e092657da1ed62cbacbca4b9
-        </div>
+          </mat-menu>-->
+           <div class="d-flex gap-2 align-items-center">
+                  <mat-icon class="icon-profil" (click)="goToProfile()">person</mat-icon>
+                  <button class="logout-btn" (click)="logout()">Déconnexion</button>
+                 </div>
       </div>
-      <div *ngIf="selectedIndex === 0">
-        <div class="p-4">
-          <h1>Bonjour<span>{{user}}</span></h1>
-          <div class="d-flex justify-content-around">
-            <mat-card appearance="outlined" class="w-25">
+      </div>
+        <div *ngIf="selectedIndex === 0">
+          <div class="p-4">
+            <h1>Bonjour<span>{{user}}</span></h1>
+              <div class="d-flex justify-content-around">
+              <mat-card appearance="outlined" class="w-25">
               <mat-card-header>
                 <mat-card-title>Utilisateur</mat-card-title>
               </mat-card-header>
