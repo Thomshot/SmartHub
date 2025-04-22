@@ -135,17 +135,16 @@
           </div>
           <div *ngIf="serviceSearchResults.length > 0" class="search-results">
             <h3>Résultats de la recherche :</h3>
-            <mat-list>
-              <mat-list-item *ngFor="let service of serviceSearchResults">
-                <h4 mat-line>Nom : {{ service.nom || 'Non disponible' }}</h4>
-                <p mat-line>Type : {{ service.type || 'Non disponible' }}</p>
-                <p *ngIf="service.statutActuel" mat-line>Statut actuel : {{ service.statutActuel }}</p>
-                <p *ngIf="service.etats" mat-line>États : {{ service.etats.join(', ') }}</p>
-                <p *ngIf="service.description" mat-line>Description : {{ service.description }}</p>
-                <p *ngIf="service.tarif" mat-line>Tarif : {{ service.tarif }}</p>
-                <p *ngIf="service.derniereMiseAJour" mat-line>Dernière mise à jour : {{ service.derniereMiseAJour | date:'medium' }}</p>
-              </mat-list-item>
-            </mat-list>
+            
+              <div *ngFor="let service of serviceSearchResults">
+                <h4>Nom : {{ service.nom || 'Non disponible' }}</h4>
+                <p >Type : {{ service.type || 'Non disponible' }}</p>
+                <p *ngIf="service.statutActuel">Statut actuel : {{ service.statutActuel }}</p>
+                <p *ngIf="service.etats" >États : {{ service.etats.join(', ') }}</p>
+                <p *ngIf="service.description" >Description : {{ service.description }}</p>
+                <p *ngIf="service.tarif" >Tarif : {{ service.tarif }}</p>
+                <p *ngIf="service.derniereMiseAJour" >Dernière mise à jour : {{ service.derniereMiseAJour | date:'medium' }}</p>
+              </div>
           </div>
           <div *ngIf="serviceSearchTriggered && serviceSearchResults.length === 0" class="no-results">
             <p>Aucun outil/service trouvé avec ce nom.</p>
@@ -164,18 +163,16 @@
           </div>
           <div *ngIf="userSearchResults && userSearchResults.length > 0" class="search-results">
             <h3>Résultat de la recherche :</h3>
-            <mat-list>
-              <mat-list-item>
-                <h4 mat-line>Nom : {{ userSearchResults[0].firstName || 'Non disponible' }} {{ userSearchResults[0].lastName || 'Non disponible' }}</h4>
-                <p mat-line>Email : {{ userSearchResults[0].email || 'Non disponible' }}</p>
-                <p mat-line>Login : {{ userSearchResults[0].login || 'Non disponible' }}</p>
-                <p *ngIf="userSearchResults[0].memberType" mat-line>Type de membre : {{ userSearchResults[0].memberType }}</p>
-                <p *ngIf="userSearchResults[0].role" mat-line>Rôle : {{ userSearchResults[0].role }}</p>
-                <p *ngIf="userSearchResults[0].city" mat-line>Ville : {{ userSearchResults[0].city }}</p>
-                <p *ngIf="userSearchResults[0].points !== undefined" mat-line>Points : {{ userSearchResults[0].points }}</p>
-                <p *ngIf="userSearchResults[0].createdAt" mat-line>Date d'inscription : {{ userSearchResults[0].createdAt | date:'medium' }}</p>
-              </mat-list-item>
-            </mat-list>
+              <div>
+                <h4 >Nom : {{ userSearchResults[0].firstName || 'Non disponible' }} {{ userSearchResults[0].lastName || 'Non disponible' }}</h4>
+                <p >Email : {{ userSearchResults[0].email || 'Non disponible' }}</p>
+                <p>Login : {{ userSearchResults[0].login || 'Non disponible' }}</p>
+                <p *ngIf="userSearchResults[0].memberType">Type de membre : {{ userSearchResults[0].memberType }}</p>
+                <p *ngIf="userSearchResults[0].role">Rôle : {{ userSearchResults[0].role }}</p>
+                <p *ngIf="userSearchResults[0].city">Ville : {{ userSearchResults[0].city }}</p>
+                <p *ngIf="userSearchResults[0].points !== undefined" >Points : {{ userSearchResults[0].points }}</p>
+                <p *ngIf="userSearchResults[0].createdAt">Date d'inscription : {{ userSearchResults[0].createdAt | date:'medium' }}</p>
+              </div>
           </div>
           <div *ngIf="userSearchTriggered && userSearchResults.length === 0" class="no-results">
             <p>Aucun utilisateur trouvé avec ce login.</p>
