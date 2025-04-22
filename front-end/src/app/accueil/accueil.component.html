@@ -17,11 +17,11 @@
     <mat-sidenav-content>
       <div class="header d-flex justify-content-between align-items-center p-3">
         <div class="d-flex gap-1 align-items-center">
-          <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+          <mat-icon class="menu-btn" (click)="sidenav.toggle()">menu</mat-icon>
         </div>
         <div class="d-flex gap-2 align-items-center">
           <mat-icon class="icon-profil" (click)="goToProfile()">person</mat-icon>
-          <button mat-button color="warn" (click)="logout()">Déconnexion</button>
+          <button class="logout-btn" (click)="logout()">Déconnexion</button>
         </div>
       </div>
       <div *ngIf="selectedIndex === 0">
