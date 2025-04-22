@@ -222,3 +222,76 @@ footer {
     background-color: #333;
   }
 }
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0; // réduit les marges verticales
+  margin-bottom: -2rem;
+  margin-top: -1rem;
+
+  img.logo-img {
+    width: 30vw;             // prend 30% de la largeur de l'écran
+    max-width: 180px;        // ne dépasse pas 180px sur les grands écrans
+    min-width: 100px;        // ne descend pas en dessous de 100px
+    height: auto;
+  }
+}
+
+.menu-btn {
+  background: none;
+  border: 2px solid transparent;
+  padding: 10px; /* Ajoute un espace autour de l'icône */
+  font-size: 24px; /* Taille de l'icône */
+  color: #fff; /* Couleur par défaut */
+  cursor: pointer;
+  border-radius: 6px; /* Coins arrondis */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+
+.menu-btn:hover {
+  background-color: rgba(255, 152, 0, 0.15); /* Fond semi-transparent orange */
+  border-color: #ff9800; /* Bordure orange */
+  box-shadow: 0px 0px 30px 10px rgba(255, 152, 0, 0.35); /* Effet de glow */
+  color: #ff9800; /* Change la couleur de l'icône au survol */
+}
+
+.icon-profil {
+  background: none;
+  border: 2px solid transparent;
+  padding: 10px; /* Ajoute un espace autour de l'icône */
+  font-size: 24px; /* Taille de l'icône */
+  color: #fff; /* Couleur par défaut */
+  cursor: pointer;
+  border-radius: 6px; /* Coins arrondis */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+
+.icon-profil:hover {
+  background-color: rgba(255, 152, 0, 0.15); /* Fond semi-transparent orange */
+  border-color: #ff9800; /* Bordure orange */
+  box-shadow: 0px 0px 30px 10px rgba(255, 152, 0, 0.35); /* Effet de glow */
+  color: #ff9800; /* Change la couleur de l'icône au survol */
+}
+
+.logout-btn {
+  background: none;
+  border: 2px solid transparent;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s ease;
+  border-radius: 6px;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 152, 0, 0.15); /* Fond semi-transparent orange */
+  border-color: #ff9800; /* Bordure orange */
+  box-shadow: 0px 0px 30px 10px rgba(255, 152, 0, 0.35); /* Effet de glow */
+  color: #ff9800; /* Change la couleur du texte au survol */
+}

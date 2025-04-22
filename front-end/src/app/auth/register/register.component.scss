@@ -45,6 +45,17 @@
     border-color: #e67e22;
   }
 
+  .form-group .custom-file-button {
+    background-color: #ff9800; /* Couleur orange */
+    color: #000 !important; /* Texte noir forcé */
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
   .gender-options {
     display: flex;
     align-items: center;

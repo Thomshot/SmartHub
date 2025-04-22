@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.routes';
 import deviceRoutes from './routes/device.routes';
 import serviceRoutes from './routes/service.routes';
+import userRoutes from './routes/user.routes';
 import path from 'path';
 
 dotenv.config();
@@ -26,6 +27,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api', authRoutes);
 app.use('/api/devices', deviceRoutes);
 app.use('/api/services', serviceRoutes);
+app.use('/api/users', userRoutes); // Register the user routes
 
 // ✅ Connexion MongoDB
 mongoose.connect(process.env.MONGO_URI!)

@@ -2,8 +2,13 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+
   getToken(): string | null {
     return localStorage.getItem('token');
+  }
+
+  getUserId(): string | null {
+    return localStorage.getItem('userId');
   }
 
   isLoggedIn(): boolean {
@@ -12,5 +17,6 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
   }
 }

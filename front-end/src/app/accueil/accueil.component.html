@@ -1,27 +1,36 @@
 <div class="smarthub-accueil">
   <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav [mode]="isMobileorTablet ? 'over' : 'side'" [opened]="shouldSidenavBeOpened()">
-      <mat-icon class="icon-logo"></mat-icon>
-      <mat-tab-group (selectedIndexChange)="onTabChange($event)">
+      <div class="logo-container">
+        <img src="assets/images/smarthub.png" alt="SmartHub Logo" class="logo-img" />
+      </div>
+      <mat-tab-group [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
         <mat-tab><ng-template mat-tab-label><span>Accueil</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Creation objet</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Gestion objet</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Gestion profil</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Recherche d'objets</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Recherche d'outils/services</span></ng-template></mat-tab>
+        <mat-tab><ng-template mat-tab-label><span>Recherche d'utilisateurs</span></ng-template></mat-tab>
       </mat-tab-group>
     </mat-sidenav>
     <mat-sidenav-content>
       <div class="header d-flex justify-content-between align-items-center p-3">
         <div class="d-flex gap-1 align-items-center">
-          <mat-icon (click)="sidenav.toggle()">menu</mat-icon>
+          <mat-icon class="menu-btn" (click)="sidenav.toggle()">menu</mat-icon>
         </div>
+<<<<<<< HEAD
         <div>
           <mat-icon class="icon-profil" [matMenuTriggerFor]="menu">profil</mat-icon>
           <mat-menu #menu="matMenu">
             <button mat-menu-item [routerLink]="'/'">Deconnexion</button>
             <button mat-menu-item (click)="selectedIndex = 3">gestion Profil</button>
           </mat-menu>
+=======
+        <div class="d-flex gap-2 align-items-center">
+          <mat-icon class="icon-profil" (click)="goToProfile()">person</mat-icon>
+          <button class="logout-btn" (click)="logout()">Déconnexion</button>
+>>>>>>> 8b92d6da6fed73f7e092657da1ed62cbacbca4b9
         </div>
       </div>
       <div *ngIf="selectedIndex === 0">
@@ -110,6 +119,9 @@
                 <p *ngIf="device.derniereInteraction" >Dernière interaction : {{ device.derniereInteraction | date:'medium' }}</p>
               </div>
           </div>
+          <div *ngIf="searchTriggered && searchResults.length === 0" class="no-results">
+            <p>Aucun objet trouvé avec ce nom.</p>
+          </div>
         </div>
       </div>
       <div *ngIf="selectedIndex === 5">
@@ -135,6 +147,39 @@
                 <p *ngIf="service.derniereMiseAJour" mat-line>Dernière mise à jour : {{ service.derniereMiseAJour | date:'medium' }}</p>
               </mat-list-item>
             </mat-list>
+          </div>
+          <div *ngIf="serviceSearchTriggered && serviceSearchResults.length === 0" class="no-results">
+            <p>Aucun outil/service trouvé avec ce nom.</p>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="selectedIndex === 6">
+        <div class="p-4">
+          <h1>Recherche d'utilisateurs</h1>
+          <div class="search-container">
+            <mat-form-field class="example-full-width">
+              <mat-label>Rechercher un utilisateur</mat-label>
+              <input matInput [(ngModel)]="userSearchQuery" placeholder="Entrez le login de l'utilisateur">
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="searchUser()">Rechercher</button>
+          </div>
+          <div *ngIf="userSearchResults && userSearchResults.length > 0" class="search-results">
+            <h3>Résultat de la recherche :</h3>
+            <mat-list>
+              <mat-list-item>
+                <h4 mat-line>Nom : {{ userSearchResults[0].firstName || 'Non disponible' }} {{ userSearchResults[0].lastName || 'Non disponible' }}</h4>
+                <p mat-line>Email : {{ userSearchResults[0].email || 'Non disponible' }}</p>
+                <p mat-line>Login : {{ userSearchResults[0].login || 'Non disponible' }}</p>
+                <p *ngIf="userSearchResults[0].memberType" mat-line>Type de membre : {{ userSearchResults[0].memberType }}</p>
+                <p *ngIf="userSearchResults[0].role" mat-line>Rôle : {{ userSearchResults[0].role }}</p>
+                <p *ngIf="userSearchResults[0].city" mat-line>Ville : {{ userSearchResults[0].city }}</p>
+                <p *ngIf="userSearchResults[0].points !== undefined" mat-line>Points : {{ userSearchResults[0].points }}</p>
+                <p *ngIf="userSearchResults[0].createdAt" mat-line>Date d'inscription : {{ userSearchResults[0].createdAt | date:'medium' }}</p>
+              </mat-list-item>
+            </mat-list>
+          </div>
+          <div *ngIf="userSearchTriggered && userSearchResults.length === 0" class="no-results">
+            <p>Aucun utilisateur trouvé avec ce login.</p>
           </div>
         </div>
       </div>

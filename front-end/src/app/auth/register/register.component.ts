@@ -73,7 +73,7 @@ export class RegisterComponent implements OnInit {
     this.memberTypeError = this.user.memberType ? null : 'Le champ "Type de membre" est obligatoire.';
     this.loginError = this.user.login ? null : 'Le champ "Pseudonyme" est obligatoire.';
     this.birthDateError = this.user.birthDate ? null : 'Le champ "Date de naissance" est obligatoire.';
-    this.validateGender(); // Valide le champ "Sexe"
+    this.validateGender();
 
     // Vérifie si tous les champs sont valides
     if (
@@ -112,6 +112,7 @@ export class RegisterComponent implements OnInit {
   onPhotoSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
+      this.selectedPhotoFile = input.files[0];
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.photoPreview = e.target.result;
@@ -140,15 +141,14 @@ export class RegisterComponent implements OnInit {
     }
 
     const formData = new FormData();
-    for (const key in this.user) {
-      formData.append(key, (this.user as any)[key]);
-    }
+    Object.entries(this.user).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
 
     if (this.selectedPhotoFile) {
       formData.append('photo', this.selectedPhotoFile);
     }
-
-    formData.append('userType', this.user.userType); // Inclure userType (toujours "simple")
 
     this.http.post('http://localhost:3000/api/register', formData).subscribe({
       next: (res: any) => {
