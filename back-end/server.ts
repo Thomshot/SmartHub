@@ -27,7 +27,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api', authRoutes);
 app.use('/api/devices', deviceRoutes);
 app.use('/api/services', serviceRoutes);
-app.use('/api/users', userRoutes); // Register the user routes
+app.use('/api/users', userRoutes);
 
 // ✅ Connexion MongoDB
 mongoose.connect(process.env.MONGO_URI!)

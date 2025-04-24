@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   verificationToken: { type: String },
   userType: { type: String, default: 'simple', enum: ['simple', 'complexe', 'administrateur'] },
-  points: { type: Number, default: 0 }, // Points cumulés par l'utilisateur
+  points: { type: Number, default: 0 },
 }, { timestamps: true });
 
-export default mongoose.model('User', userSchema, 'users'); // Explicitly use the "users" collection
+export default mongoose.model('User', userSchema, 'users');
