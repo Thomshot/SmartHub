@@ -17,6 +17,9 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 
+import { DeviceService } from '../../services/device.service';
+import { MatDialogRef } from '@angular/material/dialog';
+
 @Component({
   selector: 'app-ajout-objet-dialog',
   standalone: true,
@@ -42,6 +45,8 @@ import {
 export class AjoutObjetDialogComponent implements OnInit {
 
   private _formBuilder = inject(FormBuilder);
+  private deviceService = inject(DeviceService); // Injectez le service
+  private dialogRef = inject(MatDialogRef<AjoutObjetDialogComponent>);
 
   isLinear = true;
 
@@ -120,13 +125,29 @@ export class AjoutObjetDialogComponent implements OnInit {
   }
 
   submitObject(): void {
-    console.log('Objet créé ✅');
-    console.log({
-      type: this.myControl.value,
-      ...this.firstFormGroup.value,
-      ...this.secondFormGroup.value,
-      ...this.thirdFormGroup.value,
-      image: this.previewUrl
+    // Prépare les données de l'objet à partir des formulaires
+    const deviceData = {
+      type: this.myControl.value || 'Lampe',
+      statutActuel: 'actif', // Exemple de valeur par défaut
+      nom: this.secondFormGroup.get('objectName')?.value,
+      room: this.secondFormGroup.get('room')?.value,
+      brand: this.secondFormGroup.get('brand')?.value,
+      idUnique: this.secondFormGroup.get('id')?.value,
+      ip: this.thirdFormGroup.get('ip')?.value,
+      mac: this.thirdFormGroup.get('mac')?.value,
+      protocol: this.thirdFormGroup.get('protocol')?.value,
+      image: this.previewUrl, // Image uploadée
+    };
+
+    // Appelle le service pour ajouter l'objet
+    this.deviceService.addDevice(deviceData).subscribe({
+      next: (response) => {
+        console.log('Objet ajouté avec succès :', response);
+        this.dialogRef.close(); // Fermez le dialogue après succès
+      },
+      error: (error) => {
+        console.error('Erreur lors de l\'ajout de l\'objet :', error);
+      },
     });
   }
 }

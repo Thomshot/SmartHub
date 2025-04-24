@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'; // Ensure these are imported from 'express'
 import Device from '../models/device';
 
+// Méthode pour rechercher un appareil
 export const searchDevice = async (req: Request, res: Response): Promise<void> => {
   try {
     const { query } = req.query; // Extract the search query from the request
@@ -18,5 +19,26 @@ export const searchDevice = async (req: Request, res: Response): Promise<void> =
   } catch (error) {
     console.error('Erreur lors de la recherche :', error);
     res.status(500).json({ message: 'Erreur serveur.' });
+  }
+};
+
+// Méthode pour créer un nouvel appareil
+export const createDevice = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const deviceData = req.body; // Récupère les données envoyées dans la requête
+
+    // Crée un nouvel objet Device
+    const newDevice = new Device(deviceData);
+
+    // Sauvegarde dans la base de données
+    const savedDevice = await newDevice.save();
+
+    res.status(201).json({
+      message: 'Objet créé avec succès',
+      device: savedDevice,
+    });
+  } catch (error) {
+    console.error('Erreur lors de la création de l\'objet :', error);
+    res.status(500).json({ message: 'Erreur serveur lors de la création de l\'objet.', error });
   }
 };
