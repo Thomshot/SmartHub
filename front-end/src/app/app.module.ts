@@ -10,6 +10,7 @@ import { AccueilComponent } from './accueil/accueil.component';
 import { ProfilComponent } from './profil/profil.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+
 @NgModule({
   declarations: [
     AppComponent,

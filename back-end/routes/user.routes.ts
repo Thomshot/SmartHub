@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
-import { searchUser, getProfile, updateUser } from '../controllers/user.controller';
+import { searchUser, getProfile, updateUser, deleteUser } from '../controllers/user.controller';
 
 const router = express.Router();
 
@@ -27,5 +27,7 @@ router.get('/profile/:id', getProfile);
 
 // ✏️ Mise à jour du profil avec photo
 router.put('/:id', upload.single('photo'), updateUser);
+
+router.delete('/:id', deleteUser);
 
 export default router;

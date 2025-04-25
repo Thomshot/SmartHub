@@ -88,7 +88,7 @@
                 <p >Connectivité : </p>
                 <p >État de batterie : </p>
                 <p>Dernière interaction : </p>
-         
+
           </mat-card>
           </div>
         </div>
@@ -135,7 +135,7 @@
           </div>
           <div *ngIf="serviceSearchResults.length > 0" class="search-results">
             <h3>Résultats de la recherche :</h3>
-            
+
               <div *ngFor="let service of serviceSearchResults">
                 <h4>Nom : {{ service.nom || 'Non disponible' }}</h4>
                 <p >Type : {{ service.type || 'Non disponible' }}</p>
@@ -163,17 +163,48 @@
           </div>
           <div *ngIf="userSearchResults && userSearchResults.length > 0" class="search-results">
             <h3>Résultat de la recherche :</h3>
-              <div>
-                <h4 >Nom : {{ userSearchResults[0].firstName || 'Non disponible' }} {{ userSearchResults[0].lastName || 'Non disponible' }}</h4>
-                <p >Email : {{ userSearchResults[0].email || 'Non disponible' }}</p>
-                <p>Login : {{ userSearchResults[0].login || 'Non disponible' }}</p>
-                <p *ngIf="userSearchResults[0].memberType">Type de membre : {{ userSearchResults[0].memberType }}</p>
-                <p *ngIf="userSearchResults[0].role">Rôle : {{ userSearchResults[0].role }}</p>
-                <p *ngIf="userSearchResults[0].city">Ville : {{ userSearchResults[0].city }}</p>
-                <p *ngIf="userSearchResults[0].points !== undefined" >Points : {{ userSearchResults[0].points }}</p>
-                <p *ngIf="userSearchResults[0].createdAt">Date d'inscription : {{ userSearchResults[0].createdAt | date:'medium' }}</p>
+            <div class="user-results-container" style="display: flex; gap: 2rem;">
+              <!-- Liste utilisateurs -->
+              <div class="user-list">
+                <mat-card class="user-result-card"
+                  *ngFor="let user of userSearchResults"
+                  (click)="selectOtherUser(user)"
+                  style="cursor:pointer;">
+                  <mat-card-title>
+                    {{ user.firstName || 'Non disponible' }} {{ user.lastName || '' }}
+                  </mat-card-title>
+                  <mat-card-content>
+                    <p>Email : {{ user.email || 'Non disponible' }}</p>
+                    <p>Login : {{ user.login || 'Non disponible' }}</p>
+                    <p *ngIf="user.city">Ville : {{ user.city }}</p>
+                    <p *ngIf="user.memberType">Type de membre : {{ user.memberType }}</p>
+                    <p *ngIf="user.role">Rôle : {{ user.role }}</p>
+                    <p *ngIf="user.points !== undefined">Points : {{ user.points }}</p>
+                    <p *ngIf="user.createdAt">Date d'inscription : {{ user.createdAt | date:'medium' }}</p>
+                  </mat-card-content>
+                </mat-card>
               </div>
+
+              <div class="other-profile" *ngIf="selectedOtherUser">
+                <!-- Profil lecture seule (autre utilisateur) -->
+                <app-other-profil
+                  *ngIf="!editOtherUserMode"
+                  [user]="selectedOtherUser"
+                  [isAdmin]="currentUser?.userType === 'administrateur'"
+                  (editRequested)="editOtherUserMode = true">
+                </app-other-profil>
+
+                <!-- Profil édition (user sélectionné) -->
+                <app-edit-user
+                  *ngIf="editOtherUserMode"
+                  [userId]="selectedOtherUser._id"
+                  (close)="editOtherUserMode = false">
+                </app-edit-user>
+              </div>
+
+            </div>
           </div>
+
           <div *ngIf="userSearchTriggered && userSearchResults.length === 0" class="no-results">
             <p>Aucun utilisateur trouvé avec ce login.</p>
           </div>

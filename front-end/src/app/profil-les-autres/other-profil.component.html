@@ -1,0 +1,70 @@
+<div class="other-profil-container">
+
+  <!-- Loader -->
+  <div *ngIf="loading" class="loading-text">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+
+  <!-- Erreur -->
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <!-- Profil utilisateur (lecture seule) -->
+  <mat-card class="profil-card" *ngIf="!loading && !error">
+    <mat-card-header>
+      <mat-card-title>
+        {{ user?.firstName }} {{ user?.lastName }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Profil de l'utilisateur
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="avatar-section">
+        <img [src]="avatarUrl" class="avatar-large" alt="Avatar" />
+      </div>
+      <mat-list>
+        <mat-list-item>
+          <strong>Genre :</strong> {{ user?.gender || 'Non renseigné' }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>Date de naissance :</strong> {{ user?.birthDate || 'Non renseignée' }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>Nom :</strong> {{ user?.lastName || 'Non renseigné' }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>Prénom :</strong> {{ user?.firstName || 'Non renseigné' }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>Ville :</strong> {{ user?.city || 'Non renseignée' }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>Adresse :</strong> {{ user?.address || 'Non renseignée' }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>Email :</strong> {{ user?.email || 'Non renseigné' }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>Login :</strong> {{ user?.login || 'Non renseigné' }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>Type de membre :</strong> {{ user?.memberType || 'Non renseigné' }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>Rôle :</strong> {{ user?.role || 'Non renseigné' }}
+        </mat-list-item>
+      </mat-list>
+      <mat-card-actions *ngIf="isAdmin" align="end">
+        <button mat-raised-button color="primary"
+          style="margin-right: 1rem;"
+          (click)="editRequested.emit()">Modifier ce profil</button>
+        <button mat-raised-button color="warn" (click)="supprimerUtilisateur()" [disabled]="isDeleting">
+          <mat-icon>delete</mat-icon>
+          Supprimer cet utilisateur
+        </button>
+      </mat-card-actions>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -12,7 +12,7 @@ import { of } from 'rxjs';
   standalone: true,
   imports: [MaterialDModule, RouterModule, CommonModule, FormsModule, HttpClientModule],
   templateUrl: './page-presentation.component.html',
-  styleUrls: ['./page-presentation.component.scss'] // ❗ style**s**Url → styleUrls
+  styleUrls: ['./page-presentation.component.scss']
 })
 export class PagePresentationComponent {
   isLoginPopupVisible = false;
@@ -63,8 +63,6 @@ export class PagePresentationComponent {
         console.log('✅ Connexion réussie', res);
         localStorage.setItem('token', res.token);
         localStorage.setItem('userId', res.user.id);
-        localStorage.setItem('userName', `${res.user.firstName} ${res.user.lastName}`);
-        localStorage.setItem('userEmail', res.user.email);
         this.router.navigate(['/accueil']);
         this.closeLoginPopup();
       },
