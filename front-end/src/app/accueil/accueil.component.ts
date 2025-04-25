@@ -57,7 +57,7 @@ export class AccueilComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
     });
   }
-  filtreDialog() {
+  filtreDialog(): void {
     const dialogRef = this.dialog.open(FiltreDialogComponent, {
       panelClass: 'filtre-dialog',
       position: { right: '0' },
@@ -68,9 +68,17 @@ export class AccueilComponent implements OnInit {
     dialogRef.afterClosed().subscribe(filtres => {
       if (filtres) {
         this.filtrerMaisonDevices(filtres); // Appliquer les filtres
+      } else {
+        this.resetMaisonDevices(); // Réinitialiser les filtres
       }
     });
   }
+
+  resetMaisonDevices(): void {
+    this.filteredMaisonDevices = [...this.maisonDevices]; // Réinitialiser les objets filtrés
+    console.log('Filtres réinitialisés, affichage de toute la maison ✅');
+  }
+
   statusDialog() {
     const dialogRef = this.dialog.open(ProgressionNiveauDialogComponent);
 

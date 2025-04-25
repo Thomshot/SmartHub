@@ -45,8 +45,8 @@ export class FiltreDialogComponent {
       { label: 'Éteint', checked: false }
     ],
     connectivite: [
-      { label: 'Connecté', checked: false },
-      { label: 'Déconnecté', checked: false }
+      { label: 'Wi-Fi', checked: false },
+      { label: 'Bluetooth', checked: false }
     ],
     types: [
       { label: 'Éclairage', checked: false },
@@ -66,6 +66,14 @@ export class FiltreDialogComponent {
     };
     console.log('Filtres sélectionnés ✅', result);
     this.dialogRef.close(result);
+  }
+
+  resetFiltres() {
+    (Object.keys(this.filtres) as (keyof typeof this.filtres)[]).forEach((key) => {
+      this.filtres[key].forEach((filter: { label: string; checked: boolean }) => filter.checked = false);
+    });
+    console.log('Filtres réinitialisés ✅');
+    this.dialogRef.close(null); // Fermer le dialogue sans appliquer de filtres
   }
 
   fermer() {

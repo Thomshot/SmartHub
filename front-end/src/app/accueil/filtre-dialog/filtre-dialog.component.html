@@ -8,7 +8,7 @@
         {{ room.label }}
       </mat-checkbox>
     </section>
-  
+
     <!-- État -->
     <section>
       <h3>État</h3>
@@ -16,7 +16,7 @@
         {{ etat.label }}
       </mat-checkbox>
     </section>
-  
+
     <!-- Connectivité -->
     <section>
       <h3>Connectivité</h3>
@@ -24,7 +24,7 @@
         {{ net.label }}
       </mat-checkbox>
     </section>
-  
+
     <!-- Type d’objet -->
     <section>
       <h3>Catégorie</h3>
@@ -35,8 +35,9 @@
 </mat-dialog-content>
     <!-- Actions -->
     <mat-dialog-actions class="d-flex justify-content-between">
+      <button mat-raised-button (click)="resetFiltres()">Réinitialiser les filtres</button>
       <button mat-raised-button (click)="fermer()">Annuler</button>
       <button mat-button (click)="appliquerFiltres()">Appliquer</button>
     </mat-dialog-actions>
-   
+
   </div>
