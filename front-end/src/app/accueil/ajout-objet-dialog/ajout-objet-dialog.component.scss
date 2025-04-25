@@ -1,0 +1,122 @@
+// Conteneur principal du formulaire
+.ajout-objet-dialog-container {
+  background-color: #111; // Fond sombre
+  color: #fff; // Texte blanc
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(255, 152, 0, 0.3); // Ombre subtile orange
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+// Titres des sections
+h2, h3 {
+  color: #ff9800; // Couleur orange pour les titres
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+// Champs de formulaire
+mat-form-field {
+  width: 100%;
+  margin-bottom: 30px; // Espacement entre les champs
+
+  .mat-form-field-label {
+    color: #ff9800; // Couleur orange pour les labels
+  }
+
+  .mat-input-element,
+  .mat-select-value {
+    color: #fff !important; // Texte blanc
+    background-color: #222; // Fond sombre
+    border-radius: 6px;
+    padding: 10px; // Ajout d'un padding interne pour plus de confort
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    border-color: #ff9800; // Bordure orange
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    border-color: #e67e22; // Bordure orange plus foncée au focus
+  }
+
+  .mat-placeholder {
+    color: #aaa; // Placeholder gris clair
+  }
+
+  input,
+  textarea {
+    color: #fff !important; // Texte blanc
+  }
+}
+
+// Styles pour mat-select (Protocole et Pièce)
+mat-select {
+  color: #fff !important; // Texte blanc
+  background-color: #222; // Fond sombre
+  border-radius: 6px;
+
+  .mat-select-placeholder {
+    color: #aaa; // Placeholder gris clair
+  }
+
+  .mat-select-arrow {
+    color: #ff9800; // Flèche orange
+  }
+
+  .mat-select-panel {
+    background-color: #222; // Fond sombre pour la liste déroulante
+    color: #fff; // Texte blanc
+  }
+
+  .mat-option {
+    background-color: #222; // Fond sombre pour les options
+    color: #fff; // Texte blanc
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #333; // Fond légèrement plus clair au survol
+    }
+
+    &.mat-active {
+      background-color: #e67e22; // Fond orange pour l'option sélectionnée
+      color: #000; // Texte noir
+    }
+  }
+}
+
+// Boutons
+button {
+  background-color: #ff9800; // Couleur orange
+  color: #000; // Texte noir
+  border: none;
+  padding: 12px 24px; // Taille plus grande pour plus de confort
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px; // Espacement entre les boutons et les champs
+
+  &:hover {
+    background-color: #e67e22; // Couleur orange plus foncée au survol
+  }
+
+  &.mat-button {
+    color: #ff9800; // Texte orange pour les boutons secondaires
+  }
+}
+
+// Aperçu de l'image
+.image-preview {
+  margin-top: 20px;
+  text-align: center;
+
+  img {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); // Ombre subtile
+  }
+}

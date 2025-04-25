@@ -2,6 +2,7 @@
 
 <mat-dialog-content>
   <mat-stepper #stepper [linear]="true">
+    <!-- Étape 1 : Type d'objet -->
     <mat-step [stepControl]="firstFormGroup">
       <form [formGroup]="firstFormGroup">
         <ng-template matStepLabel>Type d'objet</ng-template>
@@ -26,32 +27,34 @@
         </div>
       </form>
     </mat-step>
+
+    <!-- Étape 2 : Détails de l'objet -->
     <mat-step [stepControl]="secondFormGroup">
       <form [formGroup]="secondFormGroup">
         <ng-template matStepLabel>Détails de l'objet</ng-template>
         <div class="d-flex gap-1">
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Nom de l'objet</mat-label>
-          <input matInput formControlName="objectName" placeholder="Ex : Frigo Cuisine" required>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Nom de l'objet</mat-label>
+            <input matInput formControlName="objectName" placeholder="Ex : Frigo Cuisine" required>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Pièce</mat-label>
-          <mat-select formControlName="room" required>
-            <mat-option *ngFor="let room of rooms" [value]="room">{{ room }}</mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Pièce</mat-label>
+            <mat-select formControlName="room" required>
+              <mat-option *ngFor="let room of rooms" [value]="room">{{ room }}</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Marque / Modèle</mat-label>
-          <input matInput formControlName="brand" placeholder="Ex : Samsung Smart Fridge">
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Marque / Modèle</mat-label>
+            <input matInput formControlName="brand" placeholder="Ex : Samsung Smart Fridge">
+          </mat-form-field>
 
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>Identifiant unique (optionnel)</mat-label>
-          <input matInput formControlName="id" placeholder="ex : FRG-1234-ABCD">
-        </mat-form-field>
-      </div>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Identifiant unique (optionnel)</mat-label>
+            <input matInput formControlName="id" placeholder="ex : FRG-1234-ABCD">
+          </mat-form-field>
+        </div>
         <div class="mt-4">
           <label>Photo de l’objet</label>
           <input type="file" (change)="onFileSelected($event)" accept="image/*" />
@@ -65,6 +68,8 @@
         </div>
       </form>
     </mat-step>
+
+    <!-- Étape 3 : Connectivité -->
     <mat-step [stepControl]="thirdFormGroup">
       <form [formGroup]="thirdFormGroup">
         <ng-template matStepLabel>Connectivité</ng-template>
