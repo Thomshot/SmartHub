@@ -42,3 +42,14 @@ export const createDevice = async (req: Request, res: Response): Promise<void> =
     res.status(500).json({ message: 'Erreur serveur lors de la création de l\'objet.', error });
   }
 };
+
+// Méthode pour récupérer tous les objets
+export const getAllDevices = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const devices = await Device.find(); // Récupère tous les objets dans la BDD
+    res.status(200).json(devices); // Retourne les objets
+  } catch (error) {
+    console.error('Erreur lors de la récupération des objets :', error);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+};

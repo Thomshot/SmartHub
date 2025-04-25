@@ -1,10 +1,12 @@
 import express from 'express';
-import { searchDevice, createDevice } from '../controllers/device.controller';
+import { getAllDevices, searchDevice, createDevice } from '../controllers/device.controller';
 
 const router = express.Router();
 
 // Route pour rechercher des appareils
 router.get('/search', searchDevice);
+
+router.get('/all', getAllDevices);
 
 router.get('/test', (req, res) => {
     res.send('✅ Route /api/devices/test atteinte');

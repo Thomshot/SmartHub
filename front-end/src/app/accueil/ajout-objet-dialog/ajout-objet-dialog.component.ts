@@ -44,6 +44,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class AjoutObjetDialogComponent implements OnInit {
 
+  
   private _formBuilder = inject(FormBuilder);
   private deviceService = inject(DeviceService); // Injectez le service
   private dialogRef = inject(MatDialogRef<AjoutObjetDialogComponent>);
@@ -127,7 +128,7 @@ export class AjoutObjetDialogComponent implements OnInit {
   submitObject(): void {
     // Prépare les données de l'objet à partir des formulaires
     const deviceData = {
-      type: this.myControl.value || 'Lampe',
+      type: this.myControl.value || 'Lampe', // Valeur par défaut si aucune sélection
       statutActuel: 'actif', // Exemple de valeur par défaut
       nom: this.secondFormGroup.get('objectName')?.value,
       room: this.secondFormGroup.get('room')?.value,

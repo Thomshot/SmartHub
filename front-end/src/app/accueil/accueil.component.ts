@@ -16,6 +16,8 @@ import { AjoutObjetDialogComponent } from './ajout-objet-dialog/ajout-objet-dial
 import { FiltreDialogComponent } from './filtre-dialog/filtre-dialog.component';
 import { ProgressionNiveauDialogComponent } from './progression-niveau-dialog/progression-niveau-dialog.component';
 import { Router } from '@angular/router';
+import { DeviceService } from '../services/device.service';
+
 
 
 @Component({
@@ -41,7 +43,10 @@ export class AccueilComponent implements OnInit {
   serviceSearchResults: any[] = [];
   serviceSearchTriggered: boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient,private router: Router) {
+  availableDevices: any[] = []; // Liste des objets disponibles
+  maisonDevices: any[] = []; // Liste des objets ajoutés à la "Maison"
+
+  constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient,private router: Router, private deviceService: DeviceService) {
   }
   readonly dialog = inject(MatDialog);
 
@@ -78,6 +83,7 @@ export class AccueilComponent implements OnInit {
   userSearchTriggered: boolean = false;
 
   ngOnInit(): void {
+    this.loadAvailableDevices();
     this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
       this.isMobileorTablet = result.matches;
     });
@@ -95,6 +101,17 @@ export class AccueilComponent implements OnInit {
         console.warn('⚠️ Aucun utilisateur détecté dans localStorage');
       }
     }
+  }
+
+loadAvailableDevices(): void {
+    this.deviceService.getAllDevices().subscribe({
+      next: (devices) => {
+        this.availableDevices = devices;
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des objets :', err);
+      }
+    });
   }
 
   shouldSidenavBeOpened(): boolean {
@@ -193,5 +210,11 @@ export class AccueilComponent implements OnInit {
           this.userSearchResults = [];
         }
       });
+  }
+
+  // Ajouter un objet à la "Maison"
+  addToMaison(device: any): void {
+    this.maisonDevices.push(device);
+    console.log('Objet ajouté à la Maison :', device);
   }
 }

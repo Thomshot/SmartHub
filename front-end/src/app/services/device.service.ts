@@ -14,4 +14,9 @@ export class DeviceService {
   addDevice(deviceData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/create`, deviceData);
   }
+
+  // Méthode pour récupérer tous les objets
+  getAllDevices(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/all`);
+  }
 }

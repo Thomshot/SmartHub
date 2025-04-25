@@ -34,7 +34,7 @@
       </div>
         <div *ngIf="selectedIndex === 0">
           <div class="p-4">
-            <h1>Bonjour<span>{{user}}</span></h1>
+            <h1>Bonjour <span>{{user}}</span></h1>
               <div class="d-flex justify-content-around">
               <mat-card appearance="outlined" class="w-25">
               <mat-card-header>
@@ -62,7 +62,37 @@
           </div>
 
         </div>
+
+        <!-- Section Maison -->
+        <div class="p-4">
+          <h2>Maison</h2>
+          <div *ngIf="maisonDevices.length > 0; else noMaisonDevices">
+            <div class="device-card" *ngFor="let device of maisonDevices">
+              <h3>{{ device.nom }}</h3>
+              <p><strong>Type :</strong> {{ device.type }}</p>
+            </div>
+          </div>
+          <ng-template #noMaisonDevices>
+            <p>Aucun objet dans la Maison.</p>
+          </ng-template>
+        </div>
+
+        <div class="p-4">
+          <h2>Objets disponibles</h2>
+          <div *ngIf="availableDevices.length > 0; else noDevices">
+            <div class="device-card" *ngFor="let device of availableDevices">
+              <h3>{{ device.nom }}</h3>
+              <p><strong>Type :</strong> {{ device.type }}</p>
+              <button mat-raised-button color="primary" (click)="addToMaison(device)">Ajouter à la Maison</button>
+            </div>
+          </div>
+          <ng-template #noDevices>
+            <p>Aucun objet disponible.</p>
+          </ng-template>
+          </div>
+
       </div>
+
       <div class="creation-objet" *ngIf="selectedIndex === 1">
         <div class="p-4">
           <h2>Objet crée:</h2>
