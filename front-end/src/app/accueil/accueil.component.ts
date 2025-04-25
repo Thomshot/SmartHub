@@ -44,6 +44,7 @@ export class AccueilComponent implements OnInit {
 
   availableDevices: any[] = []; // Liste des objets disponibles
   maisonDevices: any[] = []; // Liste des objets ajoutés à la "Maison"
+  filteredMaisonDevices: any[] = []; // Liste des objets filtrés
 
   constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient,private router: Router, private deviceService: DeviceService) {
   }
@@ -57,15 +58,17 @@ export class AccueilComponent implements OnInit {
     });
   }
   filtreDialog() {
-    const dialogRef = this.dialog.open(FiltreDialogComponent,{
+    const dialogRef = this.dialog.open(FiltreDialogComponent, {
       panelClass: 'filtre-dialog',
-      position:{right:'0'},
-      height:'100vh',
-      width:'30%',
-    } );
+      position: { right: '0' },
+      height: '100vh',
+      width: '30%',
+    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+    dialogRef.afterClosed().subscribe(filtres => {
+      if (filtres) {
+        this.filtrerMaisonDevices(filtres); // Appliquer les filtres
+      }
     });
   }
   statusDialog() {
@@ -84,6 +87,7 @@ export class AccueilComponent implements OnInit {
   ngOnInit(): void {
     this.loadAvailableDevices();
     this.loadMaisonDevicesFromLocalStorage(); // Charger les objets de la maison depuis localStorage
+    this.filteredMaisonDevices = [...this.maisonDevices]; // Initialiser les objets filtrés
     this.loadUserFromLocalStorage(); // Charger les informations utilisateur depuis localStorage
     this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
       this.isMobileorTablet = result.matches;
@@ -104,7 +108,7 @@ export class AccueilComponent implements OnInit {
     }
   }
 
-loadAvailableDevices(): void {
+  loadAvailableDevices(): void {
     this.deviceService.getAllDevices().subscribe({
       next: (devices) => {
         this.availableDevices = devices;
@@ -256,5 +260,17 @@ loadAvailableDevices(): void {
     } else {
       console.warn('⚠️ Aucun utilisateur détecté dans localStorage');
     }
+  }
+
+  filtrerMaisonDevices(filtres: any): void {
+    this.filteredMaisonDevices = this.maisonDevices.filter(device => {
+      const matchPiece = filtres.pieces.length === 0 || filtres.pieces.includes(device.room);
+      const matchEtat = filtres.etats.length === 0 || filtres.etats.includes(device.statutActuel);
+      const matchConnectivite = filtres.connectivite.length === 0 || filtres.connectivite.includes(device.connectivite);
+      const matchType = filtres.types.length === 0 || filtres.types.includes(device.type);
+
+      return matchPiece && matchEtat && matchConnectivite && matchType;
+    });
+    console.log('Objets filtrés :', this.filteredMaisonDevices);
   }
 }

@@ -121,27 +121,41 @@
       </div>
       <div *ngIf="selectedIndex === 2">
         <div class="p-4">
-          <div class="d-flex flex-column gap-3">
           <div class="d-flex gap-3 align-items-center">
             <mat-icon (click)="filtreDialog()" class="icon-filtre"></mat-icon>
             <mat-form-field>
-              <input matInput>
-              <mat-icon class="icon-loupe"></mat-icon>
+              <input matInput [(ngModel)]="searchQuery" placeholder="Rechercher un objet dans la maison">
+              <mat-icon matSuffix class="icon-loupe">search</mat-icon>
             </mat-form-field>
           </div>
-          <div>
-            <mat-card class="d-flex w-25 p-4">
-              <mat-icon class="icon-objet" style="width: auto; height: 180px;"></mat-icon>
-             <h4> <span>Nom :</span></h4>
-                <p>Type : </p>
-                <p >Statut actuel : </p>
-                <p >Connectivité : </p>
-                <p >État de batterie : </p>
-                <p>Dernière interaction : </p>
-
-          </mat-card>
+          <div class="p-4">
+            <h2>Vue de la Maison</h2>
+            <div *ngIf="filteredMaisonDevices.length > 0; else noMaisonDevices" class="d-flex flex-wrap gap-3">
+              <mat-card *ngFor="let device of filteredMaisonDevices" appearance="outlined" class="w-25">
+                <mat-card-header>
+                  <mat-card-title>{{ device.nom }}</mat-card-title>
+                  <mat-card-subtitle>{{ device.type }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <p><strong>Type :</strong> {{ device.type }}</p>
+                  <p><strong>Statut :</strong> {{ device.statutActuel }}</p>
+                  <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
+                  <p *ngIf="device.etatDeBatterie"><strong>État de batterie :</strong> {{ device.etatDeBatterie }}</p>
+                  <p *ngIf="device.derniereInteraction"><strong>Dernière interaction :</strong> {{ device.derniereInteraction | date:'medium' }}</p>
+                  <p *ngIf="device.ip"><strong>Adresse IP :</strong> {{ device.ip }}</p>
+                  <p *ngIf="device.mac"><strong>Adresse MAC :</strong> {{ device.mac }}</p>
+                  <p *ngIf="device.protocol"><strong>Protocole :</strong> {{ device.protocol }}</p>
+                  <p *ngIf="device.brand"><strong>Marque :</strong> {{ device.brand }}</p>
+                  <p *ngIf="device.room"><strong>Pièce :</strong> {{ device.room }}</p>
+                  <p *ngIf="device.image"><strong>Image :</strong></p>
+                  <img *ngIf="device.image" [src]="device.image" alt="Image de l'objet" style="max-width: 100%; border-radius: 8px;">
+                </mat-card-content>
+              </mat-card>
+            </div>
+            <ng-template #noMaisonDevices>
+              <p>Aucun objet dans la Maison.</p>
+            </ng-template>
           </div>
-        </div>
         </div>
       </div>
       <div *ngIf="selectedIndex === 3">
