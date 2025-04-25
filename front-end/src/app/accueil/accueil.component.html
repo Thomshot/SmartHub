@@ -77,6 +77,15 @@
                 <p><strong>Type :</strong> {{ device.type }}</p>
                 <p *ngIf="device.statutActuel"><strong>Statut :</strong> {{ device.statutActuel }}</p>
                 <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
+                <p *ngIf="device.etatDeBatterie"><strong>État de batterie :</strong> {{ device.etatDeBatterie }}</p>
+                <p *ngIf="device.derniereInteraction"><strong>Dernière interaction :</strong> {{ device.derniereInteraction | date:'medium' }}</p>
+                <p *ngIf="device.ip"><strong>Adresse IP :</strong> {{ device.ip }}</p>
+                <p *ngIf="device.mac"><strong>Adresse MAC :</strong> {{ device.mac }}</p>
+                <p *ngIf="device.protocol"><strong>Protocole :</strong> {{ device.protocol }}</p>
+                <p *ngIf="device.brand"><strong>Marque :</strong> {{ device.brand }}</p>
+                <p *ngIf="device.room"><strong>Pièce :</strong> {{ device.room }}</p>
+                <p *ngIf="device.image"><strong>Image :</strong></p>
+                <img *ngIf="device.image" [src]="device.image" alt="Image de l'objet" style="max-width: 100%; border-radius: 8px;">
               </mat-card-content>
               <mat-card-actions>
                 <button mat-button color="warn" (click)="removeFromMaison(device)">Supprimer</button>
