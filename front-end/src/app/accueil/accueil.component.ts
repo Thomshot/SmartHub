@@ -1,4 +1,3 @@
-
 import { ViewChild } from '@angular/core';
 import { Component, OnInit, inject } from '@angular/core';
 
@@ -76,7 +75,7 @@ export class AccueilComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
     });
   }
-  
+
 
   userSearchQuery: string = '';
   userSearchResults: any[] = [];
@@ -84,6 +83,8 @@ export class AccueilComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAvailableDevices();
+    this.loadMaisonDevicesFromLocalStorage(); // Charger les objets de la maison depuis localStorage
+    this.loadUserFromLocalStorage(); // Charger les informations utilisateur depuis localStorage
     this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
       this.isMobileorTablet = result.matches;
     });
@@ -112,6 +113,15 @@ loadAvailableDevices(): void {
         console.error('Erreur lors de la récupération des objets :', err);
       }
     });
+  }
+
+  loadMaisonDevicesFromLocalStorage(): void {
+    const maisonDevices = localStorage.getItem('maisonDevices');
+    this.maisonDevices = maisonDevices ? JSON.parse(maisonDevices) : [];
+  }
+
+  saveMaisonDevicesToLocalStorage(): void {
+    localStorage.setItem('maisonDevices', JSON.stringify(this.maisonDevices));
   }
 
   shouldSidenavBeOpened(): boolean {
@@ -180,8 +190,11 @@ loadAvailableDevices(): void {
       });
   }
 
-  logout() {
-    localStorage.clear();
+  logout(): void {
+    this.saveMaisonDevicesToLocalStorage(); // Sauvegarder les objets de la maison avant de se déconnecter
+    localStorage.removeItem('userName');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('userId');
     window.location.href = '/';
   }
 
@@ -215,6 +228,33 @@ loadAvailableDevices(): void {
   // Ajouter un objet à la "Maison"
   addToMaison(device: any): void {
     this.maisonDevices.push(device);
+    this.saveMaisonDevicesToLocalStorage(); // Sauvegarder dans localStorage
     console.log('Objet ajouté à la Maison :', device);
+  }
+
+  // Supprimer un objet de la "Maison"
+  removeFromMaison(device: any): void {
+    this.maisonDevices = this.maisonDevices.filter(d => d !== device);
+    this.saveMaisonDevicesToLocalStorage(); // Mettre à jour le localStorage
+    console.log('Objet supprimé de la Maison :', device);
+  }
+
+  clearMaisonDevices(): void {
+    this.maisonDevices = [];
+    localStorage.removeItem('maisonDevices'); // Supprimer les données de localStorage
+    console.log('Maison réinitialisée.');
+  }
+
+  loadUserFromLocalStorage(): void {
+    const name = localStorage.getItem('userName');
+    const email = localStorage.getItem('userEmail');
+    const id = localStorage.getItem('userId');
+
+    if (name && email && id) {
+      this.user = name; // Met à jour l'affichage du nom
+      console.log(`✅ Connecté en tant que ${name} <${email}> (ID: ${id})`);
+    } else {
+      console.warn('⚠️ Aucun utilisateur détecté dans localStorage');
+    }
   }
 }

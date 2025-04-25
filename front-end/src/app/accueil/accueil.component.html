@@ -66,11 +66,22 @@
         <!-- Section Maison -->
         <div class="p-4">
           <h2>Maison</h2>
-          <div *ngIf="maisonDevices.length > 0; else noMaisonDevices">
-            <div class="device-card" *ngFor="let device of maisonDevices">
-              <h3>{{ device.nom }}</h3>
-              <p><strong>Type :</strong> {{ device.type }}</p>
-            </div>
+          <button mat-raised-button color="warn" (click)="clearMaisonDevices()">Réinitialiser la Maison</button>
+          <div *ngIf="maisonDevices.length > 0; else noMaisonDevices" class="d-flex flex-wrap gap-3">
+            <mat-card *ngFor="let device of maisonDevices" appearance="outlined" class="w-25">
+              <mat-card-header>
+                <mat-card-title>{{ device.nom }}</mat-card-title>
+                <mat-card-subtitle>{{ device.type }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <p><strong>Type :</strong> {{ device.type }}</p>
+                <p *ngIf="device.statutActuel"><strong>Statut :</strong> {{ device.statutActuel }}</p>
+                <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-button color="warn" (click)="removeFromMaison(device)">Supprimer</button>
+              </mat-card-actions>
+            </mat-card>
           </div>
           <ng-template #noMaisonDevices>
             <p>Aucun objet dans la Maison.</p>
@@ -118,7 +129,7 @@
                 <p >Connectivité : </p>
                 <p >État de batterie : </p>
                 <p>Dernière interaction : </p>
-         
+
           </mat-card>
           </div>
         </div>
@@ -165,7 +176,7 @@
           </div>
           <div *ngIf="serviceSearchResults.length > 0" class="search-results">
             <h3>Résultats de la recherche :</h3>
-            
+
               <div *ngFor="let service of serviceSearchResults">
                 <h4>Nom : {{ service.nom || 'Non disponible' }}</h4>
                 <p >Type : {{ service.type || 'Non disponible' }}</p>
