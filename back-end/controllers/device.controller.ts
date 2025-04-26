@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'; // Ensure these are imported from 'express'
+import mongoose from 'mongoose';
 import Device from '../models/device';
 
 // Méthode pour rechercher un appareil

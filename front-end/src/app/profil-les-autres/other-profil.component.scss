@@ -1,0 +1,136 @@
+.other-profil-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  background-color: #000000;
+  min-height: 100vh;
+
+  .profil-card {
+    background-color: #141414;
+    color: #ffffff;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    border: 2px solid #ffa500;
+  }
+
+  .form-field {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+
+  .success-message {
+    color: #43a047;
+    margin: 8px 0 0 0;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .error-message {
+    color: #d32f2f;
+    margin-bottom: 12px;
+    font-weight: 500;
+    text-align: center;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  mat-card-header {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 0;
+  }
+
+  mat-card-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffa500;
+  }
+
+  mat-card-subtitle {
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  .avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem 0;
+  }
+
+  .avatar-large {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 3px solid #ffa500;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  mat-card-content {
+    padding: 1rem 2rem;
+  }
+
+  mat-list {
+    background: transparent;
+    color: #fff;
+    padding: 0;
+  }
+
+  mat-list-item {
+    font-size: 1.04rem;
+    color: #fff;
+    padding-left: 0;
+    padding-right: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+    margin-bottom: 4px;
+    background: none !important;
+    .mat-list-item-content {
+      padding-left: 0;
+    }
+    strong {
+      color: #ffa500;
+      min-width: 140px;
+      display: inline-block;
+      font-weight: bold;
+    }
+  }
+
+  mat-list-item:last-child {
+    border-bottom: none;
+  }
+
+  .loading-text {
+    color: #ffa500;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .error-message {
+    color: #d32f2f;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+
+  @media (max-width: 600px) {
+    .profil-card {
+      padding: 0.5rem !important;
+      max-width: 97vw;
+    }
+    mat-card-content {
+      padding: 0.5rem !important;
+    }
+  }
+}

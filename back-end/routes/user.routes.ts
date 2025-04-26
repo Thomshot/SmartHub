@@ -1,14 +1,14 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
-import { searchUser, getProfile, updateUser } from '../controllers/user.controller';
+import { searchUser, getProfile, updateUser, deleteUser } from '../controllers/user.controller';
 
 const router = express.Router();
 
 // 📸 Configuration de Multer pour l'upload de photo
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // dossier où enregistrer les photos
+    cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
@@ -26,6 +26,8 @@ router.get('/search', searchUser);
 router.get('/profile/:id', getProfile);
 
 // ✏️ Mise à jour du profil avec photo
-router.put('/users/:id', upload.single('photo'), updateUser);
+router.put('/:id', upload.single('photo'), updateUser);
+
+router.delete('/:id', deleteUser);
 
 export default router;

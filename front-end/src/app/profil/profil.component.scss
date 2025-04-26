@@ -5,8 +5,8 @@
     padding: 2rem;
     background-color: #000000;
     min-height: 100vh;
-  
-  
+
+
   .profil-card {
     background-color: #141414;
     color: #ffffff;
@@ -16,7 +16,27 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
     border: 2px solid #ffa500;
   }
-  
+
+  .success-message {
+    color: #43a047;
+    margin: 8px 0 0 0;
+    font-size: 1rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .error-message {
+    color: #d32f2f;
+    margin-bottom: 12px;
+    font-weight: 500;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
   mat-card-header {
     text-align: center;
     display: flex;
@@ -24,25 +44,25 @@
     align-items: center;
     padding-bottom: 0;
   }
-  
+
   mat-card-title {
     font-size: 24px;
     font-weight: bold;
     color: #ffa500;
   }
-  
+
   mat-card-subtitle {
     font-size: 14px;
     color: #ccc;
   }
-  
+
   .avatar-section {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 1rem 0;
   }
-  
+
   .avatar-large {
     width: 110px;
     height: 110px;
@@ -51,7 +71,7 @@
     object-fit: cover;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   }
-  
+
   button[mat-button] {
     background-color: #ffa500;
     color: black;
@@ -59,22 +79,22 @@
     margin-top: 0.5rem;
     border-radius: 10px;
   }
-  
+
   mat-card-content {
     padding: 1rem 2rem;
   }
-  
+
   .form-field {
     width: 100%;
     margin-bottom: 1.5rem;
   }
-  
+
   mat-form-field {
     width: 100%;
   }
-  
+
   /* === STYLING LES CHAMPS === */
-  
+
   ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline,
   ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-thick,
   ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start,
@@ -82,41 +102,41 @@
     color: white;
     border-color: white !important;
   }
-  
+
   ::ng-deep .mat-form-field-label {
     color: white !important;
   }
-  
+
   ::ng-deep .mat-input-element {
     color: white !important;
     caret-color: white;
   }
-  
+
   ::ng-deep input::placeholder {
     color: rgba(255, 255, 255, 0.7) !important;
   }
-  
+
   ::ng-deep .mat-select-value,
   ::ng-deep .mat-select-arrow {
     color: white !important;
   }
-  
+
   mat-card-actions {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
     padding: 1rem 2rem;
   }
-  
+
   button[mat-stroked-button] {
     border-color: #ffa500;
     color: #ffa500;
   }
-  
+
   button[mat-raised-button] {
     background-color: #ffa500;
     color: #000;
     font-weight: bold;
   }
-  
+
 }

@@ -1,6 +1,5 @@
 import { ViewChild } from '@angular/core';
 import { Component, OnInit, inject } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { MaterialDModule } from '../shared/material-d.module';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -9,8 +8,8 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ProfilComponent } from '../profil/profil.component';
 import { HttpClient } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
+import { RouterModule, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { AjoutObjetDialogComponent } from './ajout-objet-dialog/ajout-objet-dialog.component';
 import { FiltreDialogComponent } from './filtre-dialog/filtre-dialog.component';
 import { ProgressionNiveauDialogComponent } from './progression-niveau-dialog/progression-niveau-dialog.component';
@@ -22,13 +21,14 @@ import { DeviceService } from '../services/device.service';
 @Component({
   selector: 'app-accueil',
   standalone: true,
-
-  imports: [MaterialDModule, CommonModule, ProfilComponent, FormsModule,RouterModule], // ✅ Add FormsModule here
-  templateUrl: './accueil.component.html', // Ensure this path is correct
-  styleUrls: ['./accueil.component.scss'] // Ensure this path is correct
+  imports: [
+    MaterialDModule, CommonModule, ProfilComponent, FormsModule,
+    RouterModule, ProfilLesAutresComponent, EditUserComponent
+  ],
+  templateUrl: './accueil.component.html',
+  styleUrls: ['./accueil.component.scss']
 })
 export class AccueilComponent implements OnInit {
-
   isMobileorTablet: boolean = false;
   user: string = 'Utilisateur inconnu';
   selectedIndex: number = 0;
@@ -37,10 +37,12 @@ export class AccueilComponent implements OnInit {
   searchResults: any[] = [];
   searchTriggered: boolean = false;
   selectedDevice: any = null;
-
+  selectedOtherUser: any = null;
   serviceSearchQuery: string = '';
   serviceSearchResults: any[] = [];
   serviceSearchTriggered: boolean = false;
+  currentUser: any = null;
+  editOtherUserMode: boolean = false;
 
   availableDevices: any[] = []; // Liste des objets disponibles
   maisonDevices: any[] = []; // Liste des objets ajoutés à la "Maison"
@@ -60,6 +62,10 @@ export class AccueilComponent implements OnInit {
   filtreDialog(): void {
     const dialogRef = this.dialog.open(FiltreDialogComponent, {
       panelClass: 'filtre-dialog',
+      position: { right: '0' },
+      height: '100vh',
+      width: '30%',
+    });
       position: { right: '0' },
       height: '100vh',
       width: '30%',
@@ -101,14 +107,27 @@ export class AccueilComponent implements OnInit {
       this.isMobileorTablet = result.matches;
     });
 
-    // ✅ Vérifie que l’on est bien dans le navigateur
+    if (typeof window !== 'undefined' && localStorage) {
+      const connectedUserId = localStorage.getItem('userId');
+      if (connectedUserId) {
+        this.userService.getProfile(connectedUserId).subscribe({
+          next: (user: any) => {
+            this.currentUser = user;
+          },
+          error: () => {
+            this.currentUser = null;
+          }
+        });
+      }
+    }
+
     if (typeof window !== 'undefined') {
       const name = localStorage.getItem('userName');
       const email = localStorage.getItem('userEmail');
       const id = localStorage.getItem('userId');
 
       if (name && email && id) {
-        this.user = name; // ✅ Met à jour l’affichage du nom
+        this.user = name;
         console.log(`✅ Connecté en tant que ${name} <${email}> (ID: ${id})`);
       } else {
         console.warn('⚠️ Aucun utilisateur détecté dans localStorage');
@@ -153,14 +172,18 @@ export class AccueilComponent implements OnInit {
     return !this.isMobileorTablet;
   }
 
+  selectOtherUser(user: any) {
+    this.selectedOtherUser = user;
+  }
+
   recordAction(actionCount: number): void {
     const userId = localStorage.getItem('userId');
     if (!userId) return;
 
     this.http.post('http://localhost:3000/api/actions/record-action', { userId, actionCount })
       .subscribe({
-        next: (res) => console.log('Action enregistrée :', res),
-        error: (err) => console.error('Erreur :', err)
+        next: (res: any) => console.log('Action enregistrée :', res),
+        error: (err: any) => console.error('Erreur :', err)
       });
   }
 
@@ -177,8 +200,8 @@ export class AccueilComponent implements OnInit {
 
     this.http.get<any[]>(`http://localhost:3000/api/devices/search?query=${this.searchQuery}`)
       .subscribe({
-        next: (results) => this.searchResults = results,
-        error: (err) => {
+        next: (results: any[]) => this.searchResults = results,
+        error: (err: any) => {
           console.error('Erreur lors de la recherche d’objet :', err);
           this.searchResults = [];
         }
@@ -194,8 +217,8 @@ export class AccueilComponent implements OnInit {
 
     this.http.get<any[]>(`http://localhost:3000/api/services/search?query=${this.serviceSearchQuery}`)
       .subscribe({
-        next: (results) => this.serviceSearchResults = results,
-        error: (err) => {
+        next: (results: any[]) => this.serviceSearchResults = results,
+        error: (err: any) => {
           console.error('Erreur lors de la recherche de service :', err);
           this.serviceSearchResults = [];
         }
@@ -218,6 +241,10 @@ export class AccueilComponent implements OnInit {
     }
   }
 
+  goToOtherProfile(userId: string): void {
+    this.router.navigate(['/profil-les-autres', userId]);
+  }
+
   searchUser(): void {
     this.userSearchTriggered = true;
     console.log('Recherche utilisateur avec login :', this.userSearchQuery);
@@ -229,8 +256,8 @@ export class AccueilComponent implements OnInit {
 
     this.http.get<any>(`http://localhost:3000/api/users/search?login=${this.userSearchQuery}`)
       .subscribe({
-        next: (result) => this.userSearchResults = result ? [result] : [],
-        error: (err) => {
+        next: (result: any) => this.userSearchResults = result ? [result] : [],
+        error: (err: any) => {
           console.error('Erreur lors de la recherche utilisateur :', err);
           this.userSearchResults = [];
         }

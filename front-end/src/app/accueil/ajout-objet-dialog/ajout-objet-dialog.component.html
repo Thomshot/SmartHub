@@ -20,6 +20,9 @@
               {{ option }}
             </mat-option>
           </mat-autocomplete>
+          <mat-error *ngIf="firstFormGroup.get('firstCtrl')?.hasError('required')">
+            Le type d'objet est obligatoire.
+          </mat-error>
         </mat-form-field>
 
         <div>

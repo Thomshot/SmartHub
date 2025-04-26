@@ -82,25 +82,28 @@ export const verifyEmail = async (req: Request, res: Response) => {
 };
 
 
-// 📌 Connexion d’un utilisateur
 export const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
+    console.log('🔑 [DEBUG] Tentative de connexion avec', email);
 
     // 🔍 Vérifie que l'utilisateur existe
     const user = await User.findOne({ email });
     if (!user) {
+      console.log('❌ [DEBUG] Utilisateur introuvable pour:', email);
       return res.status(400).json({ message: 'Email ou mot de passe incorrect.' });
     }
 
     // ❗ Vérifie si le compte est vérifié
     if (!user.isVerified) {
+      console.log('⚠️ [DEBUG] Compte non vérifié pour:', email);
       return res.status(403).json({ message: 'Veuillez confirmer votre compte avant de vous connecter.' });
     }
 
     // 🔐 Compare le mot de passe hashé
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.log('❌ [DEBUG] Mauvais mot de passe pour:', email);
       return res.status(400).json({ message: 'Email ou mot de passe incorrect.' });
     }
 
@@ -127,6 +130,11 @@ export const loginUser = async (req: Request, res: Response) => {
       { expiresIn: '2h' }
     );
 
+    // LOG TOUTES LES INFOS UTILES POUR DEBUG
+    console.log('✅ [DEBUG] Connexion OK pour:', email);
+    console.log('🧑 [DEBUG] userType:', user.userType, '| typeof:', typeof user.userType);
+    console.log('📝 [DEBUG] user (full):', user);
+
     // ✅ Réponse
     res.status(200).json({
       message: 'Connexion réussie.',
@@ -135,7 +143,8 @@ export const loginUser = async (req: Request, res: Response) => {
         id: user._id,
         email: user.email,
         firstName: user.firstName,
-        lastName: user.lastName
+        lastName: user.lastName,
+        userType: user.userType
       }
     });
 
@@ -144,6 +153,7 @@ export const loginUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Erreur serveur.' });
   }
 };
+
 
 export const updatePoints = async (req: Request, res: Response) => {
   try {

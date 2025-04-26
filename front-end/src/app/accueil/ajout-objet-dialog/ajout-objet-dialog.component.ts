@@ -3,6 +3,8 @@ import { FormBuilder, Validators, FormControl, FormGroup, FormsModule, ReactiveF
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AsyncPipe, CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -44,7 +46,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 })
 export class AjoutObjetDialogComponent implements OnInit {
 
-  
+
   private _formBuilder = inject(FormBuilder);
   private deviceService = inject(DeviceService); // Injectez le service
   private dialogRef = inject(MatDialogRef<AjoutObjetDialogComponent>);
@@ -84,7 +86,7 @@ export class AjoutObjetDialogComponent implements OnInit {
   ngOnInit(): void {
     // Étape 1 : Choix du type d’objet
     this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required],
+      firstCtrl: ['', [Validators.required]], // Validation correcte pour le champ "Type d'objet"
     });
 
     // Étape 2 : Détails de l’objet
