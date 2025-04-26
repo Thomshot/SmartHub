@@ -1,12 +1,22 @@
 <div class="filtre-panel">
-    <h2>Filtres</h2>
-    <mat-dialog-content>
-    <!-- Pièce -->
+  <h2>Filtres</h2>
+  <mat-dialog-content>
+    <!-- Type d'objets -->
     <section>
-      <h3>Pièce</h3>
-      <mat-checkbox *ngFor="let room of filtres.pieces" [(ngModel)]="room.checked">
-        {{ room.label }}
-      </mat-checkbox>
+      <h3>Type d'objets</h3>
+      <div class="checkbox-grid">
+        <mat-checkbox *ngFor="let type of filtres.types.slice(0, 5)" [(ngModel)]="type.checked">
+          {{ type.label }}
+        </mat-checkbox>
+      </div>
+      <button mat-button (click)="showAllTypes = !showAllTypes">
+        {{ showAllTypes ? 'Réduire' : 'Afficher tout' }}
+      </button>
+      <div *ngIf="showAllTypes" class="checkbox-grid">
+        <mat-checkbox *ngFor="let type of filtres.types.slice(5)" [(ngModel)]="type.checked">
+          {{ type.label }}
+        </mat-checkbox>
+      </div>
     </section>
 
     <!-- État -->
@@ -25,19 +35,29 @@
       </mat-checkbox>
     </section>
 
-    <!-- Type d’objet -->
+    <!-- Pièce -->
     <section>
-      <h3>Catégorie</h3>
-      <mat-checkbox *ngFor="let type of filtres.types" [(ngModel)]="type.checked">
-        {{ type.label }}
-      </mat-checkbox>
+      <h3>Pièce</h3>
+      <div class="checkbox-grid">
+        <mat-checkbox *ngFor="let room of filtres.pieces.slice(0, 5)" [(ngModel)]="room.checked">
+          {{ room.label }}
+        </mat-checkbox>
+      </div>
+      <button mat-button (click)="showAllRooms = !showAllRooms">
+        {{ showAllRooms ? 'Réduire' : 'Afficher tout' }}
+      </button>
+      <div *ngIf="showAllRooms" class="checkbox-grid">
+        <mat-checkbox *ngFor="let room of filtres.pieces.slice(5)" [(ngModel)]="room.checked">
+          {{ room.label }}
+        </mat-checkbox>
+      </div>
     </section>
-</mat-dialog-content>
-    <!-- Actions -->
-    <mat-dialog-actions class="d-flex justify-content-between">
-      <button mat-raised-button (click)="resetFiltres()">Réinitialiser les filtres</button>
-      <button mat-raised-button (click)="fermer()">Annuler</button>
-      <button mat-button (click)="appliquerFiltres()">Appliquer</button>
-    </mat-dialog-actions>
+  </mat-dialog-content>
 
-  </div>
+  <!-- Actions -->
+  <mat-dialog-actions class="d-flex justify-content-between">
+    <button mat-raised-button (click)="resetFiltres()">Réinitialiser les filtres</button>
+    <button mat-raised-button (click)="fermer()">Annuler</button>
+    <button mat-button (click)="appliquerFiltres()">Appliquer</button>
+  </mat-dialog-actions>
+</div>

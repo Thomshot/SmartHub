@@ -76,6 +76,8 @@ export class AjoutObjetDialogComponent implements OnInit {
   filteredOptions!: Observable<string[]>;
 
   // Liste des pièces
+  showAllRooms = false; // Controls the visibility of the full list of rooms
+
   rooms: string[] = [
     'Salon', 'Cuisine', 'Chambre', 'Salle de bain', 'Garage', 'Entrée',
     'Buanderie', 'Bureau', 'Jardin', 'Terrasse', 'Grenier'
