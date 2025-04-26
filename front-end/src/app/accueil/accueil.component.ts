@@ -259,6 +259,33 @@ export class AccueilComponent implements OnInit {
       });
   }
 
+  showAllDevices(): void {
+    this.searchTriggered = true;
+    this.deviceService.getAllDevices().subscribe({
+      next: (devices) => {
+        this.searchResults = devices;
+        console.log('Tous les objets récupérés :', devices);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération de tous les objets :', err);
+        this.searchResults = [];
+      }
+    });
+  }
+
+  showAllServices(): void {
+    this.serviceSearchTriggered = true;
+    this.http.get<any[]>('http://localhost:3000/api/services').subscribe({
+      next: (services) => {
+        this.serviceSearchResults = services;
+        console.log('Tous les outils/services récupérés :', services);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération de tous les outils/services :', err);
+        this.serviceSearchResults = [];
+      }
+    });
+  }
 
   logout(): void {
     this.saveMaisonDevicesToLocalStorage();
@@ -346,5 +373,22 @@ export class AccueilComponent implements OnInit {
       return matchPiece && matchEtat && matchConnectivite && matchType;
     });
     console.log('Objets filtrés :', this.filteredMaisonDevices);
+  }
+
+  filtrerSearchResults(filtres: any): void {
+    this.searchResults = this.searchResults.filter(device => {
+      const matchPiece = filtres.pieces.length === 0 || filtres.pieces.includes(device.room);
+      const matchEtat = filtres.etats.length === 0 || filtres.etats.includes(device.statutActuel);
+      const matchConnectivite = filtres.connectivite.length === 0 || filtres.connectivite.includes(device.connectivite);
+      const matchType = filtres.types.length === 0 || filtres.types.includes(device.type);
+
+      return matchPiece && matchEtat && matchConnectivite && matchType;
+    });
+    console.log('Objets filtrés (Recherche d\'objets) :', this.searchResults);
+  }
+
+  resetSearchResults(): void {
+    this.searchDevice(); // Re-fetch the search results to reset filters
+    console.log('Filtres réinitialisés (Recherche d\'objets), affichage des résultats initiaux ✅');
   }
 }

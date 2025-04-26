@@ -6,12 +6,12 @@
       </div>
       <mat-tab-group [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
         <mat-tab><ng-template mat-tab-label><span>Accueil</span></ng-template></mat-tab>
-        <mat-tab *ngIf="currentUser?.userType !== 'simple'"><ng-template mat-tab-label><span>Création objet</span></ng-template></mat-tab>
-        <mat-tab *ngIf="currentUser?.userType !== 'simple'"><ng-template mat-tab-label><span>Gestion objet</span></ng-template></mat-tab>
-        <mat-tab><ng-template mat-tab-label><span>Gestion profil</span></ng-template></mat-tab>
+        <mat-tab [disabled]="currentUser?.userType === 'simple'"><ng-template mat-tab-label><span>Création objet</span></ng-template></mat-tab>
+        <mat-tab [disabled]="currentUser?.userType === 'simple'"><ng-template mat-tab-label><span>Gestion objet</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Recherche d'objets</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Recherche d'outils/services</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Recherche d'utilisateurs</span></ng-template></mat-tab>
+        <mat-tab><ng-template mat-tab-label><span>Gestion profil</span></ng-template></mat-tab>
       </mat-tab-group>
     </mat-sidenav>
     <mat-sidenav-content>
@@ -66,7 +66,7 @@
         <!-- Section Maison -->
         <div class="p-4">
           <h2>Maison</h2>
-          <button mat-raised-button color="warn" (click)="clearMaisonDevices()">Réinitialiser la Maison</button>
+          <button *ngIf="currentUser?.userType !== 'simple'" mat-raised-button color="warn" (click)="clearMaisonDevices()">Réinitialiser la Maison</button>
           <div *ngIf="maisonDevices.length > 0; else noMaisonDevices" class="d-flex flex-wrap gap-3">
             <mat-card *ngFor="let device of maisonDevices" appearance="outlined" class="w-25">
               <mat-card-header>
@@ -97,7 +97,7 @@
           </ng-template>
         </div>
 
-        <div class="p-4">
+        <div class="p-4" *ngIf="currentUser?.userType !== 'simple'">
           <h2>Objets disponibles</h2>
           <div *ngIf="availableDevices.length > 0; else noDevices" class="d-flex flex-wrap gap-3">
             <div class="device-card reduced-width" *ngFor="let device of availableDevices">
@@ -170,17 +170,24 @@
               <input matInput [(ngModel)]="searchQuery" placeholder="Entrez le nom de l'objet">
             </mat-form-field>
             <button mat-raised-button color="primary" (click)="searchDevice()">Rechercher</button>
+            <button mat-raised-button color="accent" (click)="showAllDevices()">Afficher tous les objets</button>
           </div>
           <div *ngIf="searchResults.length > 0" class="search-results">
             <h3>Résultats de la recherche :</h3>
-              <div *ngFor="let device of searchResults">
-                <h4>Nom : {{ device.nom || 'Non disponible' }}</h4>
-                <p>Type : {{ device.type || 'Non disponible' }}</p>
-                <p *ngIf="device.statutActuel">Statut actuel : {{ device.statutActuel }}</p>
-                <p *ngIf="device.connectivite" >Connectivité : {{ device.connectivite }}</p>
-                <p *ngIf="device.etatDeBatterie" >État de batterie : {{ device.etatDeBatterie }}</p>
-                <p *ngIf="device.derniereInteraction" >Dernière interaction : {{ device.derniereInteraction | date:'medium' }}</p>
-              </div>
+            <div class="d-flex flex-wrap gap-3">
+              <mat-card *ngFor="let device of searchResults" appearance="outlined" class="w-25">
+                <mat-card-header>
+                  <mat-card-title>{{ device.nom || 'Non disponible' }}</mat-card-title>
+                  <mat-card-subtitle>{{ device.type || 'Non disponible' }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <p *ngIf="device.statutActuel"><strong>Statut actuel :</strong> {{ device.statutActuel }}</p>
+                  <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
+                  <p *ngIf="device.etatDeBatterie"><strong>État de batterie :</strong> {{ device.etatDeBatterie }}</p>
+                  <p *ngIf="device.derniereInteraction"><strong>Dernière interaction :</strong> {{ device.derniereInteraction | date:'medium' }}</p>
+                </mat-card-content>
+              </mat-card>
+            </div>
           </div>
           <div *ngIf="searchTriggered && searchResults.length === 0" class="no-results">
             <p>Aucun objet trouvé avec ce nom.</p>
@@ -196,20 +203,25 @@
               <input matInput [(ngModel)]="serviceSearchQuery" placeholder="Entrez le nom de l'outil/service">
             </mat-form-field>
             <button mat-raised-button color="primary" (click)="searchService()">Rechercher</button>
+            <button mat-raised-button color="accent" (click)="showAllServices()">Afficher tous les outils/services</button>
           </div>
           <div *ngIf="serviceSearchResults.length > 0" class="search-results">
             <h3>Résultats de la recherche :</h3>
-
-
-              <div *ngFor="let service of serviceSearchResults">
-                <h4>Nom : {{ service.nom || 'Non disponible' }}</h4>
-                <p >Type : {{ service.type || 'Non disponible' }}</p>
-                <p *ngIf="service.statutActuel">Statut actuel : {{ service.statutActuel }}</p>
-                <p *ngIf="service.etats" >États : {{ service.etats.join(', ') }}</p>
-                <p *ngIf="service.description" >Description : {{ service.description }}</p>
-                <p *ngIf="service.tarif" >Tarif : {{ service.tarif }}</p>
-                <p *ngIf="service.derniereMiseAJour" >Dernière mise à jour : {{ service.derniereMiseAJour | date:'medium' }}</p>
-              </div>
+            <div class="d-flex flex-wrap gap-3">
+              <mat-card *ngFor="let service of serviceSearchResults" appearance="outlined" class="w-25">
+                <mat-card-header>
+                  <mat-card-title>{{ service.nom || 'Non disponible' }}</mat-card-title>
+                  <mat-card-subtitle>{{ service.type || 'Non disponible' }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <p *ngIf="service.statutActuel"><strong>Statut actuel :</strong> {{ service.statutActuel }}</p>
+                  <p *ngIf="service.etats"><strong>États :</strong> {{ service.etats.join(', ') }}</p>
+                  <p *ngIf="service.description"><strong>Description :</strong> {{ service.description }}</p>
+                  <p *ngIf="service.tarif"><strong>Tarif :</strong> {{ service.tarif }}</p>
+                  <p *ngIf="service.derniereMiseAJour"><strong>Dernière mise à jour :</strong> {{ service.derniereMiseAJour | date:'medium' }}</p>
+                </mat-card-content>
+              </mat-card>
+            </div>
           </div>
           <div *ngIf="serviceSearchTriggered && serviceSearchResults.length === 0" class="no-results">
             <p>Aucun outil/service trouvé avec ce nom.</p>
