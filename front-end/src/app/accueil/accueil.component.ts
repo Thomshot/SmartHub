@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+
 
 import { AjoutObjetDialogComponent } from './ajout-objet-dialog/ajout-objet-dialog.component';
 import { FiltreDialogComponent } from './filtre-dialog/filtre-dialog.component';
@@ -23,7 +25,8 @@ import { UserService } from '../services/user.service';
   standalone: true,
   imports: [
     MaterialDModule, CommonModule, ProfilComponent, FormsModule,
-    RouterModule, ProfilLesAutresComponent, EditUserComponent
+    RouterModule, ProfilLesAutresComponent, EditUserComponent, 
+    MatSelectModule
   ],
   templateUrl: './accueil.component.html',
   styleUrls: ['./accueil.component.scss']
@@ -318,5 +321,27 @@ export class AccueilComponent implements OnInit {
       return matchPiece && matchEtat && matchConnectivite && matchType;
     });
     console.log('Objets filtrés :', this.filteredMaisonDevices);
+  }
+
+  updateDeviceStatus(device: any): void {
+    if (device.newStatus && device.newStatus !== device.statutActuel) {
+      this.deviceService.updateDeviceStatus(device._id, device.newStatus).subscribe({
+        next: (response) => {
+          device.statutActuel = device.newStatus; // Met à jour localement
+          device.isEditingStatus = false; // Ferme la liste déroulante
+          console.log('Statut mis à jour avec succès :', response);
+        },
+        error: (err) => {
+          console.error('Erreur lors de la mise à jour du statut :', err);
+        },
+      });
+    } else {
+      device.isEditingStatus = false; // Ferme la liste déroulante si aucune modification
+    }
+  }
+
+  toggleEditStatus(device: any): void {
+    device.isEditingStatus = !device.isEditingStatus;
+    device.newStatus = device.statutActuel; // Pré-sélectionne le statut actuel
   }
 }

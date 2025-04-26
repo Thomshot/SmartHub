@@ -19,4 +19,8 @@ export class DeviceService {
   getAllDevices(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/all`);
   }
+
+  updateDeviceStatus(deviceId: string, newStatus: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/update-status`, { deviceId, newStatus });
+  }
 }
