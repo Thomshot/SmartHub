@@ -233,8 +233,8 @@
               <div class="user-list">
                 <mat-card class="user-result-card"
                   *ngFor="let user of userSearchResults"
-                  (click)="selectOtherUser(user)"
-                  style="cursor:pointer;">
+                  [style.cursor]="currentUser?.userType === 'simple' ? 'default' : 'pointer'"
+                  (click)="currentUser?.userType !== 'simple' && selectOtherUser(user)">
                   <mat-card-title>
                     {{ user.firstName || 'Non disponible' }} {{ user.lastName || '' }}
                   </mat-card-title>
@@ -250,7 +250,7 @@
                 </mat-card>
               </div>
 
-              <div class="other-profile" *ngIf="selectedOtherUser">
+              <div class="other-profile" *ngIf="selectedOtherUser && currentUser?.userType !== 'simple'">
                 <!-- Profil lecture seule (autre utilisateur) -->
                 <app-other-profil
                   *ngIf="!editOtherUserMode"
