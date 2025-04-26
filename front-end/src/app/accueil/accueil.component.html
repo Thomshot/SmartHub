@@ -21,22 +21,19 @@
         </div>
 
         <div>
-         <!-- <mat-icon class="icon-profil" [matMenuTriggerFor]="menu">profil</mat-icon>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item [routerLink]="'/'">Deconnexion</button>
-            <button mat-menu-item (click)="selectedIndex = 3">gestion Profil</button>
-          </mat-menu>-->
           <div class="d-flex gap-2 align-items-center">
-                  <mat-icon class="icon-profil" (click)="goToProfile()">person</mat-icon>
-                  <button class="logout-btn" (click)="logout()">Déconnexion</button>
+            <mat-icon class="icon-profil" (click)="goToProfile()">person</mat-icon>
+            <button class="logout-btn" (click)="logout()">Déconnexion</button>
           </div>
+        </div>
       </div>
-      </div>
-        <div *ngIf="selectedIndex === 0">
-          <div class="p-4">
-            <h1>Bonjour <span>{{user}}</span></h1>
-              <div class="d-flex justify-content-around">
-              <mat-card appearance="outlined" class="w-25">
+
+      <!-- Section Accueil -->
+      <div *ngIf="selectedIndex === 0">
+        <div class="p-4">
+          <h1>Bonjour <span>{{user}}</span></h1>
+          <div class="d-flex justify-content-around">
+            <mat-card appearance="outlined" class="w-25">
               <mat-card-header>
                 <mat-card-title>Utilisateur</mat-card-title>
               </mat-card-header>
@@ -60,7 +57,6 @@
               </mat-card-actions>
             </mat-card>
           </div>
-
         </div>
 
         <!-- Section Maison -->
@@ -110,15 +106,17 @@
             <p>Aucun objet disponible.</p>
           </ng-template>
         </div>
-
       </div>
 
-      <div class="creation-objet" *ngIf="selectedIndex === 1">
+      <!-- Section Création objet -->
+      <div *ngIf="selectedIndex === 1">
         <div class="p-4">
           <h2>Objet crée:</h2>
-        <button mat-button (click)="openDialog()">ajouter</button>
+          <button mat-button (click)="openDialog()">ajouter</button>
+        </div>
       </div>
-      </div>
+
+      <!-- Section Gestion objet -->
       <div *ngIf="selectedIndex === 2">
         <div class="p-4">
           <div class="d-flex gap-3 align-items-center">
@@ -130,38 +128,37 @@
           </div>
         </div>
         <div class="p-4">
-            <h2>Vue de la Maison</h2>
-            <div *ngIf="filteredMaisonDevices.length > 0; else noMaisonDevices" class="d-flex flex-wrap gap-3">
-              <mat-card *ngFor="let device of filteredMaisonDevices" appearance="outlined" class="w-25">
-                <mat-card-header>
-                  <mat-card-title>{{ device.nom }}</mat-card-title>
-                  <mat-card-subtitle>{{ device.type }}</mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                  <p><strong>Type :</strong> {{ device.type }}</p>
-                  <p><strong>Statut :</strong> {{ device.statutActuel }}</p>
-                  <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
-                  <p *ngIf="device.etatDeBatterie"><strong>État de batterie :</strong> {{ device.etatDeBatterie }}</p>
-                  <p *ngIf="device.derniereInteraction"><strong>Dernière interaction :</strong> {{ device.derniereInteraction | date:'medium' }}</p>
-                  <p *ngIf="device.ip"><strong>Adresse IP :</strong> {{ device.ip }}</p>
-                  <p *ngIf="device.mac"><strong>Adresse MAC :</strong> {{ device.mac }}</p>
-                  <p *ngIf="device.protocol"><strong>Protocole :</strong> {{ device.protocol }}</p>
-                  <p *ngIf="device.brand"><strong>Marque :</strong> {{ device.brand }}</p>
-                  <p *ngIf="device.room"><strong>Pièce :</strong> {{ device.room }}</p>
-                  <p *ngIf="device.image"><strong>Image :</strong></p>
-                  <img *ngIf="device.image" [src]="device.image" alt="Image de l'objet" style="max-width: 100%; border-radius: 8px;">
-                </mat-card-content>
-              </mat-card>
-            </div>
-            <ng-template #noMaisonDevices>
-              <p>Aucun objet dans la Maison.</p>
-            </ng-template>
+          <h2>Vue de la Maison</h2>
+          <div *ngIf="filteredMaisonDevices.length > 0; else noMaisonDevices" class="d-flex flex-wrap gap-3">
+            <mat-card *ngFor="let device of filteredMaisonDevices" appearance="outlined" class="w-25">
+              <mat-card-header>
+                <mat-card-title>{{ device.nom }}</mat-card-title>
+                <mat-card-subtitle>{{ device.type }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                <p><strong>Type :</strong> {{ device.type }}</p>
+                <p><strong>Statut :</strong> {{ device.statutActuel }}</p>
+                <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
+                <p *ngIf="device.etatDeBatterie"><strong>État de batterie :</strong> {{ device.etatDeBatterie }}</p>
+                <p *ngIf="device.derniereInteraction"><strong>Dernière interaction :</strong> {{ device.derniereInteraction | date:'medium' }}</p>
+                <p *ngIf="device.ip"><strong>Adresse IP :</strong> {{ device.ip }}</p>
+                <p *ngIf="device.mac"><strong>Adresse MAC :</strong> {{ device.mac }}</p>
+                <p *ngIf="device.protocol"><strong>Protocole :</strong> {{ device.protocol }}</p>
+                <p *ngIf="device.brand"><strong>Marque :</strong> {{ device.brand }}</p>
+                <p *ngIf="device.room"><strong>Pièce :</strong> {{ device.room }}</p>
+                <p *ngIf="device.image"><strong>Image :</strong></p>
+                <img *ngIf="device.image" [src]="device.image" alt="Image de l'objet" style="max-width: 100%; border-radius: 8px;">
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <ng-template #noMaisonDevices>
+            <p>Aucun objet dans la Maison.</p>
+          </ng-template>
         </div>
       </div>
+
+      <!-- Section Recherche d'objets -->
       <div *ngIf="selectedIndex === 3">
-        <app-profil></app-profil>
-      </div>
-      <div *ngIf="selectedIndex === 4">
         <div class="p-4">
           <h1>Recherche d'objets</h1>
           <div class="search-container">
@@ -194,7 +191,9 @@
           </div>
         </div>
       </div>
-      <div *ngIf="selectedIndex === 5">
+
+      <!-- Section Recherche d'outils/services -->
+      <div *ngIf="selectedIndex === 4">
         <div class="p-4">
           <h1>Recherche d'outils/services</h1>
           <div class="search-container">
@@ -228,7 +227,9 @@
           </div>
         </div>
       </div>
-      <div *ngIf="selectedIndex === 6">
+
+      <!-- Section Recherche d'utilisateurs -->
+      <div *ngIf="selectedIndex === 5">
         <div class="p-4">
           <h1>Recherche d'utilisateurs</h1>
           <div class="search-container">
@@ -292,6 +293,11 @@
             <p>Aucun utilisateur trouvé avec ce login.</p>
           </div>
         </div>
+      </div>
+
+      <!-- Section Gestion profil -->
+      <div *ngIf="selectedIndex === 6">
+        <app-profil></app-profil>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
