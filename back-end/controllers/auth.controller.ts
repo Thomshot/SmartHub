@@ -110,15 +110,19 @@ export const loginUser = async (req: Request, res: Response) => {
     // Mise à jour des points pour la connexion
     user.points += 0.25;
 
-    // Vérification du rôle en fonction des points
+    // Synchronisation du rôle et du type d'utilisateur
     if (user.points >= 7) {
       user.role = 'expert';
+      user.userType = 'administrateur';
     } else if (user.points >= 5) {
       user.role = 'avancé';
+      user.userType = 'complexe';
     } else if (user.points >= 3) {
       user.role = 'intermédiaire';
+      user.userType = 'simple';
     } else {
       user.role = 'débutant';
+      user.userType = 'simple';
     }
 
     await user.save();
@@ -174,15 +178,19 @@ export const updatePoints = async (req: Request, res: Response) => {
     // Mettre à jour les points
     user.points += points;
 
-    // Vérification du rôle en fonction des points
+    // Synchronisation du rôle et du type d'utilisateur
     if (user.points >= 7) {
       user.role = 'expert';
+      user.userType = 'administrateur';
     } else if (user.points >= 5) {
       user.role = 'avancé';
+      user.userType = 'complexe';
     } else if (user.points >= 3) {
       user.role = 'intermédiaire';
+      user.userType = 'simple';
     } else {
       user.role = 'débutant';
+      user.userType = 'simple';
     }
 
     await user.save();
