@@ -1,22 +1,22 @@
-import { ViewChild } from '@angular/core';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialDModule } from '../shared/material-d.module';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { FormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { ProfilComponent } from '../profil/profil.component';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+
 import { AjoutObjetDialogComponent } from './ajout-objet-dialog/ajout-objet-dialog.component';
 import { FiltreDialogComponent } from './filtre-dialog/filtre-dialog.component';
 import { ProgressionNiveauDialogComponent } from './progression-niveau-dialog/progression-niveau-dialog.component';
-import { Router } from '@angular/router';
+
+import { ProfilComponent } from '../profil/profil.component';
+import { ProfilLesAutresComponent } from '../profil-les-autres/other-profil.component';
+import { EditUserComponent } from '../edit-user/edit-user.component';
+
 import { DeviceService } from '../services/device.service';
-
-
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-accueil',
@@ -29,28 +29,37 @@ import { DeviceService } from '../services/device.service';
   styleUrls: ['./accueil.component.scss']
 })
 export class AccueilComponent implements OnInit {
-  isMobileorTablet: boolean = false;
-  user: string = 'Utilisateur inconnu';
-  selectedIndex: number = 0;
+  isMobileorTablet = false;
+  user = 'Utilisateur inconnu';
+  selectedIndex = 0;
 
-  searchQuery: string = '';
+  searchQuery = '';
   searchResults: any[] = [];
-  searchTriggered: boolean = false;
+  searchTriggered = false;
   selectedDevice: any = null;
   selectedOtherUser: any = null;
-  serviceSearchQuery: string = '';
+  serviceSearchQuery = '';
   serviceSearchResults: any[] = [];
-  serviceSearchTriggered: boolean = false;
+  serviceSearchTriggered = false;
   currentUser: any = null;
-  editOtherUserMode: boolean = false;
+  editOtherUserMode = false;
 
-  availableDevices: any[] = []; // Liste des objets disponibles
-  maisonDevices: any[] = []; // Liste des objets ajoutés à la "Maison"
-  filteredMaisonDevices: any[] = []; // Liste des objets filtrés
+  availableDevices: any[] = [];
+  maisonDevices: any[] = [];
+  filteredMaisonDevices: any[] = [];
 
-  constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient,private router: Router, private deviceService: DeviceService) {
-  }
-  readonly dialog = inject(MatDialog);
+  userSearchQuery = '';
+  userSearchResults: any[] = [];
+  userSearchTriggered = false;
+
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private http: HttpClient,
+    private router: Router,
+    private deviceService: DeviceService,
+    private userService: UserService,
+    private dialog: MatDialog
+  ) { }
 
   openDialog() {
     const dialogRef = this.dialog.open(AjoutObjetDialogComponent);
@@ -59,6 +68,7 @@ export class AccueilComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
     });
   }
+
   filtreDialog(): void {
     const dialogRef = this.dialog.open(FiltreDialogComponent, {
       panelClass: 'filtre-dialog',
@@ -66,48 +76,38 @@ export class AccueilComponent implements OnInit {
       height: '100vh',
       width: '30%',
     });
-      position: { right: '0' },
-      height: '100vh',
-      width: '30%',
-    });
 
     dialogRef.afterClosed().subscribe(filtres => {
       if (filtres) {
-        this.filtrerMaisonDevices(filtres); // Appliquer les filtres
+        this.filtrerMaisonDevices(filtres);
       } else {
-        this.resetMaisonDevices(); // Réinitialiser les filtres
+        this.resetMaisonDevices();
       }
     });
   }
 
   resetMaisonDevices(): void {
-    this.filteredMaisonDevices = [...this.maisonDevices]; // Réinitialiser les objets filtrés
+    this.filteredMaisonDevices = [...this.maisonDevices];
     console.log('Filtres réinitialisés, affichage de toute la maison ✅');
   }
 
   statusDialog() {
     const dialogRef = this.dialog.open(ProgressionNiveauDialogComponent);
-
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
     });
   }
 
-
-  userSearchQuery: string = '';
-  userSearchResults: any[] = [];
-  userSearchTriggered: boolean = false;
-
   ngOnInit(): void {
     this.loadAvailableDevices();
-    this.loadMaisonDevicesFromLocalStorage(); // Charger les objets de la maison depuis localStorage
-    this.filteredMaisonDevices = [...this.maisonDevices]; // Initialiser les objets filtrés
-    this.loadUserFromLocalStorage(); // Charger les informations utilisateur depuis localStorage
+    this.loadMaisonDevicesFromLocalStorage();
+    this.filteredMaisonDevices = [...this.maisonDevices];
+    this.loadUserFromLocalStorage();
     this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
       this.isMobileorTablet = result.matches;
     });
 
-    if (typeof window !== 'undefined' && localStorage) {
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       const connectedUserId = localStorage.getItem('userId');
       if (connectedUserId) {
         this.userService.getProfile(connectedUserId).subscribe({
@@ -121,7 +121,7 @@ export class AccueilComponent implements OnInit {
       }
     }
 
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       const name = localStorage.getItem('userName');
       const email = localStorage.getItem('userEmail');
       const id = localStorage.getItem('userId');
@@ -147,12 +147,18 @@ export class AccueilComponent implements OnInit {
   }
 
   loadMaisonDevicesFromLocalStorage(): void {
-    const maisonDevices = localStorage.getItem('maisonDevices');
-    this.maisonDevices = maisonDevices ? JSON.parse(maisonDevices) : [];
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      const maisonDevices = localStorage.getItem('maisonDevices');
+      this.maisonDevices = maisonDevices ? JSON.parse(maisonDevices) : [];
+    } else {
+      this.maisonDevices = [];
+    }
   }
 
   saveMaisonDevicesToLocalStorage(): void {
-    localStorage.setItem('maisonDevices', JSON.stringify(this.maisonDevices));
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      localStorage.setItem('maisonDevices', JSON.stringify(this.maisonDevices));
+    }
   }
 
   shouldSidenavBeOpened(): boolean {
@@ -161,7 +167,6 @@ export class AccueilComponent implements OnInit {
 
   onTabChange(index: number): void {
     this.selectedIndex = index;
-
     if (index === 0) {
       window.scrollTo(0, 0);
       console.log("🟢 Accueil affiché !");
@@ -177,18 +182,20 @@ export class AccueilComponent implements OnInit {
   }
 
   recordAction(actionCount: number): void {
-    const userId = localStorage.getItem('userId');
-    if (!userId) return;
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      const userId = localStorage.getItem('userId');
+      if (!userId) return;
 
-    this.http.post('http://localhost:3000/api/actions/record-action', { userId, actionCount })
-      .subscribe({
-        next: (res: any) => console.log('Action enregistrée :', res),
-        error: (err: any) => console.error('Erreur :', err)
-      });
+      this.http.post('http://localhost:3000/api/actions/record-action', { userId, actionCount })
+        .subscribe({
+          next: (res: any) => console.log('Action enregistrée :', res),
+          error: (err: any) => console.error('Erreur :', err)
+        });
+    }
   }
 
   onConsultation(): void {
-    this.recordAction(1); // 1 action = 0.5 points
+    this.recordAction(1);
   }
 
   searchDevice(): void {
@@ -226,11 +233,13 @@ export class AccueilComponent implements OnInit {
   }
 
   logout(): void {
-    this.saveMaisonDevicesToLocalStorage(); // Sauvegarder les objets de la maison avant de se déconnecter
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userId');
-    window.location.href = '/';
+    this.saveMaisonDevicesToLocalStorage();
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userId');
+      window.location.href = '/';
+    }
   }
 
   goToProfile(): void {
@@ -264,36 +273,38 @@ export class AccueilComponent implements OnInit {
       });
   }
 
-  // Ajouter un objet à la "Maison"
   addToMaison(device: any): void {
     this.maisonDevices.push(device);
-    this.saveMaisonDevicesToLocalStorage(); // Sauvegarder dans localStorage
+    this.saveMaisonDevicesToLocalStorage();
     console.log('Objet ajouté à la Maison :', device);
   }
 
-  // Supprimer un objet de la "Maison"
   removeFromMaison(device: any): void {
     this.maisonDevices = this.maisonDevices.filter(d => d !== device);
-    this.saveMaisonDevicesToLocalStorage(); // Mettre à jour le localStorage
+    this.saveMaisonDevicesToLocalStorage();
     console.log('Objet supprimé de la Maison :', device);
   }
 
   clearMaisonDevices(): void {
     this.maisonDevices = [];
-    localStorage.removeItem('maisonDevices'); // Supprimer les données de localStorage
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      localStorage.removeItem('maisonDevices');
+    }
     console.log('Maison réinitialisée.');
   }
 
   loadUserFromLocalStorage(): void {
-    const name = localStorage.getItem('userName');
-    const email = localStorage.getItem('userEmail');
-    const id = localStorage.getItem('userId');
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      const name = localStorage.getItem('userName');
+      const email = localStorage.getItem('userEmail');
+      const id = localStorage.getItem('userId');
 
-    if (name && email && id) {
-      this.user = name; // Met à jour l'affichage du nom
-      console.log(`✅ Connecté en tant que ${name} <${email}> (ID: ${id})`);
-    } else {
-      console.warn('⚠️ Aucun utilisateur détecté dans localStorage');
+      if (name && email && id) {
+        this.user = name;
+        console.log(`✅ Connecté en tant que ${name} <${email}> (ID: ${id})`);
+      } else {
+        console.warn('⚠️ Aucun utilisateur détecté dans localStorage');
+      }
     }
   }
 

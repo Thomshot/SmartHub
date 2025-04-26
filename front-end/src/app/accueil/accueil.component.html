@@ -26,10 +26,10 @@
             <button mat-menu-item [routerLink]="'/'">Deconnexion</button>
             <button mat-menu-item (click)="selectedIndex = 3">gestion Profil</button>
           </mat-menu>-->
-           <div class="d-flex gap-2 align-items-center">
+          <div class="d-flex gap-2 align-items-center">
                   <mat-icon class="icon-profil" (click)="goToProfile()">person</mat-icon>
                   <button class="logout-btn" (click)="logout()">Déconnexion</button>
-                 </div>
+          </div>
       </div>
       </div>
         <div *ngIf="selectedIndex === 0">
@@ -138,10 +138,10 @@
                 <p >État de batterie : </p>
                 <p>Dernière interaction : </p>
 
-          </mat-card>
+            </mat-card>
           </div>
         </div>
-          <div class="p-4">
+        <div class="p-4">
             <h2>Vue de la Maison</h2>
             <div *ngIf="filteredMaisonDevices.length > 0; else noMaisonDevices" class="d-flex flex-wrap gap-3">
               <mat-card *ngFor="let device of filteredMaisonDevices" appearance="outlined" class="w-25">
@@ -168,7 +168,6 @@
             <ng-template #noMaisonDevices>
               <p>Aucun objet dans la Maison.</p>
             </ng-template>
-          </div>
         </div>
       </div>
       <div *ngIf="selectedIndex === 3">
