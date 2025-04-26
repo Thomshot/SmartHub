@@ -6,8 +6,8 @@
       </div>
       <mat-tab-group [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
         <mat-tab><ng-template mat-tab-label><span>Accueil</span></ng-template></mat-tab>
-        <mat-tab><ng-template mat-tab-label><span>Creation objet</span></ng-template></mat-tab>
-        <mat-tab><ng-template mat-tab-label><span>Gestion objet</span></ng-template></mat-tab>
+        <mat-tab *ngIf="currentUser?.userType !== 'simple'"><ng-template mat-tab-label><span>Création objet</span></ng-template></mat-tab>
+        <mat-tab *ngIf="currentUser?.userType !== 'simple'"><ng-template mat-tab-label><span>Gestion objet</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Gestion profil</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Recherche d'objets</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Recherche d'outils/services</span></ng-template></mat-tab>
@@ -236,7 +236,13 @@
                   [style.cursor]="currentUser?.userType === 'simple' ? 'default' : 'pointer'"
                   (click)="currentUser?.userType !== 'simple' && selectOtherUser(user)">
                   <mat-card-title>
-                    {{ user.firstName || 'Non disponible' }} {{ user.lastName || '' }}
+                    <!-- Hide name for "simple" users -->
+                    <ng-container *ngIf="currentUser?.userType !== 'simple'; else restrictedName">
+                      {{ user.firstName || 'Non disponible' }} {{ user.lastName || '' }}
+                    </ng-container>
+                    <ng-template #restrictedName>
+                      Nom et prénom non disponibles
+                    </ng-template>
                   </mat-card-title>
                   <mat-card-content>
                     <p>Email : {{ user.email || 'Non disponible' }}</p>
