@@ -4,6 +4,7 @@ import User from '../models/user';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import { syncUserLevel } from '../utils/userLevel';
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -110,21 +111,7 @@ export const loginUser = async (req: Request, res: Response) => {
     // Mise à jour des points pour la connexion
     user.points += 0.25;
 
-    // Synchronisation du rôle et du type d'utilisateur
-    if (user.points >= 7) {
-      user.role = 'expert';
-      user.userType = 'administrateur';
-    } else if (user.points >= 5) {
-      user.role = 'avancé';
-      user.userType = 'complexe';
-    } else if (user.points >= 3) {
-      user.role = 'intermédiaire';
-      user.userType = 'simple';
-    } else {
-      user.role = 'débutant';
-      user.userType = 'simple';
-    }
-
+    syncUserLevel(user);
     await user.save();
 
     // 🔑 Crée un token JWT
@@ -173,21 +160,7 @@ export const updatePoints = async (req: Request, res: Response) => {
 
     // Mettre à jour les points
     user.points += points;
-
-    // Synchronisation du rôle et du type d'utilisateur
-    if (user.points >= 7) {
-      user.role = 'expert';
-      user.userType = 'administrateur';
-    } else if (user.points >= 5) {
-      user.role = 'avancé';
-      user.userType = 'complexe';
-    } else if (user.points >= 3) {
-      user.role = 'intermédiaire';
-      user.userType = 'simple';
-    } else {
-      user.role = 'débutant';
-      user.userType = 'simple';
-    }
+    syncUserLevel(user);
 
     await user.save();
 

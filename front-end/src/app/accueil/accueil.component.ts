@@ -237,13 +237,28 @@ export class AccueilComponent implements OnInit {
 
     this.http.get<any[]>(`http://localhost:3000/api/services/search?query=${this.serviceSearchQuery}`)
       .subscribe({
-        next: (results: any[]) => this.serviceSearchResults = results,
+        next: (results: any[]) => {
+          this.serviceSearchResults = results;
+
+          // === Ajout de points si au moins un résultat ===
+          if (results.length > 0) {
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+              this.http.post('http://localhost:3000/api/actions/record-action', { userId, actionCount: 1 })
+                .subscribe({
+                  next: () => console.log('Points mis à jour avec succès (service).'),
+                  error: (err) => console.error('Erreur lors de la mise à jour des points :', err)
+                });
+            }
+          }
+        },
         error: (err: any) => {
           console.error('Erreur lors de la recherche de service :', err);
           this.serviceSearchResults = [];
         }
       });
   }
+
 
   logout(): void {
     this.saveMaisonDevicesToLocalStorage();
