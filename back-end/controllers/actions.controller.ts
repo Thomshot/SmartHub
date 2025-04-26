@@ -13,7 +13,7 @@ export const recordAction = asyncHandler(
     }
 
     const points = actionCount * 0.5;
-user.points += points;
+    user.points += points;
 
     user.role = user.points >= 7 ? 'expert' :
                 user.points >= 5 ? 'avancé' :

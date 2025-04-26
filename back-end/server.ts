@@ -7,11 +7,13 @@ import deviceRoutes from './routes/device.routes';
 import serviceRoutes from './routes/service.routes';
 import userRoutes from './routes/user.routes';
 import path from 'path';
+import actionsRouter from './routes/actions.routes';
 
 dotenv.config();
 
 const app = express();
 const port = 3000;
+
 
 // ✅ Middleware global pour déboguer les requêtes
 app.use((req, res, next) => {
@@ -37,6 +39,7 @@ app.use('/api/devices', deviceRoutes);
 console.log('✅ Route /api/devices enregistrée');
 app.use('/api/services', serviceRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/actions', actionsRouter);
 
 // ✅ Connexion MongoDB
 mongoose.connect(process.env.MONGO_URI!)

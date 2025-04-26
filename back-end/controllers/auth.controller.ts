@@ -134,10 +134,6 @@ export const loginUser = async (req: Request, res: Response) => {
       { expiresIn: '2h' }
     );
 
-    // LOG TOUTES LES INFOS UTILES POUR DEBUG
-    console.log('✅ [DEBUG] Connexion OK pour:', email);
-    console.log('🧑 [DEBUG] userType:', user.userType, '| typeof:', typeof user.userType);
-    console.log('📝 [DEBUG] user (full):', user);
 
     // ✅ Réponse
     res.status(200).json({

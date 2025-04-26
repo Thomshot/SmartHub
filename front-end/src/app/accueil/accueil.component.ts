@@ -211,7 +211,6 @@ export class AccueilComponent implements OnInit {
           this.searchResults = results;
 
           if (results.length > 0) {
-            // Enregistrer l'action pour attribuer des points
             const userId = localStorage.getItem('userId');
             if (userId) {
               this.http.post('http://localhost:3000/api/actions/record-action', { userId, actionCount: 1 })
