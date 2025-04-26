@@ -15,6 +15,7 @@ import {
   MatDialogClose,
   MatDialogContent,
   MatDialogTitle,
+  MatDialogRef
 } from '@angular/material/dialog';
 
 @Component({
@@ -119,14 +120,21 @@ export class AjoutObjetDialogComponent implements OnInit {
     }
   }
 
-  submitObject(): void {
-    console.log('Objet créé ✅');
-    console.log({
-      type: this.myControl.value,
-      ...this.firstFormGroup.value,
-      ...this.secondFormGroup.value,
-      ...this.thirdFormGroup.value,
-      image: this.previewUrl
-    });
+  constructor(private dialogRef: MatDialogRef<AjoutObjetDialogComponent>) {}
+
+  submitObject() {
+    const newObject = {
+      type: this.firstFormGroup.get('firstCtrl')?.value,
+      name: this.secondFormGroup.get('objectName')?.value,
+      room: this.secondFormGroup.get('room')?.value,
+      brand: this.secondFormGroup.get('brand')?.value,
+      id: this.secondFormGroup.get('id')?.value,
+      ip: this.thirdFormGroup.get('ip')?.value,
+      mac: this.thirdFormGroup.get('mac')?.value,
+      protocol: this.thirdFormGroup.get('protocol')?.value,
+      imageUrl: this.previewUrl
+    };
+  
+    this.dialogRef.close(newObject); // 👈 renvoyer l'objet à l'appelant
   }
 }

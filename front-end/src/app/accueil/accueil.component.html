@@ -60,12 +60,52 @@
               </mat-card-actions>
             </mat-card>
           </div>
+          <div class="pt-4">
+            <mat-card class="p-3">
+              <mat-button-toggle-group [(ngModel)]="selectedChart" aria-label="Choisir une vue">
+                <mat-button-toggle value="electricite">Électricité</mat-button-toggle>
+                <mat-button-toggle value="eau">Eau</mat-button-toggle>
+                <mat-button-toggle value="appareils">Appareils</mat-button-toggle>
+              </mat-button-toggle-group>
+              <app-chart-wrapper *ngIf="isBrowser && selectedChart === 'eau'" [type]="'eau'"></app-chart-wrapper>
+<app-chart-wrapper *ngIf="isBrowser && selectedChart === 'electricite'" [type]="'electricite'"></app-chart-wrapper>
+<app-chart-wrapper *ngIf="isBrowser && selectedChart === 'appareils'" [type]="'appareils'"></app-chart-wrapper>
 
+            </mat-card>
+          </div>
         </div>
       </div>
       <div class="creation-objet" *ngIf="selectedIndex === 1">
         <div class="p-4">
           <h2>Objet crée:</h2>
+          <h1 *ngIf="createdObjects.length === 0" class="p-4 d-flex justify-content-center">
+            Aucun objet n’a encore été créé.
+          </h1>
+        
+          <!-- Liste des objets -->
+          <div *ngFor="let obj of createdObjects" class="my-4">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>{{ obj.name }} ({{ obj.type }})</mat-card-title>
+                <mat-card-subtitle>{{ obj.room }} • {{ obj.brand }}</mat-card-subtitle>
+              </mat-card-header>
+              <img *ngIf="obj.imageUrl" [src]="obj.imageUrl" alt="Image de l'objet" style="max-width: 100%; max-height: 200px; object-fit: contain;">
+              <mat-card-content>
+                <p><strong>IP :</strong> {{ obj.ip || 'Non renseignée' }}</p>
+                <p><strong>MAC :</strong> {{ obj.mac || 'Non renseignée' }}</p>
+                <p><strong>Protocole :</strong> {{ obj.protocol }}</p>
+                <p *ngIf="obj.id"><strong>ID :</strong> {{ obj.id }}</p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-icon-button color="primary" (click)="editObject(obj)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteObject(obj)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
         <button mat-button (click)="openDialog()">ajouter</button>
       </div>
       </div>
@@ -88,8 +128,7 @@
                 <p >Connectivité : </p>
                 <p >État de batterie : </p>
                 <p>Dernière interaction : </p>
-         
-          </mat-card>
+        </mat-card>
           </div>
         </div>
         </div>

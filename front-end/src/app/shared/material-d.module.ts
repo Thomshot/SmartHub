@@ -14,6 +14,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 const AngularComponents = [
   MatButtonModule,
   MatToolbarModule,
@@ -30,6 +32,8 @@ const AngularComponents = [
   MatStepperModule,
   MatAutocompleteModule,
   MatCheckboxModule,
+  MatButtonToggleModule
+
 ];
 
 @NgModule({

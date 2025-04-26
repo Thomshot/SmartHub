@@ -16,22 +16,45 @@ import { AjoutObjetDialogComponent } from './ajout-objet-dialog/ajout-objet-dial
 import { FiltreDialogComponent } from './filtre-dialog/filtre-dialog.component';
 import { ProgressionNiveauDialogComponent } from './progression-niveau-dialog/progression-niveau-dialog.component';
 import { Router } from '@angular/router';
+import { ChartComponent } from "ng-apexcharts";
+import {
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexChart,
+  ApexFill,
+  ApexDataLabels,
+  ApexLegend
+} from "ng-apexcharts";
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { ChartWrapperComponent } from './chart-wrapper.component';
 
+
+export type ChartOptions = {
+  series: ApexNonAxisChartSeries;
+  chart: ApexChart;
+  responsive: ApexResponsive[];
+  labels: any;
+  fill: ApexFill;
+  legend: ApexLegend;
+  dataLabels: ApexDataLabels;
+};
 
 @Component({
   selector: 'app-accueil',
   standalone: true,
 
-  imports: [MaterialDModule, CommonModule, ProfilComponent, FormsModule,RouterModule], // ✅ Add FormsModule here
+  imports: [MaterialDModule, CommonModule, ProfilComponent, FormsModule,RouterModule,ChartWrapperComponent ], // ✅ Add FormsModule here
   templateUrl: './accueil.component.html', // Ensure this path is correct
   styleUrls: ['./accueil.component.scss'] // Ensure this path is correct
 })
 export class AccueilComponent implements OnInit {
-
+  @ViewChild("chart") chart!: ChartComponent;
+  public chartOptions: Partial<ChartOptions>;
   isMobileorTablet: boolean = false;
   user: string = 'Utilisateur inconnu';
   selectedIndex: number = 0;
-
+  isBrowser : boolean;
   searchQuery: string = '';
   searchResults: any[] = [];
   searchTriggered: boolean = false;
@@ -41,15 +64,52 @@ export class AccueilComponent implements OnInit {
   serviceSearchResults: any[] = [];
   serviceSearchTriggered: boolean = false;
 
-  constructor(private breakpointObserver: BreakpointObserver, private http: HttpClient,private router: Router) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,private breakpointObserver: BreakpointObserver, private http: HttpClient,private router: Router) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    this.chartOptions = {
+      series: [44, 55, 41, 17, 15],
+      chart: {
+        width: 380,
+        type: "donut"
+      },
+      dataLabels: {
+        enabled: false
+      },
+      fill: {
+        type: "gradient"
+      },
+      legend: {
+        formatter: function(val, opts) {
+          return val + " - " + opts.w.globals.series[opts.seriesIndex];
+        }
+      },
+      responsive: [
+        {
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: "bottom"
+            }
+          }
+        }
+      ]
+    };
   }
   readonly dialog = inject(MatDialog);
 
   openDialog() {
-    const dialogRef = this.dialog.open(AjoutObjetDialogComponent);
+    const dialogRef = this.dialog.open(AjoutObjetDialogComponent,{
+      backdropClass:"backdrop-dialog",
+      width:"80%"
+    });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      if (result) {
+        this.createdObjects.push(result); // 👈 ajouter l'objet retourné
+      }
     });
   }
   filtreDialog() {
@@ -58,6 +118,7 @@ export class AccueilComponent implements OnInit {
       position:{right:'0'},
       height:'100vh',
       width:'30%',
+       backdropClass:"backdrop-dialog"
     } );
 
     dialogRef.afterClosed().subscribe(result => {
@@ -65,7 +126,9 @@ export class AccueilComponent implements OnInit {
     });
   }
   statusDialog() {
-    const dialogRef = this.dialog.open(ProgressionNiveauDialogComponent);
+    const dialogRef = this.dialog.open(ProgressionNiveauDialogComponent,{
+       backdropClass:"backdrop-dialog"
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`);
@@ -193,5 +256,21 @@ export class AccueilComponent implements OnInit {
           this.userSearchResults = [];
         }
       });
+  }
+  selectedChart: string='electricite';
+  createdObjects: any[] = [];
+
+  deleteObject(obj: any) {
+    const index = this.createdObjects.indexOf(obj);
+    if (index > -1) {
+      this.createdObjects.splice(index, 1);
+    }
+  }
+  
+  // Pour simplifier, tu peux réutiliser le dialog de création en mode "édition"
+  editObject(obj: any) {
+    // Tu peux ouvrir le dialog avec les valeurs préremplies, par exemple :
+    // (nécessite un peu plus de logique côté openDialog())
+    console.log('Édition demandée pour :', obj);
   }
 }

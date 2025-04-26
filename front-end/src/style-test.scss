@@ -263,10 +263,11 @@
           
         }
 
-
-.cdk-overlay-backdrop{
+.backdrop-dialog{
+&.cdk-overlay-backdrop{
     background-color: #000;
     opacity: 0.8 !important;
+}
 }
 .cdk-global-overlay-wrapper{
     .mat-mdc-dialog-panel {
@@ -306,10 +307,10 @@
 .mat-mdc-form-field {
   border-radius: 10px;
   max-height: 60px;
+ 
   .mat-mdc-text-field-wrapper{
-      
-      border: 2px solid#ff9800;
-      background-color: #222 !important;
+    border: 2px solid#ff9800;
+    background-color: #222 !important;
       mat-icon{
           position: absolute;
           right: -8px;
@@ -385,8 +386,12 @@
   
   /* Fond de la scrollbar */
   ::-webkit-scrollbar-track {
-    background: #ff9800 !important;
-    border-radius: 10px !important;
+    background: #F3F2F0 !important;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #ff9800;
+    border-radius: 40px;
+    height: 40px;
   }
   .icon-objet {
     background: url(assets/images/aspirateur.jpg);
@@ -398,4 +403,61 @@
     bottom: 0;
   }
 }
+.mat-button-toggle-group {
+  width: 20%;
+  border: 2px solid #ff9800 !important;
+  .mat-button-toggle {
+    width: 33%;
+    &:not(:first-child){
+      border-left: 2px solid #ff9800 !important;
+    }
+  
+    .mat-button-toggle-label-content {
+      color: #ffffff;
+    }
+    &.mat-button-toggle-checked{
+      background-color: #ff9800;
+      .mat-button-toggle-label-content {
+        color: #000;
+        font-weight: 700;
+      }
+    }
+    .mat-pseudo-checkbox {
+      display: none;
+    }
+  }
+}
 
+.mat-mdc-form-field {
+  .mdc-floating-label{
+    color: white !important;
+  }
+ 
+}
+
+.mat-mdc-text-field-wrapper{
+  .mat-mdc-form-field-flex{
+    .mat-mdc-input-element {
+      color: white !important;
+    }
+    .mdc-floating-label--float-above {
+      top: calc(var(--mat-form-field-container-height)/2 + 7px ) !important;
+      color: #ff9800 !important;
+    }
+    .mat-mdc-notch-piece {
+      border: none;
+    }
+  }
+}  
+
+.mat-mdc-select-panel,.avatar-large {
+  border: 2px solid #ff9800 ;
+  border-top: none;
+  background-color: #222 !important;
+  top: -10px;
+  position: relative !important;
+  padding:0;
+  .mdc-list-item__primary-text {
+    color: white;
+  }
+}
