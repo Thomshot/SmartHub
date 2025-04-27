@@ -5,8 +5,8 @@
             color: white;
         }
         background-color:#111;
-       
-       
+
+
     }
     .icon-profil {
         background: url(assets/images/profil.svg);
@@ -47,10 +47,10 @@
             .mdc-tab__text-label {
                 color: white;
             }
-            
+
             &.mdc-tab--active{
             background-color: #ff9800;
-       
+
             font-size: 1rem;
             border-radius:6px;
             cursor: pointer;
@@ -122,6 +122,63 @@
     }
 }
 
+.mat-card {
+  background-color: #222 !important;
+  border: 2px solid #ff9800 !important;
+  border-radius: 8px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.mat-card-title {
+  color: #ff9800;
+  font-weight: bold;
+}
+
+.mat-card-subtitle {
+  color: #ccc;
+}
+
+.mat-card-content p {
+  margin: 0.5rem 0;
+}
+
+.mat-raised-button {
+  background-color: #ff9800 !important;
+  color: black !important;
+  font-weight: bold;
+  &:hover {
+    background-color: #ffc166 !important;
+  }
+}
+
+.device-card {
+  width: 30%; /* Ajustez la largeur selon vos besoins */
+  background-color: #111; /* Même couleur que le fond du site */
+  border: none; /* Suppression des bordures */
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: white; /* Texte blanc pour correspondre au thème */
+}
+
+.device-card.reduced-width {
+  width: 25%; /* Réduction de la largeur */
+}
+
+.device-card h3 {
+  margin: 0 0 8px;
+  color: #ff9800; /* Titre en orange pour correspondre au thème */
+}
+
+.device-card p {
+  margin: 0 0 12px;
+  color: #ccc; /* Texte secondaire en gris clair */
+}
+
+.device-card button {
+  width: 100%;
+}
 
         .profil-container {
             display: flex;
@@ -130,8 +187,8 @@
             padding: 2rem;
             background-color: #000000;
             min-height: 100vh;
-          
-          
+
+
           .profil-card {
             background-color: #141414;
             color: #ffffff;
@@ -141,7 +198,7 @@
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
             border: 2px solid #ffa500;
           }
-          
+
           mat-card-header {
             text-align: center;
             display: flex;
@@ -149,25 +206,25 @@
             align-items: center;
             padding-bottom: 0;
           }
-          
+
           mat-card-title {
             font-size: 24px;
             font-weight: bold;
             color: #ffa500;
           }
-          
+
           mat-card-subtitle {
             font-size: 14px;
             color: #ccc;
           }
-          
+
           .avatar-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin: 1rem 0;
           }
-          
+
           .avatar-large {
             width: 110px;
             height: 110px;
@@ -176,7 +233,7 @@
             object-fit: cover;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
           }
-          
+
           button[mat-button] {
             background-color: #ffa500;
             color: black;
@@ -184,83 +241,83 @@
             margin-top: 0.5rem;
             border-radius: 10px;
           }
-          
+
           mat-card-content {
             padding: 1rem 2rem;
           }
-          
+
           .form-field {
             width: 100%;
             margin-bottom: 1.5rem;
           }
-          
+
           mat-form-field {
             width: 100%;
           }
-          
+
           mat-card-actions {
             display: flex;
             justify-content: flex-end;
             gap: 1rem;
             padding: 1rem 2rem;
           }
-          
+
           button[mat-stroked-button] {
             border-color: #ffa500;
             color: #ffa500;
           }
-          
+
           button[mat-raised-button] {
             background-color: #ffa500;
             color: #000;
             font-weight: bold;
           }
 
-          
+
 
           .mat-mdc-form-field {
             .mat-mdc-text-field-wrapper {
               background-color: transparent;
               border-radius: 4px;
             }
-          
+
             .mat-mdc-input-element,
             .mat-mdc-floating-label {
               color: white !important;
               caret-color: white;
             }
-          
+
             .mat-mdc-form-field-outline,
             .mat-mdc-form-field-outline-thick,
             .mat-mdc-form-field-outline-start,
             .mat-mdc-form-field-outline-end {
               border-color: white !important;
             }
-          
+
             input::placeholder {
               color: rgba(255, 255, 255, 0.6);
             }
-          
+
             // ✅ Pour mat-select
             .mat-mdc-select-value-text {
               color: white !important;
             }
-          
+
             // ✅ Pour le placeholder (avant qu’une valeur soit sélectionnée)
             .mat-mdc-select-placeholder {
               color: rgba(255, 255, 255, 0.6) !important;
             }
           }
-          
+
           // ✅ Pour les options dans la dropdown
           .mat-mdc-select-panel {
             .mdc-list-item__primary-text {
               color: white !important;
             }
           }
-          
-        
-          
+
+
+
         }
 
 
@@ -285,7 +342,7 @@
         .mat-step-icon {
           background-color: #ff9800;
         }
-      } 
+      }
       .mat-mdc-dialog-title {
         color: white;
       }
@@ -293,7 +350,7 @@
     .mat-mdc-dialog-surface,.mat-horizontal-stepper-wrapper{
         gap: 1rem ;
     }
-    
+
 }
 
 
@@ -307,7 +364,7 @@
   border-radius: 10px;
   max-height: 60px;
   .mat-mdc-text-field-wrapper{
-      
+
       border: 2px solid#ff9800;
       background-color: #222 !important;
       mat-icon{
@@ -382,7 +439,7 @@
     width: 10px; /* largeur verticale */
    /* hauteur horizontale */
   }
-  
+
   /* Fond de la scrollbar */
   ::-webkit-scrollbar-track {
     background: #ff9800 !important;

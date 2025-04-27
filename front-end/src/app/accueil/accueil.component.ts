@@ -210,7 +210,20 @@ export class AccueilComponent implements OnInit {
 
     this.http.get<any[]>(`http://localhost:3000/api/devices/search?query=${this.searchQuery}`)
       .subscribe({
-        next: (results: any[]) => this.searchResults = results,
+        next: (results: any[]) => {
+          this.searchResults = results;
+
+          if (results.length > 0) {
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+              this.http.post('http://localhost:3000/api/actions/record-action', { userId, actionCount: 1 })
+                .subscribe({
+                  next: () => console.log('Points mis à jour avec succès.'),
+                  error: (err) => console.error('Erreur lors de la mise à jour des points :', err)
+                });
+            }
+          }
+        },
         error: (err: any) => {
           console.error('Erreur lors de la recherche d’objet :', err);
           this.searchResults = [];
@@ -227,12 +240,54 @@ export class AccueilComponent implements OnInit {
 
     this.http.get<any[]>(`http://localhost:3000/api/services/search?query=${this.serviceSearchQuery}`)
       .subscribe({
-        next: (results: any[]) => this.serviceSearchResults = results,
+        next: (results: any[]) => {
+          this.serviceSearchResults = results;
+
+          // === Ajout de points si au moins un résultat ===
+          if (results.length > 0) {
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+              this.http.post('http://localhost:3000/api/actions/record-action', { userId, actionCount: 1 })
+                .subscribe({
+                  next: () => console.log('Points mis à jour avec succès (service).'),
+                  error: (err) => console.error('Erreur lors de la mise à jour des points :', err)
+                });
+            }
+          }
+        },
         error: (err: any) => {
           console.error('Erreur lors de la recherche de service :', err);
           this.serviceSearchResults = [];
         }
       });
+  }
+
+  showAllDevices(): void {
+    this.searchTriggered = true;
+    this.deviceService.getAllDevices().subscribe({
+      next: (devices) => {
+        this.searchResults = devices;
+        console.log('Tous les objets récupérés :', devices);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération de tous les objets :', err);
+        this.searchResults = [];
+      }
+    });
+  }
+
+  showAllServices(): void {
+    this.serviceSearchTriggered = true;
+    this.http.get<any[]>('http://localhost:3000/api/services').subscribe({
+      next: (services) => {
+        this.serviceSearchResults = services;
+        console.log('Tous les outils/services récupérés :', services);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération de tous les outils/services :', err);
+        this.serviceSearchResults = [];
+      }
+    });
   }
 
   logout(): void {
@@ -246,7 +301,7 @@ export class AccueilComponent implements OnInit {
   }
 
   goToProfile(): void {
-    this.selectedIndex = 3;
+    this.selectedIndex = 6; // Index de l'onglet "Gestion profil"
     if (this.isMobileorTablet) {
       const sidenavEl = document.querySelector('mat-sidenav') as any;
       sidenavEl?.close?.();
@@ -352,5 +407,22 @@ export class AccueilComponent implements OnInit {
       return matchPiece && matchEtat && matchConnectivite && matchType;
     });
     console.log('Objets filtrés :', this.filteredMaisonDevices);
+  }
+
+  filtrerSearchResults(filtres: any): void {
+    this.searchResults = this.searchResults.filter(device => {
+      const matchPiece = filtres.pieces.length === 0 || filtres.pieces.includes(device.room);
+      const matchEtat = filtres.etats.length === 0 || filtres.etats.includes(device.statutActuel);
+      const matchConnectivite = filtres.connectivite.length === 0 || filtres.connectivite.includes(device.connectivite);
+      const matchType = filtres.types.length === 0 || filtres.types.includes(device.type);
+
+      return matchPiece && matchEtat && matchConnectivite && matchType;
+    });
+    console.log('Objets filtrés (Recherche d\'objets) :', this.searchResults);
+  }
+
+  resetSearchResults(): void {
+    this.searchDevice(); // Re-fetch the search results to reset filters
+    console.log('Filtres réinitialisés (Recherche d\'objets), affichage des résultats initiaux ✅');
   }
 }

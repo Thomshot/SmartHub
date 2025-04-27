@@ -61,20 +61,23 @@ export class AjoutObjetDialogComponent implements OnInit {
   // Autocomplete
   myControl = new FormControl('');
   options: string[] = [
-    'Lampe', 'Ampoule connectée', 'Prise intelligente', 'Interrupteur connecté', 'Ruban LED',
-    'Thermostat', 'Chauffage connecté', 'Climatisation', 'Radiateur connecté', 'Ventilateur connecté',
-    'Déshumidificateur', 'Humidificateur', 'Réfrigérateur', 'Four', 'Micro-ondes', 'Lave-vaisselle',
+    'Lampe connectée', 'Ampoule connectée', 'Prise intelligente', 'Interrupteur connecté', 'Ruban LED',
+    'Thermostat intelligent', 'Chauffage connecté', 'Climatisation', 'Radiateur connecté', 'Ventilateur connecté',
+    'Déshumidificateur', 'Humidificateur', 'Réfrigérateur connecté', 'Four', 'Micro-ondes', 'Lave-vaisselle',
     'Machine à laver', 'Sèche-linge', 'Bouilloire connectée', 'Cafetière connectée', 'Grille-pain connecté',
-    'Aspirateur robot', 'Robot laveur de sol', 'Nettoyeur de vitres', 'Arrosage automatique',
-    'Caméra de sécurité', 'Détecteur de mouvement', 'Détecteur de fumée', 'Détecteur de gaz', 'Alarme',
+    'Robot aspirateur', 'Robot laveur de sol', 'Nettoyeur de vitres', 'Arrosage automatique',
+    'Caméra connectée', 'Détecteur de mouvement', 'Détecteur de fumée', 'Détecteur de gaz', 'Alarme',
     'Capteur d’ouverture', 'Sonnette connectée', 'Serrure connectée', 'Volet roulant', 'Porte de garage connectée',
     'Interphone', 'Badge d’accès', 'Télévision connectée', 'Enceinte connectée', 'Assistant vocal',
     'Télécommande universelle', 'Console de jeu', 'Hub domotique', 'Panneau solaire', 'Station météo',
-    'Capteur de qualité de l’air', 'Compteur d’énergie connecté', 'Capteur de luminosité', 'Capteur d’humidité'
+    'Capteur de qualité de l’air', 'Compteur d’énergie connecté', 'Capteur de luminosité', 'Capteur d’humidité',
+    'Capteur connecté'
   ];
   filteredOptions!: Observable<string[]>;
 
   // Liste des pièces
+  showAllRooms = false; // Controls the visibility of the full list of rooms
+
   rooms: string[] = [
     'Salon', 'Cuisine', 'Chambre', 'Salle de bain', 'Garage', 'Entrée',
     'Buanderie', 'Bureau', 'Jardin', 'Terrasse', 'Grenier'

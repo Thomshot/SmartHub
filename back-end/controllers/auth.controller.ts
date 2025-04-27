@@ -4,6 +4,7 @@ import User from '../models/user';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import { syncUserLevel } from '../utils/userLevel';
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -110,17 +111,7 @@ export const loginUser = async (req: Request, res: Response) => {
     // Mise à jour des points pour la connexion
     user.points += 0.25;
 
-    // Vérification du rôle en fonction des points
-    if (user.points >= 7) {
-      user.role = 'expert';
-    } else if (user.points >= 5) {
-      user.role = 'avancé';
-    } else if (user.points >= 3) {
-      user.role = 'intermédiaire';
-    } else {
-      user.role = 'débutant';
-    }
-
+    syncUserLevel(user);
     await user.save();
 
     // 🔑 Crée un token JWT
@@ -130,10 +121,6 @@ export const loginUser = async (req: Request, res: Response) => {
       { expiresIn: '2h' }
     );
 
-    // LOG TOUTES LES INFOS UTILES POUR DEBUG
-    console.log('✅ [DEBUG] Connexion OK pour:', email);
-    console.log('🧑 [DEBUG] userType:', user.userType, '| typeof:', typeof user.userType);
-    console.log('📝 [DEBUG] user (full):', user);
 
     // ✅ Réponse
     res.status(200).json({
@@ -173,17 +160,7 @@ export const updatePoints = async (req: Request, res: Response) => {
 
     // Mettre à jour les points
     user.points += points;
-
-    // Vérification du rôle en fonction des points
-    if (user.points >= 7) {
-      user.role = 'expert';
-    } else if (user.points >= 5) {
-      user.role = 'avancé';
-    } else if (user.points >= 3) {
-      user.role = 'intermédiaire';
-    } else {
-      user.role = 'débutant';
-    }
+    syncUserLevel(user);
 
     await user.save();
 
