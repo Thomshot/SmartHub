@@ -84,7 +84,7 @@
                 <img *ngIf="device.image" [src]="device.image" alt="Image de l'objet" style="max-width: 100%; border-radius: 8px;">
               </mat-card-content>
               <mat-card-actions>
-                <button mat-button color="warn" (click)="removeFromMaison(device)">Supprimer</button>
+                <button *ngIf="currentUser?.userType !== 'simple'" mat-button color="warn" (click)="removeFromMaison(device)">Supprimer</button>
               </mat-card-actions>
             </mat-card>
           </div>

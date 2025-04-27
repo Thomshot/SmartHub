@@ -298,7 +298,7 @@ export class AccueilComponent implements OnInit {
   }
 
   goToProfile(): void {
-    this.selectedIndex = 3;
+    this.selectedIndex = 6; // Index de l'onglet "Gestion profil"
     if (this.isMobileorTablet) {
       const sidenavEl = document.querySelector('mat-sidenav') as any;
       sidenavEl?.close?.();
