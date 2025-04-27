@@ -90,6 +90,9 @@
               <mat-card-actions>
                 <button mat-button color="warn" (click)="removeFromMaison(device)">Supprimer</button>
               </mat-card-actions>
+              <div *ngIf="deleteMessage" [ngClass]="deleteMessageType === 'success' ? 'success-message' : 'error-message'">
+                {{ deleteMessage }}
+              </div>
             </mat-card>
           </div>
           <ng-template #noMaisonDevices>

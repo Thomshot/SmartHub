@@ -52,6 +52,9 @@ export class AccueilComponent implements OnInit {
   userSearchResults: any[] = [];
   userSearchTriggered = false;
 
+  deleteMessage: string | null = null;
+  deleteMessageType: 'success' | 'error' | null = null;
+
   constructor(
     private breakpointObserver: BreakpointObserver,
     private http: HttpClient,
@@ -280,10 +283,41 @@ export class AccueilComponent implements OnInit {
   }
 
   removeFromMaison(device: any): void {
+    this.deleteMessage = null; // Reset message à chaque action
+
+    if (this.currentUser?.role !== 'expert') {
+      // Demande de suppression à l’admin
+      const userId = localStorage.getItem('userId');
+      this.http.post('http://localhost:3000/api/devices/request-delete', {
+        deviceId: device._id,
+        userId,
+        deviceName: device.nom
+      }).subscribe({
+        next: () => {
+          this.deleteMessage = 'Demande envoyée à l’administrateur.';
+          this.deleteMessageType = 'success';
+          setTimeout(() => {
+            this.deleteMessage = null;
+          }, 3000);
+        },
+        error: err => {
+          this.deleteMessage = 'Erreur lors de la demande : ' + (err.error?.message || err.message);
+          this.deleteMessageType = 'error';
+          setTimeout(() => {
+            this.deleteMessage = null;
+          }, 3000);
+        }
+      });
+      return;
+    }
+
+    // Sinon, suppression directe
     this.maisonDevices = this.maisonDevices.filter(d => d !== device);
     this.saveMaisonDevicesToLocalStorage();
-    console.log('Objet supprimé de la Maison :', device);
+    this.deleteMessage = 'Objet supprimé de la Maison.';
+    this.deleteMessageType = 'success';
   }
+
 
   clearMaisonDevices(): void {
     this.maisonDevices = [];

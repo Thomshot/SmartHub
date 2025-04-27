@@ -68,6 +68,16 @@
           <input matInput formControlName="login">
         </mat-form-field>
 
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Points</mat-label>
+          <input matInput type="number" formControlName="points">
+        </mat-form-field>
+
+        <div style="margin-bottom: 1rem;">
+          <span><strong>Niveau :</strong> {{ editForm.value.role || user?.role }}</span> <br>
+          <span><strong>Type :</strong> {{ editForm.value.userType || user?.userType }}</span>
+        </div>
+
         <div *ngIf="errorMsg" class="error-message">{{ errorMsg }}</div>
 
         <mat-card-actions align="end">

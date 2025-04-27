@@ -1,6 +1,7 @@
 import { Request, Response, RequestHandler } from 'express';
 import User from '../models/user';
 import bcrypt from 'bcrypt';
+import { syncUserLevel } from '../utils/userLevel';
 
 export const searchUser: RequestHandler = async (req, res) => {
   try {
@@ -40,10 +41,11 @@ export const getProfile: RequestHandler = async (req, res) => {
   }
 };
 
-// ✏️ Mise à jour du profil
+
 export const updateUser: RequestHandler = async (req, res) => {
   try {
     const userId = req.params.id;
+
     // Préparer les champs à mettre à jour
     const updateData: any = {
       gender: req.body.gender,
@@ -56,7 +58,6 @@ export const updateUser: RequestHandler = async (req, res) => {
       login: req.body.login,
     };
 
-    // Hash du mot de passe si fourni
     if (req.body.password && req.body.password.trim() !== "") {
       const saltRounds = 10;
       updateData.password = await bcrypt.hash(req.body.password, saltRounds);
@@ -64,17 +65,32 @@ export const updateUser: RequestHandler = async (req, res) => {
     if (req.file) {
       updateData.photo = req.file.filename;
     }
-
-    const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true }).select('-password');
-    if (!updatedUser) {
-      res.json({ message: 'Profil mis à jour avec succès', user: updatedUser });
+    if (typeof req.body.points === 'number') {
+      updateData.points = req.body.points;
     }
-    res.json({ message: 'Profil mis à jour avec succès', user: updatedUser });
+
+    const user = await User.findById(userId);
+    if (!user) {
+      res.status(404).json({ message: 'Utilisateur non trouvé' });
+      return;
+    }
+
+    user.set(updateData);    // Met à jour tous les champs, dont les points si présents
+
+    syncUserLevel(user);     // Mets à jour le rôle/niveau à chaque update, peu importe ce qui change
+
+    await user.save();
+
+    const { password, ...safeUser } = user.toObject();
+
+    res.json({ message: 'Profil mis à jour avec succès', user: safeUser });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
+
+
 
 export const deleteUser: RequestHandler = async (req, res) => {
   try {

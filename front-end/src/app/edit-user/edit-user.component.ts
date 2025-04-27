@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { UserService } from '../services/user.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // <-- Ajoute Validators ici !
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -74,8 +74,11 @@ export class EditUserComponent implements OnInit {
           gender: [user.gender],
           otherGender: [user.otherGender || ''],
           birthDate: [user.birthDate],
+          points: [user.points, [Validators.required, Validators.min(0)]],
+          role: [user.role || 'débutant'],
+          userType: [user.userType || 'simple']
         });
-        this.avatarPreview = null; // reset preview if any
+        this.avatarPreview = null;
         this.loading = false;
       },
       error: err => {
@@ -122,9 +125,16 @@ export class EditUserComponent implements OnInit {
     }
 
     this.userService.updateProfile(this.user._id, payload).subscribe({
-      next: () => {
+      next: (res: any) => {
         alert('Modifications enregistrées.');
         this.loadingUpdate = false;
+        if (res && res.user) {
+          this.user = res.user;
+          this.editForm.patchValue({
+            role: res.user.role,
+            userType: res.user.userType
+          });
+        }
         this.close.emit();
       },
       error: err => {
