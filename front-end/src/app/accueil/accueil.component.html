@@ -74,7 +74,6 @@
                 <mat-card-subtitle>{{ device.type }}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
-                <p><strong>Type :</strong> {{ device.type }}</p>
                 <p *ngIf="device.statutActuel"><strong>Statut :</strong> {{ device.statutActuel }}</p>
                 <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
                 <p *ngIf="device.etatDeBatterie"><strong>État de batterie :</strong> {{ device.etatDeBatterie }}</p>
@@ -132,8 +131,7 @@
             <mat-card class="d-flex w-25 p-4">
               <mat-icon class="icon-objet" style="width: auto; height: 180px;"></mat-icon>
              <h4> <span>Nom :</span></h4>
-                <p>Type : </p>
-                <p >Statut actuel : </p>
+                <p>Statut actuel : </p>
                 <p >Connectivité : </p>
                 <p >État de batterie : </p>
                 <p>Dernière interaction : </p>
@@ -165,7 +163,6 @@
                 <mat-card-subtitle>{{ device.type }}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
-                <p><strong>Type :</strong> {{ device.type }}</p>
                 <p *ngIf="device.statutActuel">
                   <strong>Statut :</strong> {{ device.statutActuel }}
                   <button mat-icon-button (click)="toggleEditStatus(device)">

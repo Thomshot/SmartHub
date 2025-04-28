@@ -498,3 +498,7 @@ mat-select {
   border-color: #ff9800; /* Couleur orange pour le focus */
   box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
 }
+
+.mat-mdc-card-subtitle {
+  color: lightgray !important; /* Set text color to light gray */
+}
