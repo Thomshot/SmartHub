@@ -1,11 +1,22 @@
-import mongoose, { Types, Document } from 'mongoose';
-import { IDevice } from './device';
+import mongoose, { Schema, Document, Types } from 'mongoose';
+import { IDevice } from './device'; // si besoin
 
+// 🔥 Petit device stocké chez l'utilisateur
+export interface IUserDeviceEmbedded {
+  idUnique: string;
+  nom: string;
+  type: string;
+  statutActuel: string;
+  // Ajoute d'autres champs si tu veux (température, connectivité, etc)
+}
+
+// 🔥 Objet device pour User
 export interface IUserDevice {
-  device: Types.ObjectId | IDevice; // soit ObjectId soit Device
+  device: IUserDeviceEmbedded; // Ici on n'a pas ObjectId ni IDevice complet
   statutActuel: string;
 }
 
+// 🔥 L'utilisateur complet
 export interface IUser extends Document {
   gender?: string;
   otherGender?: string;
@@ -27,12 +38,19 @@ export interface IUser extends Document {
   userDevices: IUserDevice[];
 }
 
-const userDeviceSchema = new mongoose.Schema({
-  device: { type: mongoose.Schema.Types.ObjectId, ref: 'Device', required: true },
+// Schéma pour sous-objet Device dans userDevices
+const userDeviceSchema = new Schema({
+  device: {
+    idUnique: { type: String, required: true },
+    nom: { type: String, required: true },
+    type: { type: String, required: true },
+    statutActuel: { type: String, required: true },
+  },
   statutActuel: { type: String, required: true },
 });
 
-const userSchema = new mongoose.Schema({
+// Schéma principal User
+const userSchema = new Schema({
   gender: { type: String },
   otherGender: { type: String },
   birthDate: { type: String, required: true },
@@ -53,4 +71,5 @@ const userSchema = new mongoose.Schema({
   userDevices: [userDeviceSchema],
 }, { timestamps: true });
 
+// Export du modèle User
 export default mongoose.model<IUser>('User', userSchema, 'users');

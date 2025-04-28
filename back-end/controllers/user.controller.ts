@@ -118,36 +118,50 @@ export const addDeviceToUser: RequestHandler = async (req, res) => {
     const userId = req.params.id;
     const { deviceId } = req.body;
 
-    // Trouve le device dans la collection Device
+    // 🔥 1. Trouver le Device à cloner
     const device = await Device.findById(deviceId);
     if (!device) {
       res.status(404).json({ message: 'Device not found' });
       return;
     }
 
-    await User.findByIdAndUpdate(
-      userId,
-      { $addToSet: { userDevices: { device: device._id, statutActuel: device.statutActuel } } }
-    );
-
-    // Recherche l'utilisateur et populé les devices
-    const user = await User.findById(userId).populate('userDevices.device');  // <-- Ajoute le populate ici
+    // 🔥 2. Trouver l'utilisateur
+    const user = await User.findById(userId);
     if (!user) {
       res.status(404).json({ message: "Utilisateur non trouvé." });
       return;
     }
 
-    // Récupère l'objet complet device depuis userDevices
-    const userDevice = user.userDevices.find((ud: any) => ud.device._id.toString() === deviceId);
-    if (!userDevice) {
-      res.status(404).json({ message: "Device non trouvé dans la maison de l'utilisateur." });
+    // 🔥 3. Vérifier que le device n'est pas déjà ajouté (optionnel mais propre)
+    const alreadyExists = user.userDevices.some((ud) => 
+      (ud.device as any).idUnique === device.idUnique
+    );
+
+    if (alreadyExists) {
+      res.status(400).json({ message: "Device déjà présent chez l'utilisateur." });
       return;
     }
 
-    // Maintenant tu as accès à `nom` car `device` est peuplé
+    // 🔥 4. Ajouter une **copie complète** du Device
+    user.userDevices.push({
+      device: {
+        idUnique: device.idUnique,
+        nom: device.nom,
+        type: device.type,
+        statutActuel: device.statutActuel,
+        // Ajoute d'autres champs ici si tu veux
+      },
+      statutActuel: device.statutActuel, // Tu peux personnaliser ce champ si besoin
+    });
+
+    await user.save();
+
+    // 🔥 5. Retourner le dernier device ajouté
+    const lastDevice = user.userDevices[user.userDevices.length - 1];
+
     res.status(200).json({
       message: 'Device ajouté à la maison de l\'utilisateur',
-      device: userDevice.device // Retourne l'objet device complet
+      device: lastDevice.device, // Retourne l'objet device cloné
     });
 
   } catch (error) {

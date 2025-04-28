@@ -170,34 +170,32 @@ export const updateUserDeviceName = async (req: Request, res: Response): Promise
       return;
     }
 
-    const user = await User.findById(userId).populate('userDevices.device') as IUser;
+    // ➔ Pas besoin de populate ici
+    const user = await User.findById(userId) as IUser;
     if (!user) {
       res.status(404).json({ message: "Utilisateur non trouvé." });
       return;
     }
 
-    const rawUserDevice = user.userDevices.find((ud) => {
-      return ud.device && typeof ud.device === 'object' && '_id' in ud.device;
-    });
-
-    if (!rawUserDevice || !rawUserDevice.device || typeof rawUserDevice.device !== 'object' || !('_id' in rawUserDevice.device)) {
-      res.status(404).json({ message: "Device non trouvé dans la maison de l'utilisateur." });
-      return;
-    }
-
-    const device = rawUserDevice.device as IDevice;
-
-    if ((device._id as mongoose.Types.ObjectId).toString() !== deviceId) {
-      res.status(404).json({ message: "Device non trouvé dans la maison de l'utilisateur." });
-      return;
-    }
-
-    await Device.updateOne(
-      { _id: device._id },
-      { $set: { nom: name } }
+    // ➔ userDevices contient des objets internes maintenant (pas des références ObjectId)
+    const userDevice = user.userDevices.find((ud) =>
+      ud.device &&
+      typeof ud.device === 'object' &&
+      '_id' in ud.device &&
+      (ud.device as any)._id.toString() === deviceId
     );
 
-    res.status(200).json({ message: "Nom du device mis à jour avec succès.", device });
+    if (!userDevice) {
+      res.status(404).json({ message: "Device non trouvé dans la maison de l'utilisateur." });
+      return;
+    }
+
+    // ➔ Modifier directement l'objet device stocké dans user
+    (userDevice.device as any).nom = name;
+
+    await user.save();
+
+    res.status(200).json({ message: "Nom du device lié à l'utilisateur mis à jour avec succès.", device: userDevice.device });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Erreur serveur.' });
