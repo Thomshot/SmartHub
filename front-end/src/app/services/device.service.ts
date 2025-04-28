@@ -23,4 +23,8 @@ export class DeviceService {
   updateDeviceStatus(deviceId: string, newStatus: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/update-status`, { deviceId, newStatus });
   }
+
+  updateDeviceName(deviceId: string, newName: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${deviceId}/name`, { name: newName });
+  }
 }

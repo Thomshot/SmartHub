@@ -60,7 +60,6 @@
                 <mat-card-subtitle>{{ device.type }}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
-                <p><strong>Type :</strong> {{ device.type }}</p>
                 <p *ngIf="device.statutActuel"><strong>Statut :</strong> {{ device.statutActuel }}</p>
                 <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
                 <p *ngIf="device.etatDeBatterie"><strong>État de batterie :</strong> {{ device.etatDeBatterie }}</p>
@@ -99,7 +98,6 @@
             <p>Aucun objet disponible.</p>
           </ng-template>
         </div>
-
       </div>
 
       <!-- Section Création objet -->
@@ -120,6 +118,17 @@
               <mat-icon matSuffix class="icon-loupe">search</mat-icon>
             </mat-form-field>
           </div>
+          <div>
+            <mat-card class="d-flex w-25 p-4">
+              <mat-icon class="icon-objet" style="width: auto; height: 180px;"></mat-icon>
+             <h4> <span>Nom :</span></h4>
+                <p>Statut actuel : </p>
+                <p >Connectivité : </p>
+                <p >État de batterie : </p>
+                <p>Dernière interaction : </p>
+
+            </mat-card>
+          </div>
         </div>
 
         <div class="p-4">
@@ -127,11 +136,24 @@
           <div *ngIf="filteredMaisonDevices.length > 0; else noMaisonDevices" class="d-flex flex-wrap gap-3">
             <mat-card *ngFor="let device of filteredMaisonDevices" appearance="outlined" class="w-25">
               <mat-card-header>
-                <mat-card-title>{{ device.nom }}</mat-card-title>
+                
+                <mat-card-title>
+                  <!-- Affichage du nom ou champ de saisie pour modifier le nom -->
+                  <span *ngIf="!device.isEditingName">{{ device.nom }}</span>
+                  <input
+                    *ngIf="device.isEditingName"
+                    [(ngModel)]="device.newName"
+                    placeholder="Entrez un nouveau nom"
+                    class="edit-name-input"
+                  />
+                  <button mat-icon-button (click)="toggleEditName(device)">
+                    <mat-icon>{{ device.isEditingName ? 'check' : 'edit' }}</mat-icon>
+                  </button>
+                </mat-card-title>
+
                 <mat-card-subtitle>{{ device.type }}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
-                <p><strong>Type :</strong> {{ device.type }}</p>
                 <p *ngIf="device.statutActuel">
                   <strong>Statut :</strong> {{ device.statutActuel }}
                   <button mat-icon-button (click)="toggleEditStatus(device)">
@@ -149,11 +171,8 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button mat-raised-button color="primary" (click)="updateDeviceStatus(device)">
-                    <mat-icon>check</mat-icon>
-                  </button>
                 </div>
-
+        
                 <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
                 <p *ngIf="device.etatDeBatterie"><strong>État de batterie :</strong> {{ device.etatDeBatterie }}</p>
                 <p *ngIf="device.derniereInteraction"><strong>Dernière interaction :</strong> {{ device.derniereInteraction | date:'medium' }}</p>
@@ -173,6 +192,7 @@
         </div>
       </div>
 
+      <!-- Section Recherche d'objets -->
       <div *ngIf="selectedIndex === 3">
         <div class="p-4">
           <h1>Recherche d'objets</h1>

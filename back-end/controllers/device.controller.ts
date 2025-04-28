@@ -155,4 +155,62 @@ export const clearUserDevices = async (req: Request, res: Response): Promise<voi
   await user.save();
 
   res.json({ message: "Tous les objets ont été retirés de la maison de l'utilisateur." });
+}
+
+export const updateDeviceName = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const deviceId = req.params.id;
+    const { name } = req.body;
+
+    const device = await Device.findById(deviceId);
+    if (!device) {
+      res.status(404).json({ message: 'Objet non trouvé.' });
+      return;
+    }
+
+    device.nom = name;
+    await device.save();
+
+    res.status(200).json({ message: 'Nom mis à jour avec succès.', device });
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du nom :', error);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+};
+
+
+export const clearUserDevices = async (req: Request, res: Response): Promise<void> => {
+  const userId = req.params.id;
+
+  const user = await User.findById(userId);
+  if (!user){
+    res.status(404).json({ message: "Utilisateur non trouvé." });
+    return;
+  }
+
+  user.userDevices.splice(0, user.userDevices.length);
+  await user.save();
+
+  res.json({ message: "Tous les objets ont été retirés de la maison de l'utilisateur." });
+};
+
+export const updateDeviceName = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const deviceId = req.params.id;
+    const { name } = req.body;
+
+    const device = await Device.findById(deviceId);
+    if (!device) {
+      res.status(404).json({ message: 'Objet non trouvé.' });
+      return;
+    }
+
+    device.nom = name;
+    await device.save();
+
+    res.status(200).json({ message: 'Nom mis à jour avec succès.', device });
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour du nom :', error);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
 };

@@ -482,10 +482,36 @@ export class AccueilComponent implements OnInit {
     }
   }
 
+  updateDeviceName(device: any): void {
+    this.deviceService.updateDeviceName(device._id, device.newName).subscribe({
+      next: (response: any) => {
+        device.nom = device.newName; // Met à jour localement
+        console.log('Nom mis à jour avec succès :', response);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la mise à jour du nom :', err);
+      }
+    });
+  }
+
 
 
   toggleEditStatus(device: any): void {
     device.isEditingStatus = !device.isEditingStatus;
     device.newStatus = device.statutActuel;
+  }
+
+  toggleEditName(device: any): void {
+    if (device.isEditingName) {
+      // Si l'utilisateur valide la modification
+      if (device.newName && device.newName !== device.nom) {
+        this.updateDeviceName(device);
+      }
+      device.isEditingName = false;
+    } else {
+      // Active le mode édition
+      device.isEditingName = true;
+      device.newName = device.nom; // Pré-remplit avec le nom actuel
+    }
   }
 }
