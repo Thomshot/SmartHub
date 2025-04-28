@@ -147,7 +147,21 @@
           <div *ngIf="filteredMaisonDevices.length > 0; else noMaisonDevices" class="d-flex flex-wrap gap-3">
             <mat-card *ngFor="let device of filteredMaisonDevices" appearance="outlined" class="w-25">
               <mat-card-header>
-                <mat-card-title>{{ device.nom }}</mat-card-title>
+                
+                <mat-card-title>
+                  <!-- Affichage du nom ou champ de saisie pour modifier le nom -->
+                  <span *ngIf="!device.isEditingName">{{ device.nom }}</span>
+                  <input
+                    *ngIf="device.isEditingName"
+                    [(ngModel)]="device.newName"
+                    placeholder="Entrez un nouveau nom"
+                    class="edit-name-input"
+                  />
+                  <button mat-icon-button (click)="toggleEditName(device)">
+                    <mat-icon>{{ device.isEditingName ? 'check' : 'edit' }}</mat-icon>
+                  </button>
+                </mat-card-title>
+
                 <mat-card-subtitle>{{ device.type }}</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
@@ -169,9 +183,6 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
-                  <button mat-raised-button color="primary" (click)="updateDeviceStatus(device)">
-                    <mat-icon>check</mat-icon>
-                  </button>
                 </div>
         
                 <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
