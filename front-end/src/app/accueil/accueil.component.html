@@ -109,6 +109,7 @@
             <p>Aucun objet disponible.</p>
           </ng-template>
         </div>
+
       </div>
 
       <!-- Section Création objet -->
@@ -130,6 +131,7 @@
             </mat-form-field>
           </div>
         </div>
+
         <div class="p-4">
           <h2>Vue de la Maison</h2>
           <div *ngIf="filteredMaisonDevices.length > 0; else noMaisonDevices" class="d-flex flex-wrap gap-3">
@@ -140,7 +142,28 @@
               </mat-card-header>
               <mat-card-content>
                 <p><strong>Type :</strong> {{ device.type }}</p>
-                <p><strong>Statut :</strong> {{ device.statutActuel }}</p>
+                <p *ngIf="device.statutActuel">
+                  <strong>Statut :</strong> {{ device.statutActuel }}
+                  <button mat-icon-button (click)="toggleEditStatus(device)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                </p>
+
+                <!-- Liste déroulante pour modifier le statut -->
+                <div *ngIf="device.isEditingStatus" class="status-dropdown">
+                  <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Modifier le statut</mat-label>
+                    <mat-select [(value)]="device.newStatus" (selectionChange)="updateDeviceStatus(device)">
+                      <mat-option *ngFor="let status of device.etats" [value]="status">
+                        {{ status }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <button mat-raised-button color="primary" (click)="updateDeviceStatus(device)">
+                    <mat-icon>check</mat-icon>
+                  </button>
+                </div>
+
                 <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
                 <p *ngIf="device.etatDeBatterie"><strong>État de batterie :</strong> {{ device.etatDeBatterie }}</p>
                 <p *ngIf="device.derniereInteraction"><strong>Dernière interaction :</strong> {{ device.derniereInteraction | date:'medium' }}</p>
@@ -160,7 +183,6 @@
         </div>
       </div>
 
-      <!-- Section Recherche d'objets -->
       <div *ngIf="selectedIndex === 3">
         <div class="p-4">
           <h1>Recherche d'objets</h1>
