@@ -31,18 +31,8 @@
       <!-- Section Accueil -->
       <div *ngIf="selectedIndex === 0">
         <div class="p-4">
-          <h1>Bonjour <span>{{user}}</span></h1>
+          <h1>Bonjour <span>{{ currentUser?.firstName }} {{ currentUser?.lastName || user }}</span></h1>
           <div class="d-flex justify-content-around">
-            <mat-card appearance="outlined" class="w-25">
-              <mat-card-header>
-                <mat-card-title>Utilisateur</mat-card-title>
-              </mat-card-header>
-              <mat-list role="list">
-                <mat-list-item role="listitem"><button mat-button>Utilisateur 1</button></mat-list-item>
-                <mat-list-item role="listitem"><button mat-button>Utilisateur 2</button></mat-list-item>
-                <mat-list-item role="listitem"><button mat-button>Utilisateur 3</button></mat-list-item>
-              </mat-list>
-            </mat-card>
             <mat-card appearance="outlined" class="w-25">
               <mat-card-header>
                 <mat-card-title>Progression Niveau</mat-card-title>

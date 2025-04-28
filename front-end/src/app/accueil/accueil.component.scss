@@ -316,6 +316,13 @@ footer {
 .other-profile {
   flex: 2;
   min-width: 350px;
+  color: #fff; // Ensure text is white
+  strong {
+    color: #ffa500; // Keep titles in orange
+  }
+  p {
+    color: #fff; // Ensure paragraph text is white
+  }
 }
 
 @media (max-width: 900px) {
@@ -446,4 +453,8 @@ mat-card-actions {
   background: #ffeaea;
   margin-bottom: 10px;
   font-weight: bold;
+}
+
+::ng-deep .mdc-list-item__primary-text {
+  color: #fff !important; // Force text color to white
 }
