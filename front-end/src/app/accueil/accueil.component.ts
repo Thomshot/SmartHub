@@ -429,6 +429,23 @@ export class AccueilComponent implements OnInit {
     console.log('Filtres réinitialisés (Recherche d\'objets), affichage des résultats initiaux ✅');
   }
 
+  filtrerSearchResults(filtres: any): void {
+    this.searchResults = this.searchResults.filter(device => {
+      const matchPiece = filtres.pieces.length === 0 || filtres.pieces.includes(device.room);
+      const matchEtat = filtres.etats.length === 0 || filtres.etats.includes(device.statutActuel);
+      const matchConnectivite = filtres.connectivite.length === 0 || filtres.connectivite.includes(device.connectivite);
+      const matchType = filtres.types.length === 0 || filtres.types.includes(device.type);
+
+      return matchPiece && matchEtat && matchConnectivite && matchType;
+    });
+    console.log('Objets filtrés (Recherche d\'objets) :', this.searchResults);
+  }
+
+  resetSearchResults(): void {
+    this.searchDevice(); // Re-fetch the search results to reset filters
+    console.log('Filtres réinitialisés (Recherche d\'objets), affichage des résultats initiaux ✅');
+  }
+
   updateDeviceStatus(device: any): void {
     if (device.newStatus && device.newStatus !== device.statutActuel) {
       // Appel HTTP direct vers le backend Express.js
