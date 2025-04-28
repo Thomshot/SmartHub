@@ -118,6 +118,7 @@ export const addDeviceToUser: RequestHandler = async (req, res) => {
     const userId = req.params.id;
     const { deviceId } = req.body;
 
+    // Trouve le device dans la collection Device
     const device = await Device.findById(deviceId);
     if (!device) {
       res.status(404).json({ message: 'Device not found' });
@@ -128,7 +129,27 @@ export const addDeviceToUser: RequestHandler = async (req, res) => {
       userId,
       { $addToSet: { userDevices: { device: device._id, statutActuel: device.statutActuel } } }
     );
-    res.json({ message: 'Device ajouté à la maison de l\'utilisateur' });
+
+    // Recherche l'utilisateur et populé les devices
+    const user = await User.findById(userId).populate('userDevices.device');  // <-- Ajoute le populate ici
+    if (!user) {
+      res.status(404).json({ message: "Utilisateur non trouvé." });
+      return;
+    }
+
+    // Récupère l'objet complet device depuis userDevices
+    const userDevice = user.userDevices.find((ud: any) => ud.device._id.toString() === deviceId);
+    if (!userDevice) {
+      res.status(404).json({ message: "Device non trouvé dans la maison de l'utilisateur." });
+      return;
+    }
+
+    // Maintenant tu as accès à `nom` car `device` est peuplé
+    res.status(200).json({
+      message: 'Device ajouté à la maison de l\'utilisateur',
+      device: userDevice.device // Retourne l'objet device complet
+    });
+
   } catch (error) {
     console.error('Erreur lors de l’ajout du device à l’utilisateur:', error);
     res.status(500).json({ message: 'Erreur serveur.' });

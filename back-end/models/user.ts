@@ -1,4 +1,31 @@
-import mongoose from 'mongoose';
+import mongoose, { Types, Document } from 'mongoose';
+import { IDevice } from './device';
+
+export interface IUserDevice {
+  device: Types.ObjectId | IDevice; // soit ObjectId soit Device
+  statutActuel: string;
+}
+
+export interface IUser extends Document {
+  gender?: string;
+  otherGender?: string;
+  birthDate: string;
+  lastName: string;
+  firstName: string;
+  city: string;
+  address: string;
+  email: string;
+  password: string;
+  login?: string;
+  memberType?: string;
+  photo?: string;
+  role: 'débutant' | 'intermédiaire' | 'avancé' | 'expert';
+  isVerified: boolean;
+  verificationToken?: string;
+  userType: 'simple' | 'complexe' | 'administrateur';
+  points: number;
+  userDevices: IUserDevice[];
+}
 
 const userDeviceSchema = new mongoose.Schema({
   device: { type: mongoose.Schema.Types.ObjectId, ref: 'Device', required: true },
@@ -26,4 +53,4 @@ const userSchema = new mongoose.Schema({
   userDevices: [userDeviceSchema],
 }, { timestamps: true });
 
-export default mongoose.model('User', userSchema, 'users');
+export default mongoose.model<IUser>('User', userSchema, 'users');

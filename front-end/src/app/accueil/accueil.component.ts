@@ -483,16 +483,31 @@ export class AccueilComponent implements OnInit {
   }
 
   updateDeviceName(device: any): void {
-    this.deviceService.updateDeviceName(device._id, device.newName).subscribe({
-      next: (response: any) => {
-        device.nom = device.newName; // Met à jour localement
-        console.log('Nom mis à jour avec succès :', response);
-      },
-      error: (err) => {
-        console.error('Erreur lors de la mise à jour du nom :', err);
-      }
-    });
+    const userId = localStorage.getItem('userId');  // Récupère l'ID de l'utilisateur
+    if (!userId) {
+      console.error('Utilisateur non connecté');
+      return;
+    }
+
+    if (device.newName && device.newName !== device.nom) {
+      // Envoi de la requête PUT pour mettre à jour le nom du device dans la maison de l'utilisateur
+      this.http.put(`http://localhost:3000/api/users/${userId}/devices/${device._id}/name`, { name: device.newName })
+        .subscribe({
+          next: (response: any) => {
+            // Met à jour le nom localement
+            device.nom = device.newName;
+            device.newName = undefined;  // Réinitialiser le champ
+            console.log('Nom mis à jour avec succès :', response);
+          },
+          error: (err) => {
+            console.error('Erreur lors de la mise à jour du nom :', err);
+          }
+        });
+    } else {
+      console.error('Le nouveau nom est le même que l\'ancien ou vide');
+    }
   }
+
 
 
 

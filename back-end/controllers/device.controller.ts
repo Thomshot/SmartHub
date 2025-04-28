@@ -1,8 +1,10 @@
 import { Request, Response } from 'express'; // Ensure these are imported from 'express'
 import mongoose from 'mongoose';
 import Device from '../models/device';
-import User from '../models/user';
+import User, { IUser } from '../models/user';
 import nodemailer from 'nodemailer';
+import { IDevice } from '../models/device';
+
 // Méthode pour rechercher un appareil
 export const searchDevice = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -141,44 +143,6 @@ export const updateDeviceStatus = async (req: Request, res: Response): Promise<v
   }
 };
 
-
-export const clearUserDevices = async (req: Request, res: Response): Promise<void> => {
-  const userId = req.params.id;
-
-  const user = await User.findById(userId);
-  if (!user){
-    res.status(404).json({ message: "Utilisateur non trouvé." });
-    return;
-  }
-
-  user.userDevices.splice(0, user.userDevices.length);
-  await user.save();
-
-  res.json({ message: "Tous les objets ont été retirés de la maison de l'utilisateur." });
-}
-
-export const updateDeviceName = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const deviceId = req.params.id;
-    const { name } = req.body;
-
-    const device = await Device.findById(deviceId);
-    if (!device) {
-      res.status(404).json({ message: 'Objet non trouvé.' });
-      return;
-    }
-
-    device.nom = name;
-    await device.save();
-
-    res.status(200).json({ message: 'Nom mis à jour avec succès.', device });
-  } catch (error) {
-    console.error('Erreur lors de la mise à jour du nom :', error);
-    res.status(500).json({ message: 'Erreur serveur.' });
-  }
-};
-
-
 export const clearUserDevices = async (req: Request, res: Response): Promise<void> => {
   const userId = req.params.id;
 
@@ -194,23 +158,50 @@ export const clearUserDevices = async (req: Request, res: Response): Promise<voi
   res.json({ message: "Tous les objets ont été retirés de la maison de l'utilisateur." });
 };
 
-export const updateDeviceName = async (req: Request, res: Response): Promise<void> => {
+
+export const updateUserDeviceName = async (req: Request, res: Response): Promise<void> => {
   try {
-    const deviceId = req.params.id;
+    const userId = req.params.userId;
+    const deviceId = req.params.deviceId;
     const { name } = req.body;
 
-    const device = await Device.findById(deviceId);
-    if (!device) {
-      res.status(404).json({ message: 'Objet non trouvé.' });
+    if (!name || name.trim() === "") {
+      res.status(400).json({ message: "Le nom du device est requis." });
       return;
     }
 
-    device.nom = name;
-    await device.save();
+    const user = await User.findById(userId).populate('userDevices.device') as IUser;
+    if (!user) {
+      res.status(404).json({ message: "Utilisateur non trouvé." });
+      return;
+    }
 
-    res.status(200).json({ message: 'Nom mis à jour avec succès.', device });
+    const rawUserDevice = user.userDevices.find((ud) => {
+      return ud.device && typeof ud.device === 'object' && '_id' in ud.device;
+    });
+
+    if (!rawUserDevice || !rawUserDevice.device || typeof rawUserDevice.device !== 'object' || !('_id' in rawUserDevice.device)) {
+      res.status(404).json({ message: "Device non trouvé dans la maison de l'utilisateur." });
+      return;
+    }
+
+    const device = rawUserDevice.device as IDevice;
+
+    if ((device._id as mongoose.Types.ObjectId).toString() !== deviceId) {
+      res.status(404).json({ message: "Device non trouvé dans la maison de l'utilisateur." });
+      return;
+    }
+
+    await Device.updateOne(
+      { _id: device._id },
+      { $set: { nom: name } }
+    );
+
+    res.status(200).json({ message: "Nom du device mis à jour avec succès.", device });
   } catch (error) {
-    console.error('Erreur lors de la mise à jour du nom :', error);
+    console.error(error);
     res.status(500).json({ message: 'Erreur serveur.' });
   }
 };
+
+
