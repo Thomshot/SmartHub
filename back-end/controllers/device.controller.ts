@@ -67,12 +67,6 @@ export const updateDeviceStatus = async (req: Request, res: Response): Promise<v
       return;
     }
 
-    // Vérifiez si le nouvel état est valide
-    if (!device.états.includes(newStatus)) {
-      res.status(400).json({ message: 'État invalide.' });
-      return;
-    }
-
     // Mettez à jour le statut
     device.statutActuel = newStatus;
     await device.save();

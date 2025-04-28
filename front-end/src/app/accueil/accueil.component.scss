@@ -435,8 +435,9 @@ mat-card-actions {
 
 /* Styles pour la liste déroulante */
 .status-dropdown {
-  margin-top: 10px;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espacement entre la liste déroulante et le bouton */
 }
 
 mat-form-field {

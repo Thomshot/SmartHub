@@ -169,6 +169,9 @@
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
+                  <button mat-raised-button color="primary" (click)="updateDeviceStatus(device)">
+                    <mat-icon>check</mat-icon>
+                  </button>
                 </div>
         
                 <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
