@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllDevices, searchDevice, createDevice, requestDeleteDevice } from '../controllers/device.controller';
+import { getAllDevices, searchDevice, createDevice, requestDeleteDevice, updateDeviceStatus, updateDeviceName } from '../controllers/device.controller';
 
 const router = express.Router();
 
@@ -19,6 +19,7 @@ router.post('/create', (req, res, next) => {
   }, createDevice);
 
 router.post('/request-delete', requestDeleteDevice);
-
+router.put('/:id/status', updateDeviceStatus);
+router.put('/:id/name', updateDeviceName);
 
 export default router;

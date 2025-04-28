@@ -458,3 +458,96 @@ mat-card-actions {
 ::ng-deep .mdc-list-item__primary-text {
   color: #fff !important; // Force text color to white
 }
+
+.success-message {
+  color: #24b120;
+  padding: 8px;
+  border-radius: 4px;
+  background: #eaffea;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.error-message {
+  color: #b12c20;
+  padding: 8px;
+  border-radius: 4px;
+  background: #ffeaea;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+::ng-deep .mdc-list-item__primary-text {
+  color: #fff !important; // Force text color to white
+}
+
+/* filepath: h:\Documents\Alternance\DEVWEB\SmartHub\SmartHub\front-end\src\app\accueil\accueil.component.scss */
+
+
+mat-form-field {
+  width: 100%;
+  .mat-form-field-label {
+    color: #ff9800; /* Couleur orange pour les labels */
+  }
+
+  .mat-select-value {
+    color: #fff !important; /* Texte blanc */
+    background-color: #222; /* Fond sombre */
+    border-radius: 6px;
+    padding: 10px; /* Ajout d'un padding interne pour plus de confort */
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    border-color: #ff9800; /* Bordure orange */
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    border-color: #e67e22; /* Bordure orange plus foncée au focus */
+  }
+
+  .mat-placeholder {
+    color: #aaa; /* Placeholder gris clair */
+  }
+}
+
+mat-select {
+  color: #fff !important; /* Texte blanc */
+  background-color: #222; /* Fond sombre */
+}
+
+.mat-select-panel {
+  background-color: #222; /* Fond sombre pour la liste déroulante */
+  color: #fff; /* Texte blanc */
+}
+
+.mat-option {
+  background-color: #222; /* Fond sombre pour les options */
+  color: #fff; /* Texte blanc */
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #333; /* Fond légèrement plus clair au survol */
+  }
+
+  &.mat-active {
+    background-color: #e67e22; /* Fond orange pour l'option sélectionnée */
+    color: #000; /* Texte noir */
+  }
+}
+
+.edit-name-input {
+  width: 100%;
+  padding: 5px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.edit-name-input:focus {
+  border-color: #ff9800; /* Couleur orange pour le focus */
+  box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
+}
+
+.mat-mdc-card-subtitle {
+  color: lightgray !important; /* Set text color to light gray */
+}
