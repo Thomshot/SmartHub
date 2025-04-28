@@ -1,5 +1,15 @@
 import mongoose from 'mongoose';
 
+const userServiceSchema = new mongoose.Schema({
+  service: { type: mongoose.Schema.Types.ObjectId, ref: 'Service', required: true },
+  statutActuel: { type: String, required: true },
+});
+
+const userDeviceSchema = new mongoose.Schema({
+  device: { type: mongoose.Schema.Types.ObjectId, ref: 'Device', required: true },
+  statutActuel: { type: String, required: true },
+});
+
 const userSchema = new mongoose.Schema({
   gender: { type: String },
   otherGender: { type: String },
@@ -18,6 +28,8 @@ const userSchema = new mongoose.Schema({
   verificationToken: { type: String },
   userType: { type: String, default: 'simple', enum: ['simple', 'complexe', 'administrateur'] },
   points: { type: Number, default: 0 },
+  userServices: [userServiceSchema],
+  userDevices: [userDeviceSchema],
 }, { timestamps: true });
 
 export default mongoose.model('User', userSchema, 'users');

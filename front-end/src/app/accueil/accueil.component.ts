@@ -25,7 +25,7 @@ import { UserService } from '../services/user.service';
   standalone: true,
   imports: [
     MaterialDModule, CommonModule, ProfilComponent, FormsModule,
-    RouterModule, ProfilLesAutresComponent, EditUserComponent, 
+    RouterModule, ProfilLesAutresComponent, EditUserComponent,
     MatSelectModule
   ],
   templateUrl: './accueil.component.html',
@@ -325,20 +325,27 @@ export class AccueilComponent implements OnInit {
 
   updateDeviceStatus(device: any): void {
     if (device.newStatus && device.newStatus !== device.statutActuel) {
-      this.deviceService.updateDeviceStatus(device._id, device.newStatus).subscribe({
-        next: (response) => {
-          device.statutActuel = device.newStatus; // Met à jour localement
-          device.isEditingStatus = false; // Ferme la liste déroulante
-          console.log('Statut mis à jour avec succès :', response);
-        },
-        error: (err) => {
-          console.error('Erreur lors de la mise à jour du statut :', err);
-        },
-      });
+      // Appel HTTP direct vers le backend Express.js
+      this.http.put(`http://localhost:3000/api/devices/${device._id}/status`, { status: device.newStatus })
+        .subscribe({
+          next: (response: any) => {
+            device.statutActuel = device.newStatus;
+            device.isEditingStatus = false;
+            device.newStatus = undefined;
+            console.log('Statut mis à jour avec succès :', response);
+            this.saveMaisonDevicesToLocalStorage(); // Si tu utilises le localStorage
+          },
+          error: (err) => {
+            console.error('Erreur lors de la mise à jour du statut :', err);
+            device.isEditingStatus = false;
+          }
+        });
     } else {
-      device.isEditingStatus = false; // Ferme la liste déroulante si aucune modification
+      device.isEditingStatus = false;
+      device.newStatus = undefined;
     }
   }
+
 
   toggleEditStatus(device: any): void {
     device.isEditingStatus = !device.isEditingStatus;

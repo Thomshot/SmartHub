@@ -56,19 +56,21 @@ export const getAllDevices = async (req: Request, res: Response): Promise<void> 
 };
 
 
+// Met à jour le statut d'un appareil via l'URL
 export const updateDeviceStatus = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { deviceId, newStatus } = req.body;
+    const deviceId = req.params.id; // <-- On prend l'id dans l'URL !
+    const { status } = req.body;    // <-- On prend 'status' dans le body
 
-    // Vérifiez si l'objet existe
+    // Vérifier si l'objet existe
     const device = await Device.findById(deviceId);
     if (!device) {
       res.status(404).json({ message: 'Objet non trouvé.' });
       return;
     }
 
-    // Mettez à jour le statut
-    device.statutActuel = newStatus;
+    // Mettre à jour le statut
+    device.statutActuel = status;
     await device.save();
 
     res.status(200).json({ message: 'Statut mis à jour avec succès.', device });

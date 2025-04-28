@@ -19,6 +19,6 @@ router.post('/create', (req, res, next) => {
   }, createDevice);
 
 // Route pour mettre à jour le statut d'un objet
-router.post('/update-status', updateDeviceStatus);
+router.put('/:id/status', updateDeviceStatus);
 
 export default router;
