@@ -424,4 +424,7 @@ export class AccueilDemoComponent implements OnInit {
     this.searchDevice(); // Re-fetch the search results to reset filters
     console.log('Filtres réinitialisés (Recherche d\'objets), affichage des résultats initiaux ✅');
   }
+  navigateToSignup(): void {
+    this.router.navigate(['/register']); // Redirect to the registration page
+  }
 }

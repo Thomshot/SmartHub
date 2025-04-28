@@ -5,13 +5,8 @@
         <img src="assets/images/smarthub.png" alt="SmartHub Logo" class="logo-img" />
       </div>
       <mat-tab-group [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
-        <mat-tab><ng-template mat-tab-label><span>Accueil</span></ng-template></mat-tab>
-        <mat-tab [disabled]="currentUser?.userType === 'simple'"><ng-template mat-tab-label><span>Création objet</span></ng-template></mat-tab>
-        <mat-tab [disabled]="currentUser?.userType === 'simple'"><ng-template mat-tab-label><span>Gestion objet</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Recherche d'objets</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Recherche d'outils/services</span></ng-template></mat-tab>
-        <mat-tab><ng-template mat-tab-label><span>Recherche d'utilisateurs</span></ng-template></mat-tab>
-        <mat-tab><ng-template mat-tab-label><span>Gestion profil</span></ng-template></mat-tab>
       </mat-tab-group>
     </mat-sidenav>
     <mat-sidenav-content>
@@ -19,149 +14,13 @@
         <div class="d-flex gap-1 align-items-center">
           <mat-icon class="menu-btn" (click)="sidenav.toggle()">menu</mat-icon>
         </div>
-
-        <div>
-          <div class="d-flex gap-2 align-items-center">
-            <mat-icon class="icon-profil" (click)="goToProfile()">person</mat-icon>
-            <button class="logout-btn" (click)="logout()">Déconnexion</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section Accueil -->
-      <div *ngIf="selectedIndex === 0">
-        <div class="p-4">
-          <h1>Bonjour <span>{{user}}</span></h1>
-          <div class="d-flex justify-content-around">
-            <mat-card appearance="outlined" class="w-25">
-              <mat-card-header>
-                <mat-card-title>Utilisateur</mat-card-title>
-              </mat-card-header>
-              <mat-list role="list">
-                <mat-list-item role="listitem"><button mat-button>Utilisateur 1</button></mat-list-item>
-                <mat-list-item role="listitem"><button mat-button>Utilisateur 2</button></mat-list-item>
-                <mat-list-item role="listitem"><button mat-button>Utilisateur 3</button></mat-list-item>
-              </mat-list>
-            </mat-card>
-            <mat-card appearance="outlined" class="w-25">
-              <mat-card-header>
-                <mat-card-title>Progression Niveau</mat-card-title>
-              </mat-card-header>
-              <div class="p-3 d-flex justify-content-center flex-column gap-3">
-                <span>Vous avez 1 point sur 10</span>
-                <mat-progress-bar value="10"></mat-progress-bar>
-                <span>Il ne vous reste plus que 9 points pour monter de niveau</span>
-              </div>
-              <mat-card-actions>
-                <button (click)="statusDialog()" mat-button>Status actuel</button>
-              </mat-card-actions>
-            </mat-card>
-          </div>
-        </div>
-
-        <!-- Section Maison -->
-        <div class="p-4">
-          <h2>Maison</h2>
-          <button *ngIf="currentUser?.userType !== 'simple'" mat-raised-button color="warn" (click)="clearMaisonDevices()">Réinitialiser la Maison</button>
-          <div *ngIf="maisonDevices.length > 0; else noMaisonDevices" class="d-flex flex-wrap gap-3">
-            <mat-card *ngFor="let device of maisonDevices" appearance="outlined" class="w-25">
-              <mat-card-header>
-                <mat-card-title>{{ device.nom }}</mat-card-title>
-                <mat-card-subtitle>{{ device.type }}</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <p><strong>Type :</strong> {{ device.type }}</p>
-                <p *ngIf="device.statutActuel"><strong>Statut :</strong> {{ device.statutActuel }}</p>
-                <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
-                <p *ngIf="device.etatDeBatterie"><strong>État de batterie :</strong> {{ device.etatDeBatterie }}</p>
-                <p *ngIf="device.derniereInteraction"><strong>Dernière interaction :</strong> {{ device.derniereInteraction | date:'medium' }}</p>
-                <p *ngIf="device.ip"><strong>Adresse IP :</strong> {{ device.ip }}</p>
-                <p *ngIf="device.mac"><strong>Adresse MAC :</strong> {{ device.mac }}</p>
-                <p *ngIf="device.protocol"><strong>Protocole :</strong> {{ device.protocol }}</p>
-                <p *ngIf="device.brand"><strong>Marque :</strong> {{ device.brand }}</p>
-                <p *ngIf="device.room"><strong>Pièce :</strong> {{ device.room }}</p>
-                <p *ngIf="device.image"><strong>Image :</strong></p>
-                <img *ngIf="device.image" [src]="device.image" alt="Image de l'objet" style="max-width: 100%; border-radius: 8px;">
-              </mat-card-content>
-              <mat-card-actions>
-                <button *ngIf="currentUser?.userType !== 'simple'" mat-button color="warn" (click)="removeFromMaison(device)">Supprimer</button>
-              </mat-card-actions>
-              <div *ngIf="deleteMessage" [ngClass]="deleteMessageType === 'success' ? 'success-message' : 'error-message'">
-                {{ deleteMessage }}
-              </div>
-            </mat-card>
-          </div>
-          <ng-template #noMaisonDevices>
-            <p>Aucun objet dans la Maison.</p>
-          </ng-template>
-        </div>
-
-        <div class="p-4" *ngIf="currentUser?.userType !== 'simple'">
-          <h2>Objets disponibles</h2>
-          <div *ngIf="availableDevices.length > 0; else noDevices" class="d-flex flex-wrap gap-3">
-            <div class="device-card reduced-width" *ngFor="let device of availableDevices">
-              <h3>{{ device.nom }}</h3>
-              <p><strong>Type :</strong> {{ device.type }}</p>
-              <button mat-raised-button color="primary" (click)="addToMaison(device)">Ajouter à la Maison</button>
-            </div>
-          </div>
-          <ng-template #noDevices>
-            <p>Aucun objet disponible.</p>
-          </ng-template>
-        </div>
-      </div>
-
-      <!-- Section Création objet -->
-      <div *ngIf="selectedIndex === 1">
-        <div class="p-4">
-          <h2>Objet crée:</h2>
-          <button mat-button (click)="openDialog()">ajouter</button>
-        </div>
-      </div>
-
-      <!-- Section Gestion objet -->
-      <div *ngIf="selectedIndex === 2">
-        <div class="p-4">
-          <div class="d-flex gap-3 align-items-center">
-            <mat-icon (click)="filtreDialog()" class="icon-filtre"></mat-icon>
-            <mat-form-field>
-              <input matInput [(ngModel)]="searchQuery" placeholder="Rechercher un objet dans la maison">
-              <mat-icon matSuffix class="icon-loupe">search</mat-icon>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="p-4">
-          <h2>Vue de la Maison</h2>
-          <div *ngIf="filteredMaisonDevices.length > 0; else noMaisonDevices" class="d-flex flex-wrap gap-3">
-            <mat-card *ngFor="let device of filteredMaisonDevices" appearance="outlined" class="w-25">
-              <mat-card-header>
-                <mat-card-title>{{ device.nom }}</mat-card-title>
-                <mat-card-subtitle>{{ device.type }}</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <p><strong>Type :</strong> {{ device.type }}</p>
-                <p><strong>Statut :</strong> {{ device.statutActuel }}</p>
-                <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
-                <p *ngIf="device.etatDeBatterie"><strong>État de batterie :</strong> {{ device.etatDeBatterie }}</p>
-                <p *ngIf="device.derniereInteraction"><strong>Dernière interaction :</strong> {{ device.derniereInteraction | date:'medium' }}</p>
-                <p *ngIf="device.ip"><strong>Adresse IP :</strong> {{ device.ip }}</p>
-                <p *ngIf="device.mac"><strong>Adresse MAC :</strong> {{ device.mac }}</p>
-                <p *ngIf="device.protocol"><strong>Protocole :</strong> {{ device.protocol }}</p>
-                <p *ngIf="device.brand"><strong>Marque :</strong> {{ device.brand }}</p>
-                <p *ngIf="device.room"><strong>Pièce :</strong> {{ device.room }}</p>
-                <p *ngIf="device.image"><strong>Image :</strong></p>
-                <img *ngIf="device.image" [src]="device.image" alt="Image de l'objet" style="max-width: 100%; border-radius: 8px;">
-              </mat-card-content>
-            </mat-card>
-          </div>
-          <ng-template #noMaisonDevices>
-            <p>Aucun objet dans la Maison.</p>
-          </ng-template>
+        <div class="d-flex gap-2">
+          <button mat-raised-button color="accent" (click)="navigateToSignup()">Inscription</button>
         </div>
       </div>
 
       <!-- Section Recherche d'objets -->
-      <div *ngIf="selectedIndex === 3">
+      <div *ngIf="selectedIndex === 0">
         <div class="p-4">
           <h1>Recherche d'objets</h1>
           <div class="search-container">
@@ -196,13 +55,13 @@
       </div>
 
       <!-- Section Recherche d'outils/services -->
-      <div *ngIf="selectedIndex === 4">
+      <div *ngIf="selectedIndex === 1">
         <div class="p-4">
           <h1>Recherche d'outils/services</h1>
           <div class="search-container">
             <mat-form-field class="example-full-width">
               <mat-label>Rechercher un outil/service</mat-label>
-              <input matInput [(ngModel)]="serviceSearchQuery" placeholder="Entrez le nom de l'outil/service">
+              <input matInput [(ngModel)]="serviceSearchQuery" placeholder="Rechercher un outil ou un service">
             </mat-form-field>
             <button mat-raised-button color="primary" (click)="searchService()">Rechercher</button>
             <button mat-raised-button color="accent" (click)="showAllServices()">Afficher tous les outils/services</button>
@@ -229,78 +88,6 @@
             <p>Aucun outil/service trouvé avec ce nom.</p>
           </div>
         </div>
-      </div>
-
-      <!-- Section Recherche d'utilisateurs -->
-      <div *ngIf="selectedIndex === 5">
-        <div class="p-4">
-          <h1>Recherche d'utilisateurs</h1>
-          <div class="search-container">
-            <mat-form-field class="example-full-width">
-              <mat-label>Rechercher un utilisateur</mat-label>
-              <input matInput [(ngModel)]="userSearchQuery" placeholder="Entrez le login de l'utilisateur">
-            </mat-form-field>
-            <button mat-raised-button color="primary" (click)="searchUser()">Rechercher</button>
-          </div>
-          <div *ngIf="userSearchResults && userSearchResults.length > 0" class="search-results">
-            <h3>Résultat de la recherche :</h3>
-            <div class="user-results-container" style="display: flex; gap: 2rem;">
-              <!-- Liste utilisateurs -->
-              <div class="user-list">
-                <mat-card class="user-result-card"
-                  *ngFor="let user of userSearchResults"
-                  [style.cursor]="currentUser?.userType === 'simple' ? 'default' : 'pointer'"
-                  (click)="currentUser?.userType !== 'simple' && selectOtherUser(user)">
-                  <mat-card-title>
-                    <!-- Hide name for "simple" users -->
-                    <ng-container *ngIf="currentUser?.userType !== 'simple'; else restrictedName">
-                      {{ user.firstName || 'Non disponible' }} {{ user.lastName || '' }}
-                    </ng-container>
-                    <ng-template #restrictedName>
-                      Nom et prénom non disponibles
-                    </ng-template>
-                  </mat-card-title>
-                  <mat-card-content>
-                    <p>Email : {{ user.email || 'Non disponible' }}</p>
-                    <p>Login : {{ user.login || 'Non disponible' }}</p>
-                    <p *ngIf="user.city">Ville : {{ user.city }}</p>
-                    <p *ngIf="user.memberType">Type de membre : {{ user.memberType }}</p>
-                    <p *ngIf="user.role">Rôle : {{ user.role }}</p>
-                    <p *ngIf="user.points !== undefined">Points : {{ user.points }}</p>
-                    <p *ngIf="user.createdAt">Date d'inscription : {{ user.createdAt | date:'medium' }}</p>
-                  </mat-card-content>
-                </mat-card>
-              </div>
-
-              <div class="other-profile" *ngIf="selectedOtherUser && currentUser?.userType !== 'simple'">
-                <!-- Profil lecture seule (autre utilisateur) -->
-                <app-other-profil
-                  *ngIf="!editOtherUserMode"
-                  [user]="selectedOtherUser"
-                  [isAdmin]="currentUser?.userType === 'administrateur'"
-                  (editRequested)="editOtherUserMode = true">
-                </app-other-profil>
-
-                <!-- Profil édition (user sélectionné) -->
-                <app-edit-user
-                  *ngIf="editOtherUserMode"
-                  [userId]="selectedOtherUser._id"
-                  (close)="editOtherUserMode = false">
-                </app-edit-user>
-              </div>
-
-            </div>
-          </div>
-
-          <div *ngIf="userSearchTriggered && userSearchResults.length === 0" class="no-results">
-            <p>Aucun utilisateur trouvé avec ce login.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section Gestion profil -->
-      <div *ngIf="selectedIndex === 6">
-        <app-profil></app-profil>
       </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
