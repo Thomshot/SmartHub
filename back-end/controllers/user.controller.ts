@@ -2,6 +2,7 @@ import { Request, Response, RequestHandler } from 'express';
 import User from '../models/user';
 import bcrypt from 'bcrypt';
 import { syncUserLevel } from '../utils/userLevel';
+import Device from '../models/device';
 
 export const searchUser: RequestHandler = async (req, res) => {
   try {
@@ -29,7 +30,12 @@ export const searchUser: RequestHandler = async (req, res) => {
 export const getProfile: RequestHandler = async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await User.findById(userId).select('-password -verificationToken');
+    const user = await User.findById(userId)
+      .select('-password -verificationToken')
+      .populate({
+        path: 'userDevices.device',
+        model: 'Device'
+      });
     if (!user) {
       res.status(404).json({ message: 'Utilisateur introuvable' });
       return;
@@ -103,6 +109,28 @@ export const deleteUser: RequestHandler = async (req, res) => {
     res.status(200).json({ message: 'Utilisateur supprimé avec succès.' });
   } catch (error) {
     console.error('Erreur suppression utilisateur:', error);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+};
+
+export const addDeviceToUser: RequestHandler = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { deviceId } = req.body;
+
+    const device = await Device.findById(deviceId);
+    if (!device) {
+      res.status(404).json({ message: 'Device not found' });
+      return;
+    }
+
+    await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { userDevices: { device: device._id, statutActuel: device.statutActuel } } }
+    );
+    res.json({ message: 'Device ajouté à la maison de l\'utilisateur' });
+  } catch (error) {
+    console.error('Erreur lors de l’ajout du device à l’utilisateur:', error);
     res.status(500).json({ message: 'Erreur serveur.' });
   }
 };

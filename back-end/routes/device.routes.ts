@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllDevices, searchDevice, createDevice, requestDeleteDevice, updateDeviceStatus } from '../controllers/device.controller';
+import { getAllDevices, searchDevice, createDevice, requestDeleteDevice, updateDeviceStatus, clearUserDevices } from '../controllers/device.controller';
 
 const router = express.Router();
 
@@ -20,8 +20,6 @@ router.post('/create', (req, res, next) => {
 
 router.post('/request-delete', requestDeleteDevice);
 
-
-// Route pour mettre à jour le statut d'un objet
-router.put('/:id/status', updateDeviceStatus);
+router.post('/users/:id/clear-devices', clearUserDevices);
 
 export default router;

@@ -60,20 +60,30 @@ export const requestDeleteDevice = async (req: Request, res: Response): Promise<
   const { deviceId, userId, deviceName } = req.body;
 
   try {
-    // Trouver l’utilisateur qui fait la demande
+    // 1️⃣ Vérifier que l'utilisateur existe
     const user = await User.findById(userId);
-    if (!user) {
+    if (!user){
       res.status(404).json({ message: 'Utilisateur non trouvé.' });
       return;
     }
 
+    // 2️⃣ Retirer l'objet de la maison de l'utilisateur si présent
+    const deviceIndex = user.userDevices.findIndex(
+      (ud: any) => ud.device.toString() === deviceId
+    );
+    if (deviceIndex > -1) {
+      user.userDevices.splice(deviceIndex, 1);
+      await user.save();
+    }
+
+    // 3️⃣ Trouver les administrateurs
     const admins = await User.find({ userType: 'administrateur' });
     if (!admins || admins.length === 0) {
       res.status(404).json({ message: 'Aucun administrateur trouvé.' });
       return;
     }
 
-    // Configuration du transporteur email (adapté pour Gmail)
+    // 4️⃣ Envoyer le mail de demande aux admins
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -83,10 +93,9 @@ export const requestDeleteDevice = async (req: Request, res: Response): Promise<
     });
 
     const toEmails = admins.map(a => a.email).join(',');
-
     const mailOptions = {
       from: '"SmartHub" <no-reply@smarthub.com>',
-      to: toEmails, // une chaîne séparée par des virgules
+      to: toEmails,
       subject: 'Demande de suppression d\'objet',
       html: `
         <p>L'utilisateur <b>${user.firstName} ${user.lastName}</b> (${user.email}) demande la suppression de l’objet <b>${deviceName}</b> (ID : ${deviceId}).</p>
@@ -94,37 +103,56 @@ export const requestDeleteDevice = async (req: Request, res: Response): Promise<
       `,
     };
 
-    // Envoi du mail
     await transporter.sendMail(mailOptions);
 
-    res.status(200).json({ message: "Demande envoyée à l'administrateur." });
+    res.status(200).json({
+      message: "Demande envoyée à l'administrateur et objet retiré de votre maison (si présent)."
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Erreur serveur lors de la demande.' });
   }
 };
 
-
-// Met à jour le statut d'un appareil via l'URL
 export const updateDeviceStatus = async (req: Request, res: Response): Promise<void> => {
   try {
-    const deviceId = req.params.id; // <-- On prend l'id dans l'URL !
-    const { status } = req.body;    // <-- On prend 'status' dans le body
+    const userId = req.params.userId;
+    const deviceId = req.params.deviceId;
+    const { status } = req.body;
 
-    // Vérifier si l'objet existe
-    const device = await Device.findById(deviceId);
-    if (!device) {
-      res.status(404).json({ message: 'Objet non trouvé.' });
+    const user = await User.findById(userId).populate('userDevices.device');
+    if (!user) {
+      res.status(404).json({ message: "Utilisateur non trouvé." });
       return;
     }
-
-    // Mettre à jour le statut
-    device.statutActuel = status;
-    await device.save();
-
-    res.status(200).json({ message: 'Statut mis à jour avec succès.', device });
-  } catch (error) {
-    console.error('Erreur lors de la mise à jour du statut :', error);
+    const userDevice = user.userDevices.find(
+      (ud: any) => ud.device._id.toString() === deviceId
+    );
+    if (!userDevice) {
+      res.status(404).json({ message: "Device non trouvé dans la maison de l'utilisateur." });
+      return;
+    }
+    userDevice.statutActuel = status;
+    await user.save();
+    res.json({ message: 'Statut mis à jour pour ce device chez cet utilisateur.', userDevice });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Erreur serveur.' });
   }
+};
+
+
+export const clearUserDevices = async (req: Request, res: Response): Promise<void> => {
+  const userId = req.params.id;
+
+  const user = await User.findById(userId);
+  if (!user){
+    res.status(404).json({ message: "Utilisateur non trouvé." });
+    return;
+  }
+
+  user.userDevices.splice(0, user.userDevices.length);
+  await user.save();
+
+  res.json({ message: "Tous les objets ont été retirés de la maison de l'utilisateur." });
 };

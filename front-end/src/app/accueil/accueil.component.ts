@@ -106,7 +106,6 @@ export class AccueilComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadAvailableDevices();
-    this.loadMaisonDevicesFromLocalStorage();
     this.filteredMaisonDevices = [...this.maisonDevices];
     this.loadUserFromLocalStorage();
     this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
@@ -119,6 +118,11 @@ export class AccueilComponent implements OnInit {
         this.userService.getProfile(connectedUserId).subscribe({
           next: (user: any) => {
             this.currentUser = user;
+            this.maisonDevices = user.userDevices.map((ud: any) => ({
+              ...ud.device,
+              statutActuel: ud.statutActuel
+            }));
+            this.filteredMaisonDevices = [...this.maisonDevices];
           },
           error: () => {
             this.currentUser = null;
@@ -152,20 +156,6 @@ export class AccueilComponent implements OnInit {
     });
   }
 
-  loadMaisonDevicesFromLocalStorage(): void {
-    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-      const maisonDevices = localStorage.getItem('maisonDevices');
-      this.maisonDevices = maisonDevices ? JSON.parse(maisonDevices) : [];
-    } else {
-      this.maisonDevices = [];
-    }
-  }
-
-  saveMaisonDevicesToLocalStorage(): void {
-    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-      localStorage.setItem('maisonDevices', JSON.stringify(this.maisonDevices));
-    }
-  }
 
   shouldSidenavBeOpened(): boolean {
     return !this.isMobileorTablet;
@@ -279,6 +269,21 @@ export class AccueilComponent implements OnInit {
     });
   }
 
+  clearMaisonDevices(): void {
+    const userId = localStorage.getItem('userId');
+    this.http.post('http://localhost:3000/api/users/' + userId + '/clear-devices', {})
+      .subscribe({
+        next: () => {
+          this.reloadMaisonDevices(); // recharge à jour après suppression
+          console.log('Maison réinitialisée.');
+        },
+        error: (err) => {
+          console.error('Erreur lors de la réinitialisation de la maison :', err);
+        }
+      });
+  }
+
+
   showAllServices(): void {
     this.serviceSearchTriggered = true;
     this.http.get<any[]>('http://localhost:3000/api/services').subscribe({
@@ -294,7 +299,6 @@ export class AccueilComponent implements OnInit {
   }
 
   logout(): void {
-    this.saveMaisonDevicesToLocalStorage();
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       localStorage.removeItem('userName');
       localStorage.removeItem('userEmail');
@@ -302,6 +306,7 @@ export class AccueilComponent implements OnInit {
       window.location.href = '/';
     }
   }
+
 
   goToProfile(): void {
     this.selectedIndex = 6; // Index de l'onglet "Gestion profil"
@@ -335,13 +340,40 @@ export class AccueilComponent implements OnInit {
   }
 
   addToMaison(device: any): void {
-    this.maisonDevices.push(device);
-    this.saveMaisonDevicesToLocalStorage();
-    console.log('Objet ajouté à la Maison :', device);
+    const userId = localStorage.getItem('userId');
+    this.http.post('http://localhost:3000/api/users/' + userId + '/add-device', {
+      userId, deviceId: device._id
+    }).subscribe({
+      next: () => {
+        // Recharge les devices depuis le backend
+        this.reloadMaisonDevices();
+        console.log('Objet ajouté à la Maison :', device);
+      },
+      error: err => {
+        console.error('Erreur lors de l’ajout de l’objet :', err);
+      }
+    });
+  }
+
+  reloadMaisonDevices() {
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      this.userService.getProfile(userId).subscribe({
+        next: (user: any) => {
+          this.currentUser = user;
+          this.maisonDevices = user.userDevices.map((ud: any) => ({
+            ...ud.device,
+            statutActuel: ud.statutActuel
+          }));
+          this.filteredMaisonDevices = [...this.maisonDevices];
+          console.log('Maison rechargée :', this.maisonDevices);
+        }
+      });
+    }
   }
 
   removeFromMaison(device: any): void {
-    this.deleteMessage = null; // Reset message à chaque action
+    this.deleteMessage = null;
 
     if (this.currentUser?.role !== 'expert') {
       // Demande de suppression à l’admin
@@ -354,36 +386,33 @@ export class AccueilComponent implements OnInit {
         next: () => {
           this.deleteMessage = 'Demande envoyée à l’administrateur.';
           this.deleteMessageType = 'success';
-          setTimeout(() => {
-            this.deleteMessage = null;
-          }, 3000);
+          setTimeout(() => { this.deleteMessage = null; }, 3000);
         },
         error: err => {
           this.deleteMessage = 'Erreur lors de la demande : ' + (err.error?.message || err.message);
           this.deleteMessageType = 'error';
-          setTimeout(() => {
-            this.deleteMessage = null;
-          }, 3000);
+          setTimeout(() => { this.deleteMessage = null; }, 3000);
         }
       });
       return;
     }
 
-    // Sinon, suppression directe
-    this.maisonDevices = this.maisonDevices.filter(d => d !== device);
-    this.saveMaisonDevicesToLocalStorage();
-    this.deleteMessage = 'Objet supprimé de la Maison.';
-    this.deleteMessageType = 'success';
+    // Si expert : suppression directe (appel backend, plus localStorage !)
+    const userId = localStorage.getItem('userId');
+    this.http.post('http://localhost:3000/api/users/' + userId + '/remove-device', {
+      userId,
+      deviceId: device._id
+    }).subscribe({
+      next: () => {
+        this.reloadMaisonDevices();
+      },
+      error: err => {
+        this.deleteMessage = 'Erreur lors de la suppression : ' + (err.error?.message || err.message);
+        this.deleteMessageType = 'error';
+      }
+    });
   }
 
-
-  clearMaisonDevices(): void {
-    this.maisonDevices = [];
-    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-      localStorage.removeItem('maisonDevices');
-    }
-    console.log('Maison réinitialisée.');
-  }
 
   loadUserFromLocalStorage(): void {
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
@@ -429,17 +458,18 @@ export class AccueilComponent implements OnInit {
     console.log('Filtres réinitialisés (Recherche d\'objets), affichage des résultats initiaux ✅');
   }
 
+
   updateDeviceStatus(device: any): void {
-    if (device.newStatus && device.newStatus !== device.statutActuel) {
-      // Appel HTTP direct vers le backend Express.js
-      this.http.put(`http://localhost:3000/api/devices/${device._id}/status`, { status: device.newStatus })
+    const userId = localStorage.getItem('userId');
+
+    if (userId && device.newStatus && device.newStatus !== device.statutActuel) {
+      this.http.put(`http://localhost:3000/api/users/${userId}/devices/${device._id}/status`, { status: device.newStatus })
         .subscribe({
           next: (response: any) => {
-            device.statutActuel = device.newStatus;
+            this.reloadMaisonDevices();
             device.isEditingStatus = false;
             device.newStatus = undefined;
             console.log('Statut mis à jour avec succès :', response);
-            this.saveMaisonDevicesToLocalStorage(); // Si tu utilises le localStorage
           },
           error: (err) => {
             console.error('Erreur lors de la mise à jour du statut :', err);
@@ -453,8 +483,9 @@ export class AccueilComponent implements OnInit {
   }
 
 
+
   toggleEditStatus(device: any): void {
     device.isEditingStatus = !device.isEditingStatus;
-    device.newStatus = device.statutActuel; // Pré-sélectionne le statut actuel
+    device.newStatus = device.statutActuel;
   }
 }
