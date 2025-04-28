@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+
 
 import { AjoutObjetDialogComponent } from './ajout-objet-dialog/ajout-objet-dialog.component';
 import { FiltreDialogComponent } from './filtre-dialog/filtre-dialog.component';
@@ -23,7 +25,8 @@ import { UserService } from '../services/user.service';
   standalone: true,
   imports: [
     MaterialDModule, CommonModule, ProfilComponent, FormsModule,
-    RouterModule, ProfilLesAutresComponent, EditUserComponent
+    RouterModule, ProfilLesAutresComponent, EditUserComponent,
+    MatSelectModule
   ],
   templateUrl: './accueil.component.html',
   styleUrls: ['./accueil.component.scss']
@@ -424,5 +427,34 @@ export class AccueilComponent implements OnInit {
   resetSearchResults(): void {
     this.searchDevice(); // Re-fetch the search results to reset filters
     console.log('Filtres réinitialisés (Recherche d\'objets), affichage des résultats initiaux ✅');
+  }
+
+  updateDeviceStatus(device: any): void {
+    if (device.newStatus && device.newStatus !== device.statutActuel) {
+      // Appel HTTP direct vers le backend Express.js
+      this.http.put(`http://localhost:3000/api/devices/${device._id}/status`, { status: device.newStatus })
+        .subscribe({
+          next: (response: any) => {
+            device.statutActuel = device.newStatus;
+            device.isEditingStatus = false;
+            device.newStatus = undefined;
+            console.log('Statut mis à jour avec succès :', response);
+            this.saveMaisonDevicesToLocalStorage(); // Si tu utilises le localStorage
+          },
+          error: (err) => {
+            console.error('Erreur lors de la mise à jour du statut :', err);
+            device.isEditingStatus = false;
+          }
+        });
+    } else {
+      device.isEditingStatus = false;
+      device.newStatus = undefined;
+    }
+  }
+
+
+  toggleEditStatus(device: any): void {
+    device.isEditingStatus = !device.isEditingStatus;
+    device.newStatus = device.statutActuel; // Pré-sélectionne le statut actuel
   }
 }
