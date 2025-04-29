@@ -131,29 +131,41 @@ export class AjoutObjetDialogComponent implements OnInit {
   }
 
   submitObject(): void {
-    // Prépare les données de l'objet à partir des formulaires
     const deviceData = {
-      type: this.myControl.value || 'Lampe', // Valeur par défaut si aucune sélection
-      statutActuel: 'actif', // Exemple de valeur par défaut
+      type: this.myControl.value || 'Lampe',
+      statutActuel: 'actif',
       nom: this.secondFormGroup.get('objectName')?.value,
       room: this.secondFormGroup.get('room')?.value,
       brand: this.secondFormGroup.get('brand')?.value,
-      idUnique: this.secondFormGroup.get('id')?.value,
+      idUnique: this.secondFormGroup.get('id')?.value || this.generateRandomId(),
       ip: this.thirdFormGroup.get('ip')?.value,
       mac: this.thirdFormGroup.get('mac')?.value,
       protocol: this.thirdFormGroup.get('protocol')?.value,
-      image: this.previewUrl, // Image uploadée
+      image: this.previewUrl,
     };
 
-    // Appelle le service pour ajouter l'objet
+    if (!deviceData.nom || !deviceData.type || !deviceData.room) {
+      console.error('❌ Impossible d\'ajouter un objet : champs requis manquants');
+      alert('Veuillez remplir le nom, le type et la pièce.');
+      return;
+    }
+
+    console.log('📦 Données envoyées au serveur :', deviceData);
+
     this.deviceService.addDevice(deviceData).subscribe({
       next: (response) => {
-        console.log('Objet ajouté avec succès :', response);
-        this.dialogRef.close(); // Fermez le dialogue après succès
+        console.log('✅ Objet ajouté avec succès :', response);
+        this.dialogRef.close();
       },
       error: (error) => {
-        console.error('Erreur lors de l\'ajout de l\'objet :', error);
+        console.error('❌ Erreur lors de l\'ajout de l\'objet :', error);
       },
     });
   }
+
+  // ✨ Générer un ID unique si l'utilisateur n’en donne pas
+  generateRandomId(): string {
+    return 'ID-' + Math.random().toString(36).substr(2, 9);
+  }
+
 }

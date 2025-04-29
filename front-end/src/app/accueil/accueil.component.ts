@@ -247,16 +247,16 @@ export type ChartOptions = {
 
 
     loadAvailableDevices(): void {
-      this.deviceService.getAllDevices().subscribe({
+      this.http.get<any[]>('http://localhost:3000/api/devices').subscribe({
         next: (devices) => {
           this.availableDevices = devices;
+          console.log('✅ Objets disponibles chargés :', devices);
         },
         error: (err) => {
-          console.error('Erreur lors de la récupération des objets :', err);
+          console.error('❌ Erreur lors de la récupération des objets :', err);
         }
       });
     }
-
 
     shouldSidenavBeOpened(): boolean {
 

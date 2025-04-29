@@ -26,24 +26,24 @@ export const searchDevice = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-// Méthode pour créer un nouvel appareil
 export const createDevice = async (req: Request, res: Response): Promise<void> => {
   try {
-    const deviceData = req.body; // Récupère les données envoyées dans la requête
+    const deviceData = req.body;
+    if (!deviceData.nom || !deviceData.type || !deviceData.room) {
+      res.status(400).json({ message: "Champs obligatoires manquants (nom, type, room)." });
+      return;
+    }
 
-    // Crée un nouvel objet Device
     const newDevice = new Device(deviceData);
-
-    // Sauvegarde dans la base de données
     const savedDevice = await newDevice.save();
 
     res.status(201).json({
       message: 'Objet créé avec succès',
       device: savedDevice,
     });
-  } catch (error) {
-    console.error('Erreur lors de la création de l\'objet :', error);
-    res.status(500).json({ message: 'Erreur serveur lors de la création de l\'objet.', error });
+  } catch (error: any) {
+    console.error('Erreur lors de la création de l\'objet :', error.message);
+    res.status(500).json({ message: 'Erreur serveur lors de la création de l\'objet.', error: error.message });
   }
 };
 

@@ -14,7 +14,7 @@
       </mat-tab-group>
     </mat-sidenav>
     <mat-sidenav-content>
-  
+
       <div class="header d-flex justify-content-between align-items-center p-3">
         <div class="d-flex gap-1 align-items-center">
           <mat-icon class="menu-btn" (click)="sidenav.toggle()">menu</mat-icon>
@@ -31,7 +31,7 @@
       <!-- Section Accueil -->
       <div *ngIf="selectedIndex === 0">
         <div class="p-4">
-          <h1>Bonjour <span>{{user}}</span></h1>
+          <h1 *ngIf="currentUser">Bonjour <span>{{ currentUser.login }}</span></h1>
           <div *ngIf="currentUser?.userType === 'administrateur'" class="p-4">
             <h2>📜 Historique des connexions</h2>
             <button mat-raised-button color="primary" (click)="toggleLoginHistory()">
@@ -50,7 +50,7 @@
                   </mat-list-item>
                 </mat-list>
               </div>
-          
+
               <ng-template #noHistory>
                 <p>Aucune connexion enregistrée.</p>
               </ng-template>
@@ -62,14 +62,19 @@
                 <mat-card-title>Progression Niveau</mat-card-title>
               </mat-card-header>
               <div class="p-3 d-flex justify-content-center flex-column gap-3">
-                <span>Vous avez {{ pointsActuels }} point{{ pointsActuels !== 1 ? 's' : '' }} sur {{ pointsMax }}</span>
-                <mat-progress-bar [value]="(pointsActuels / pointsMax) * 100"></mat-progress-bar>
-                <span>Il ne vous reste plus que {{ pointsMax - pointsActuels }} point{{ (pointsMax - pointsActuels) !== 1 ? 's' : '' }} pour monter de niveau</span>
+                <ng-container *ngIf="currentUser?.userType === 'administrateur'; else progressionContent">
+                  <span>🎉 Vous avez atteint le niveau maximum !</span>
+                </ng-container>
+                <ng-template #progressionContent>
+                  <span>Vous avez {{ pointsActuels }} point{{ pointsActuels !== 1 ? 's' : '' }} sur {{ pointsMax }}</span>
+                  <mat-progress-bar [value]="(pointsActuels / pointsMax) * 100"></mat-progress-bar>
+                  <span>Il ne vous reste plus que {{ pointsMax - pointsActuels }} point{{ (pointsMax - pointsActuels) !== 1 ? 's' : '' }} pour monter de niveau</span>
+                </ng-template>
               </div>
               <mat-card-actions>
                 <button (click)="statusDialog()" mat-button>Status actuel</button>
               </mat-card-actions>
-            </mat-card>            
+            </mat-card>
           </div>
         </div>
 
@@ -139,11 +144,8 @@
       <!-- Section Création objet -->
       <div *ngIf="selectedIndex === 1">
         <div class="p-4">
-          <h2>Objet crée:</h2>
-          <h1 *ngIf="createdObjects.length === 0" class="p-4 d-flex justify-content-center">
-            Aucun objet n’a encore été créé.
-          </h1>
-        
+          <h2>Création d'objet :</h2>
+
           <!-- Liste des objets -->
           <div *ngFor="let obj of createdObjects" class="my-4">
             <mat-card>
