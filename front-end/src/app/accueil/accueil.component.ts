@@ -105,7 +105,7 @@ export type ChartOptions = {
       private userService: UserService,
       private dialog: MatDialog,
     private cdr: ChangeDetectorRef,@Inject(PLATFORM_ID) private platformId: Object
-    ) {this.isBrowser = isPlatformBrowser(platformId); 
+    ) {this.isBrowser = isPlatformBrowser(platformId);
 
     }
 
@@ -195,48 +195,43 @@ export type ChartOptions = {
     }
 
     ngOnInit(): void {
-    this.cdr.detectChanges();
-      this.loadAvailableDevices();
-        this.filteredMaisonDevices = [...this.maisonDevices];
-      this.loadUserFromLocalStorage();
+      this.cdr.detectChanges();
 
-      this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
+      if (this.isBrowser) {
+        this.loadAvailableDevices();
+        this.loadUserFromLocalStorage();
 
-      const screenWidth = window.innerWidth;
-    this.isMobileorTablet = screenWidth <= 960;
-    this.menuOpened = !this.isMobileorTablet;
-
-    // Ensuite continue à écouter les changements de taille
-    this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
-        this.isMobileorTablet = result.matches;
-      });
-
+        // Gestion du responsive
+        const screenWidth = window.innerWidth;
+        this.isMobileorTablet = screenWidth <= 960;
         this.menuOpened = !this.isMobileorTablet;
-    });
 
-      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+        this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
+          this.isMobileorTablet = result.matches;
+          this.menuOpened = !this.isMobileorTablet;
+        });
+
         const connectedUserId = localStorage.getItem('userId');
         if (connectedUserId) {
           this.userService.getProfile(connectedUserId).subscribe({
             next: (user: any) => {
               this.currentUser = user;
-            if (this.currentUser?.userType === 'simple') {
-              this.tabs[1].disabled = true; // Création objet
-              this.tabs[2].disabled = true; // Gestion objet
-            }
 
-            this.maisonDevices = user.userDevices.map((ud: any) => ({
-              ...ud.device,
-              userDeviceId: ud._id,
-              statutActuel: ud.statutActuel,
-              etats: ['Actif', 'Inactif'],
-            }));
+              if (this.currentUser?.userType === 'simple') {
+                this.tabs[1].disabled = true; // Création objet
+                this.tabs[2].disabled = true; // Gestion objet
+              }
 
+              this.maisonDevices = user.userDevices.map((ud: any) => ({
+                ...ud.device,
+                userDeviceId: ud._id,
+                statutActuel: ud.statutActuel,
+                etats: ['Actif', 'Inactif'],
+              }));
 
-            this.filteredMaisonDevices = [...this.maisonDevices];
-            this.cdr.detectChanges();
-              this.loadPoints(); // ✅ Charger les points de l'utilisateur
-              // 👉 Pas d'appel à loadLoginHistory ici !
+              this.filteredMaisonDevices = [...this.maisonDevices];
+              this.cdr.detectChanges();
+              this.loadPoints(); // charger les points utilisateur
             },
             error: () => {
               this.currentUser = null;
@@ -415,21 +410,34 @@ export type ChartOptions = {
         });
     }
 
-  addToMaison(device: any): void {
-    const userId = localStorage.getItem('userId');
-    this.http.post('http://localhost:3000/api/users/' + userId + '/add-device', {
-      userId, deviceId: device._id
-    }).subscribe({
-      next: () => {
-        // Recharge les devices depuis le backend
-        this.reloadMaisonDevices();
-        console.log('Objet ajouté à la Maison :', device);
-      },
-      error: err => {
-        console.error('Erreur lors de l’ajout de l’objet :', err);
+    addToMaison(device: any): void {
+      // Vérifie si le device est déjà dans maisonDevices
+      const alreadyExists = this.maisonDevices.some(d => d._id === device._id);
+      if (alreadyExists) {
+        console.warn('⚠️ Cet objet est déjà présent dans la maison');
+        this.deleteMessage = 'Cet objet est déjà présent dans votre maison.';
+        this.deleteMessageType = 'error';
+        setTimeout(() => this.deleteMessage = null, 3000);
+        return;
       }
-    });
-  }
+
+      const userId = localStorage.getItem('userId');
+      this.http.post('http://localhost:3000/api/users/' + userId + '/add-device', {
+        userId, deviceId: device._id
+      }).subscribe({
+        next: () => {
+          this.reloadMaisonDevices();
+          console.log('✅ Objet ajouté à la Maison :', device);
+        },
+        error: err => {
+          console.error('❌ Erreur lors de l’ajout de l’objet :', err);
+          this.deleteMessage = err.error?.message || 'Erreur inconnue lors de l’ajout.';
+          this.deleteMessageType = 'error';
+          setTimeout(() => this.deleteMessage = null, 3000);
+        }
+      });
+    }
+
 
   reloadMaisonDevices() {
     const userId = localStorage.getItem('userId');
@@ -449,7 +457,7 @@ export type ChartOptions = {
     }
   }
 
-  
+
 
   removeFromMaison(device: any): void {
     this.deleteMessage = null;
@@ -640,14 +648,35 @@ export type ChartOptions = {
   showAllDevices(): void {
     this.searchTriggered = true;
     this.searchQuery = '';
-    this.searchDevice();
+
+    this.http.get<any[]>('http://localhost:3000/api/devices').subscribe({
+      next: (results: any[]) => {
+        this.searchResults = results;
+        console.log('✅ Tous les objets chargés :', results);
+      },
+      error: (err: any) => {
+        console.error('❌ Erreur lors du chargement des objets :', err);
+        this.searchResults = [];
+      }
+    });
   }
-  
+
   showAllServices(): void {
     this.serviceSearchTriggered = true;
     this.serviceSearchQuery = '';
-    this.searchService();
+
+    this.http.get<any[]>('http://localhost:3000/api/services').subscribe({
+      next: (results: any[]) => {
+        this.serviceSearchResults = results;
+        console.log('✅ Tous les services chargés :', results);
+      },
+      error: (err: any) => {
+        console.error('❌ Erreur lors du chargement des services :', err);
+        this.serviceSearchResults = [];
+      }
+    });
   }
-  
+
+
 
 }

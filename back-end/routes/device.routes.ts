@@ -6,7 +6,7 @@ const router = express.Router();
 // Route pour rechercher des appareils
 router.get('/search', searchDevice);
 
-router.get('/all', getAllDevices);
+router.get('/', getAllDevices);
 
 router.get('/test', (req, res) => {
     res.send('✅ Route /api/devices/test atteinte');
