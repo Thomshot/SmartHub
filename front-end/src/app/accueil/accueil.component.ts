@@ -449,8 +449,7 @@ export type ChartOptions = {
     }
   }
 
-  deleteMessage: string | null = null;
-  deleteMessageType: 'success' | 'error' | null = null;
+  
 
   removeFromMaison(device: any): void {
     this.deleteMessage = null;
@@ -637,5 +636,18 @@ export type ChartOptions = {
     // (nécessite un peu plus de logique côté openDialog())
     console.log('Édition demandée pour :', obj);
   }
+
+  showAllDevices(): void {
+    this.searchTriggered = true;
+    this.searchQuery = '';
+    this.searchDevice();
+  }
+  
+  showAllServices(): void {
+    this.serviceSearchTriggered = true;
+    this.serviceSearchQuery = '';
+    this.searchService();
+  }
+  
 
 }
