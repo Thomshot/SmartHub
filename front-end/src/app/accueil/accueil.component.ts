@@ -93,7 +93,7 @@ export type ChartOptions = {
     pointsActuels: number = 0;
     pointsMax: number = 10;
     loginHistory: any[] = [];
-    showLoginHistory: boolean = false; 
+    showLoginHistory: boolean = false;
 
 
 
@@ -133,7 +133,7 @@ export type ChartOptions = {
         console.log('Accès refusé : utilisateur non admin');
         return;
       }
-    
+
       this.http.get<any[]>('http://localhost:3000/api/login-history').subscribe({
         next: (history) => {
           this.loginHistory = history;
@@ -145,9 +145,9 @@ export type ChartOptions = {
         }
       });
     }
-    
-    
-    
+
+
+
 
   openDialog() {
     const dialogRef = this.dialog.open(AjoutObjetDialogComponent,{
@@ -199,17 +199,21 @@ export type ChartOptions = {
       this.loadAvailableDevices();
         this.filteredMaisonDevices = [...this.maisonDevices];
       this.loadUserFromLocalStorage();
-    
+
+      this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
+
       const screenWidth = window.innerWidth;
     this.isMobileorTablet = screenWidth <= 960;
     this.menuOpened = !this.isMobileorTablet;
-  
+
     // Ensuite continue à écouter les changements de taille
     this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
         this.isMobileorTablet = result.matches;
+      });
+
         this.menuOpened = !this.isMobileorTablet;
     });
-    
+
       if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
         const connectedUserId = localStorage.getItem('userId');
         if (connectedUserId) {
@@ -241,8 +245,8 @@ export type ChartOptions = {
         }
       }
     }
-    
-    
+
+
 
     loadAvailableDevices(): void {
       this.deviceService.getAllDevices().subscribe({
@@ -257,7 +261,7 @@ export type ChartOptions = {
 
 
     shouldSidenavBeOpened(): boolean {
-  
+
     return !this.isMobileorTablet;
     }
 
@@ -273,7 +277,7 @@ export type ChartOptions = {
         this.menuOpened = false;
       }
     }
-    
+
     closeSidenav(): boolean {
       return !this.isMobileorTablet;
     }
@@ -445,6 +449,9 @@ export type ChartOptions = {
     }
   }
 
+  deleteMessage: string | null = null;
+  deleteMessageType: 'success' | 'error' | null = null;
+
   removeFromMaison(device: any): void {
     this.deleteMessage = null;
 
@@ -531,34 +538,6 @@ export type ChartOptions = {
       console.log('Filtres réinitialisés (Recherche d\'objets)');
     }
 
-    showAllDevices(): void {
-      this.deviceService.getAllDevices().subscribe({
-        next: (devices) => {
-          this.searchResults = devices;
-          console.log('Tous les objets récupérés :', devices);
-        },
-        error: (err) => {
-          console.error('Erreur lors de la récupération de tous les objets :', err);
-          this.searchResults = [];
-        }
-      });
-    }
-    
-    showAllServices(): void {
-      this.serviceSearchTriggered = true;
-      this.http.get<any[]>('http://localhost:3000/api/services').subscribe({
-        next: (services) => {
-          this.serviceSearchResults = services;
-          console.log('Tous les outils/services récupérés :', services);
-        },
-        error: (err) => {
-          console.error('Erreur lors de la récupération de tous les outils/services :', err);
-          this.serviceSearchResults = [];
-        }
-      });
-    }
-    
-  
 
   updateDeviceStatus(device: any): void {
     const userId = localStorage.getItem('userId');
@@ -651,12 +630,12 @@ export type ChartOptions = {
       this.createdObjects.splice(index, 1);
     }
   }
-  
+
   // Pour simplifier, tu peux réutiliser le dialog de création en mode "édition"
   editObject(obj: any) {
     // Tu peux ouvrir le dialog avec les valeurs préremplies, par exemple :
     // (nécessite un peu plus de logique côté openDialog())
     console.log('Édition demandée pour :', obj);
   }
- 
+
 }
