@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
-import { searchUser, getProfile, updateUser, deleteUser } from '../controllers/user.controller';
+import { searchUser, getProfile, updateUser, deleteUser, getUserPoints } from '../controllers/user.controller'; // ✨ Ajout de getUserPoints
 
 const router = express.Router();
 
@@ -25,9 +25,13 @@ router.get('/search', searchUser);
 // 👤 Récupération du profil
 router.get('/profile/:id', getProfile);
 
+// ✨ Récupération des points d'un utilisateur
+router.get('/profile/:id/points', getUserPoints); // ⬅️ AJOUTE CETTE ROUTE ICI
+
 // ✏️ Mise à jour du profil avec photo
 router.put('/:id', upload.single('photo'), updateUser);
 
+// ❌ Suppression utilisateur
 router.delete('/:id', deleteUser);
 
 export default router;
