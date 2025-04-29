@@ -706,3 +706,28 @@
 .logo-container {
   justify-content: center;
 }
+
+.mdc-radio {
+  .mdc-radio__background {
+    .mdc-radio__outer-circle, .mdc-radio__inner-circle {
+      border-color: #ff9800 !important;
+    }
+  }
+  +.mdc-label{
+    color: #ff9800 !important;
+  }
+}
+
+.mat-accent.mat-mdc-radio-button{
+  --mdc-radio-selected-focus-icon-color: #ff9800;
+    --mdc-radio-selected-hover-icon-color: #ff9800;
+    --mdc-radio-selected-icon-color: #ff9800;
+    --mdc-radio-selected-pressed-icon-color: #ff9800;
+    --mat-radio-checked-ripple-color: #ff9800;
+}
+
+.mat-mdc-radio-group {
+  li {
+    color: white;
+  }
+}
