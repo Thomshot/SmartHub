@@ -264,13 +264,15 @@ export class AccueilDemoComponent implements OnInit {
 
   showAllDevices(): void {
     this.searchTriggered = true;
-    this.deviceService.getAllDevices().subscribe({
-      next: (devices) => {
-        this.searchResults = devices;
-        console.log('Tous les objets récupérés :', devices);
+    this.searchQuery = '';
+
+    this.http.get<any[]>('http://localhost:3000/api/devices').subscribe({
+      next: (results: any[]) => {
+        this.searchResults = results;
+        console.log('✅ Tous les objets chargés :', results);
       },
-      error: (err) => {
-        console.error('Erreur lors de la récupération de tous les objets :', err);
+      error: (err: any) => {
+        console.error('❌ Erreur lors du chargement des objets :', err);
         this.searchResults = [];
       }
     });
