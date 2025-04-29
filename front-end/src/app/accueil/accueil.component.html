@@ -14,7 +14,7 @@
       </mat-tab-group>
     </mat-sidenav>
     <mat-sidenav-content>
-  
+
       <div class="header d-flex justify-content-between align-items-center p-3">
         <div class="d-flex gap-1 align-items-center">
           <mat-icon class="menu-btn" (click)="sidenav.toggle()">menu</mat-icon>
@@ -31,12 +31,12 @@
       <!-- Section Accueil -->
       <div *ngIf="selectedIndex === 0">
         <div class="p-4">
-          <h1>Bonjour <span>{{user}}</span></h1>
+          <h1 *ngIf="currentUser">Bonjour <span>{{ currentUser.login }}</span></h1>
           <div *ngIf="currentUser?.userType === 'administrateur'" class="p-4">
             <h2>📜 Historique des connexions</h2>
-          
+
             <button mat-raised-button color="primary" (click)="loadLoginHistory()">Voir l'historique</button>
-          
+
             <div *ngIf="showLoginHistory" class="list-connexion">
               <div *ngIf="loginHistory.length > 0; else noHistory">
                 <mat-list>
@@ -50,7 +50,7 @@
                   </mat-list-item>
                 </mat-list>
               </div>
-          
+
               <ng-template #noHistory>
                 <p>Aucune connexion enregistrée.</p>
               </ng-template>
@@ -69,7 +69,7 @@
               <mat-card-actions>
                 <button (click)="statusDialog()" mat-button>Status actuel</button>
               </mat-card-actions>
-            </mat-card>            
+            </mat-card>
           </div>
         </div>
 
@@ -143,7 +143,7 @@
           <h1 *ngIf="createdObjects.length === 0" class="p-4 d-flex justify-content-center">
             Aucun objet n’a encore été créé.
           </h1>
-        
+
           <!-- Liste des objets -->
           <div *ngFor="let obj of createdObjects" class="my-4">
             <mat-card>
