@@ -16,7 +16,31 @@ import { MatSelectModule } from '@angular/material/select';
   import { ProfilComponent } from '../profil/profil.component';
   import { ProfilLesAutresComponent } from '../profil-les-autres/other-profil.component';
   import { EditUserComponent } from '../edit-user/edit-user.component';
+import { ChartComponent } from "ng-apexcharts";
+import {
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexChart,
+  ApexFill,
+  ApexDataLabels,
+  ApexLegend
+} from "ng-apexcharts";
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { ChartWrapperComponent } from './chart-wrapper.component';
+import { MatSidenav } from '@angular/material/sidenav';
+import { LayoutModule } from '@angular/cdk/layout';
 
+
+export type ChartOptions = {
+  series: ApexNonAxisChartSeries;
+  chart: ApexChart;
+  responsive: ApexResponsive[];
+  labels: any;
+  fill: ApexFill;
+  legend: ApexLegend;
+  dataLabels: ApexDataLabels;
+};
   import { DeviceService } from '../services/device.service';
   import { UserService } from '../services/user.service';
 
@@ -26,12 +50,13 @@ import { MatSelectModule } from '@angular/material/select';
     imports: [
       MaterialDModule, CommonModule, ProfilComponent, FormsModule,
       RouterModule, ProfilLesAutresComponent, EditUserComponent,
-    MatSelectModule
+    MatSelectModule,ChartWrapperComponent, LayoutModule
     ],
     templateUrl: './accueil.component.html',
     styleUrls: ['./accueil.component.scss']
   })
   export class AccueilComponent implements OnInit {
+    @ViewChild("chart") chart!: ChartComponent;
     isMobileorTablet = false;
     user = 'Utilisateur inconnu';
     selectedIndex = 0;
@@ -45,6 +70,8 @@ import { MatSelectModule } from '@angular/material/select';
     { label: 'Gestion profil', disabled: false },
   ];
     searchQuery = '';
+    isBrowser : boolean;
+    menuOpened=false;
     searchResults: any[] = [];
     searchTriggered = false;
     selectedDevice: any = null;
@@ -119,11 +146,16 @@ import { MatSelectModule } from '@angular/material/select';
 
 
 
-    openDialog() {
-      const dialogRef = this.dialog.open(AjoutObjetDialogComponent);
+  openDialog() {
+    const dialogRef = this.dialog.open(AjoutObjetDialogComponent,{
+      backdropClass:"backdrop-dialog",
+      width:"80%"
+    });
 
       dialogRef.afterClosed().subscribe(result => {
-        console.log(`Dialog result: ${result}`);
+        if (result) {
+        this.createdObjects.push(result); // 👈 ajouter l'objet retourné
+      }
       });
     }
 
@@ -133,6 +165,7 @@ import { MatSelectModule } from '@angular/material/select';
         position: { right: '0' },
         height: '100vh',
         width: '30%',
+       backdropClass:"backdrop-dialog"
       });
 
       dialogRef.afterClosed().subscribe(filtres => {
@@ -150,7 +183,9 @@ import { MatSelectModule } from '@angular/material/select';
     }
 
     statusDialog() {
-      const dialogRef = this.dialog.open(ProgressionNiveauDialogComponent);
+      const dialogRef = this.dialog.open(ProgressionNiveauDialogComponent,{
+       backdropClass:"backdrop-dialog"
+    });
       dialogRef.afterClosed().subscribe(result => {
         console.log(`Dialog result: ${result}`);
       });
@@ -163,8 +198,18 @@ import { MatSelectModule } from '@angular/material/select';
       this.loadUserFromLocalStorage();
 
       this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
+
+      const screenWidth = window.innerWidth;
+    this.isMobileorTablet = screenWidth <= 960;
+    this.menuOpened = !this.isMobileorTablet;
+
+    // Ensuite continue à écouter les changements de taille
+    this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
         this.isMobileorTablet = result.matches;
       });
+
+        this.menuOpened = !this.isMobileorTablet;
+    });
 
       if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
         const connectedUserId = localStorage.getItem('userId');
@@ -213,7 +258,8 @@ import { MatSelectModule } from '@angular/material/select';
 
 
     shouldSidenavBeOpened(): boolean {
-      return !this.isMobileorTablet;
+
+    return !this.isMobileorTablet;
     }
 
     onTabChange(index: number): void {
@@ -221,6 +267,11 @@ import { MatSelectModule } from '@angular/material/select';
       if (index === 0) {
         window.scrollTo(0, 0);
         console.log("🟢 Accueil affiché !");
+      }
+    }
+    onTabClose(): void {
+      if (this.isMobileorTablet) {
+        this.menuOpened = false;
       }
     }
 
@@ -303,19 +354,6 @@ import { MatSelectModule } from '@angular/material/select';
       });
   }
 
-  showAllDevices(): void {
-    this.searchTriggered = true;
-    this.deviceService.getAllDevices().subscribe({
-      next: (devices) => {
-        this.searchResults = devices;
-        console.log('Tous les objets récupérés :', devices);
-      },
-      error: (err) => {
-        console.error('Erreur lors de la récupération de tous les objets :', err);
-        this.searchResults = [];
-      }
-    });
-  }
 
   clearMaisonDevices(): void {
     const userId = localStorage.getItem('userId');
@@ -332,19 +370,6 @@ import { MatSelectModule } from '@angular/material/select';
   }
 
 
-  showAllServices(): void {
-    this.serviceSearchTriggered = true;
-    this.http.get<any[]>('http://localhost:3000/api/services').subscribe({
-      next: (services) => {
-        this.serviceSearchResults = services;
-        console.log('Tous les outils/services récupérés :', services);
-      },
-      error: (err) => {
-        console.error('Erreur lors de la récupération de tous les outils/services :', err);
-        this.serviceSearchResults = [];
-      }
-    });
-  }
 
   logout(): void {
     if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
@@ -593,4 +618,21 @@ import { MatSelectModule } from '@angular/material/select';
       device.newName = device.nom;
     }
   }
+  selectedChart: string='electricite';
+  createdObjects: any[] = [];
+
+  deleteObject(obj: any) {
+    const index = this.createdObjects.indexOf(obj);
+    if (index > -1) {
+      this.createdObjects.splice(index, 1);
+    }
+  }
+
+  // Pour simplifier, tu peux réutiliser le dialog de création en mode "édition"
+  editObject(obj: any) {
+    // Tu peux ouvrir le dialog avec les valeurs préremplies, par exemple :
+    // (nécessite un peu plus de logique côté openDialog())
+    console.log('Édition demandée pour :', obj);
+  }
+
 }

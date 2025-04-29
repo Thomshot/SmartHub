@@ -1,7 +1,14 @@
-<header>
+<header [matMenuTriggerFor]="logoMenu">
   <!-- Section d'en-tête avec les liens de navigation -->
-  <div class="header-top">
+  <div class="header-top"   >
     <img class="logo" src="assets/images/smarthub.png" alt="Logo SmartHub" />
+    <mat-menu #logoMenu="matMenu"  backdropClass="nav-menu" yPosition="below">
+      <button mat-menu-item routerLink="/accueil" routerLinkActive="active">Accueil</button>
+      <button mat-menu-item routerLink="/demo" routerLinkActive="active">Démonstration</button>
+      <button mat-menu-item (click)="openLoginPopup()">Connexion</button>
+      <button mat-menu-item (click)="navigateToRegister()">Inscription</button>
+    </mat-menu>
+    
     <nav class="top-nav">
       <button routerLink="/demo" routerLinkActive="active">Démonstration</button>
       <button routerLinkActive="active" class="login-btn" (click)="openLoginPopup()">Connexion</button>
