@@ -21,6 +21,5 @@ router.post('/create', (req, res, next) => {
 router.post('/request-delete', requestDeleteDevice);
 
 router.post('/users/:id/clear-devices', clearUserDevices);
-router.put('/:id/status', updateDeviceStatus);
 
 export default router;

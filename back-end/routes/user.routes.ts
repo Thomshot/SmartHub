@@ -1,8 +1,8 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
-import { searchUser, getProfile, updateUser, deleteUser, addDeviceToUser } from '../controllers/user.controller';
-import { requestDeleteDevice,updateDeviceStatus, updateUserDeviceName } from '../controllers/device.controller';
+import { searchUser, getProfile, updateUser, deleteUser} from '../controllers/user.controller';
+import { requestDeleteDevice,updateDeviceStatus, updateUserDeviceName, addDeviceToUser  } from '../controllers/device.controller';
 
 const router = express.Router();
 
@@ -36,5 +36,6 @@ router.post('/:id/add-device', addDeviceToUser);
 router.post('/:id/remove-device', requestDeleteDevice);
 
 router.put('/:userId/devices/:deviceId/status', updateDeviceStatus);
-router.put('/:userId/devices/:deviceId/name', updateUserDeviceName);
+router.put('/:userId/devices/:userDeviceId/name', updateUserDeviceName);
+
 export default router;

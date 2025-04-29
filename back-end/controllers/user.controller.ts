@@ -27,22 +27,19 @@ export const searchUser: RequestHandler = async (req, res) => {
   }
 };
 
-export const getProfile: RequestHandler = async (req, res) => {
+export const getProfile = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.params.id;
-    const user = await User.findById(userId)
-      .select('-password -verificationToken')
-      .populate({
-        path: 'userDevices.device',
-        model: 'Device'
-      });
+    const user = await User.findById(req.params.id)
+      .select('-password -verificationToken') // cacher le mot de passe
+
     if (!user) {
-      res.status(404).json({ message: 'Utilisateur introuvable' });
+      res.status(404).json({ message: 'Utilisateur non trouvé' });
       return;
     }
-    res.json(user);
-  } catch (err) {
-    console.error('Erreur getProfile:', err);
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Erreur getProfile:', error);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
@@ -64,13 +61,24 @@ export const updateUser: RequestHandler = async (req, res) => {
       login: req.body.login,
     };
 
+    if (req.body.gender) updateData.gender = req.body.gender;
+    if (req.body.birthDate) updateData.birthDate = req.body.birthDate;
+    if (req.body.lastName) updateData.lastName = req.body.lastName;
+    if (req.body.firstName) updateData.firstName = req.body.firstName;
+    if (req.body.city) updateData.city = req.body.city;
+    if (req.body.address) updateData.address = req.body.address;
+    if (req.body.email) updateData.email = req.body.email;
+    if (req.body.login) updateData.login = req.body.login;
+    
     if (req.body.password && req.body.password.trim() !== "") {
       const saltRounds = 10;
       updateData.password = await bcrypt.hash(req.body.password, saltRounds);
     }
+    
     if (req.file) {
       updateData.photo = req.file.filename;
     }
+    
     if (typeof req.body.points === 'number') {
       updateData.points = req.body.points;
     }
@@ -81,7 +89,11 @@ export const updateUser: RequestHandler = async (req, res) => {
       return;
     }
 
-    user.set(updateData);    // Met à jour tous les champs, dont les points si présents
+    Object.keys(updateData).forEach((key) => {
+      if (updateData[key] !== undefined) {
+        (user as any)[key] = updateData[key];
+      }
+    });
 
     syncUserLevel(user);     // Mets à jour le rôle/niveau à chaque update, peu importe ce qui change
 
@@ -113,59 +125,4 @@ export const deleteUser: RequestHandler = async (req, res) => {
   }
 };
 
-export const addDeviceToUser: RequestHandler = async (req, res) => {
-  try {
-    const userId = req.params.id;
-    const { deviceId } = req.body;
 
-    // 🔥 1. Trouver le Device à cloner
-    const device = await Device.findById(deviceId);
-    if (!device) {
-      res.status(404).json({ message: 'Device not found' });
-      return;
-    }
-
-    // 🔥 2. Trouver l'utilisateur
-    const user = await User.findById(userId);
-    if (!user) {
-      res.status(404).json({ message: "Utilisateur non trouvé." });
-      return;
-    }
-
-    // 🔥 3. Vérifier que le device n'est pas déjà ajouté (optionnel mais propre)
-    const alreadyExists = user.userDevices.some((ud) => 
-      (ud.device as any).idUnique === device.idUnique
-    );
-
-    if (alreadyExists) {
-      res.status(400).json({ message: "Device déjà présent chez l'utilisateur." });
-      return;
-    }
-
-    // 🔥 4. Ajouter une **copie complète** du Device
-    user.userDevices.push({
-      device: {
-        idUnique: device.idUnique,
-        nom: device.nom,
-        type: device.type,
-        statutActuel: device.statutActuel,
-        // Ajoute d'autres champs ici si tu veux
-      },
-      statutActuel: device.statutActuel, // Tu peux personnaliser ce champ si besoin
-    });
-
-    await user.save();
-
-    // 🔥 5. Retourner le dernier device ajouté
-    const lastDevice = user.userDevices[user.userDevices.length - 1];
-
-    res.status(200).json({
-      message: 'Device ajouté à la maison de l\'utilisateur',
-      device: lastDevice.device, // Retourne l'objet device cloné
-    });
-
-  } catch (error) {
-    console.error('Erreur lors de l’ajout du device à l’utilisateur:', error);
-    res.status(500).json({ message: 'Erreur serveur.' });
-  }
-};

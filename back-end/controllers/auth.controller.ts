@@ -86,10 +86,17 @@ export const verifyEmail = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
+
+    if (!email || !password) {
+      console.log('⚠️ [DEBUG] Email ou mot de passe manquant');
+      return res.status(400).json({ message: 'Email et mot de passe requis.' });
+    }
+
     console.log('🔑 [DEBUG] Tentative de connexion avec', email);
 
     // 🔍 Vérifie que l'utilisateur existe
     const user = await User.findOne({ email });
+
     if (!user) {
       console.log('❌ [DEBUG] Utilisateur introuvable pour:', email);
       return res.status(400).json({ message: 'Email ou mot de passe incorrect.' });
@@ -111,8 +118,15 @@ export const loginUser = async (req: Request, res: Response) => {
     // Mise à jour des points pour la connexion
     user.points += 0.25;
 
+    // 🔥 Mise à jour du niveau si besoin
     syncUserLevel(user);
-    await user.save();
+
+    try {
+      await user.save();
+    } catch (saveError) {
+      console.error('Erreur lors de la sauvegarde des points ou du niveau:', saveError);
+      return res.status(500).json({ message: 'Erreur lors de la mise à jour du compte.' });
+    }
 
     // 🔑 Crée un token JWT
     const token = jwt.sign(
@@ -121,6 +135,7 @@ export const loginUser = async (req: Request, res: Response) => {
       { expiresIn: '2h' }
     );
 
+    console.log('✅ [DEBUG] Connexion réussie pour', email);
 
     // ✅ Réponse
     res.status(200).json({
@@ -131,13 +146,15 @@ export const loginUser = async (req: Request, res: Response) => {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        userType: user.userType
+        userType: user.userType,
+        role: user.role,
+        points: user.points,
       }
     });
 
   } catch (error) {
     console.error('Erreur connexion :', error);
-    res.status(500).json({ message: 'Erreur serveur.' });
+    res.status(500).json({ message: 'Erreur serveur lors de la connexion.' });
   }
 };
 

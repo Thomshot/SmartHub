@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaterialDModule } from '../shared/material-d.module';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -35,7 +35,15 @@ export class AccueilComponent implements OnInit {
   isMobileorTablet = false;
   user = 'Utilisateur inconnu';
   selectedIndex = 0;
-
+  tabs = [
+    { label: 'Accueil', disabled: false },
+    { label: 'Création objet', disabled: false },
+    { label: 'Gestion objet', disabled: false },
+    { label: 'Recherche d\'objets', disabled: false },
+    { label: 'Recherche d\'outils/services', disabled: false },
+    { label: 'Recherche d\'utilisateurs', disabled: false },
+    { label: 'Gestion profil', disabled: false },
+  ];
   searchQuery = '';
   searchResults: any[] = [];
   searchTriggered = false;
@@ -64,7 +72,8 @@ export class AccueilComponent implements OnInit {
     private router: Router,
     private deviceService: DeviceService,
     private userService: UserService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private cdr: ChangeDetectorRef
   ) { }
 
   openDialog() {
@@ -105,6 +114,7 @@ export class AccueilComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cdr.detectChanges();
     this.loadAvailableDevices();
     this.filteredMaisonDevices = [...this.maisonDevices];
     this.loadUserFromLocalStorage();
@@ -118,11 +128,21 @@ export class AccueilComponent implements OnInit {
         this.userService.getProfile(connectedUserId).subscribe({
           next: (user: any) => {
             this.currentUser = user;
+            if (this.currentUser?.userType === 'simple') {
+              this.tabs[1].disabled = true; // Création objet
+              this.tabs[2].disabled = true; // Gestion objet
+            }
+
             this.maisonDevices = user.userDevices.map((ud: any) => ({
               ...ud.device,
-              statutActuel: ud.statutActuel
+              userDeviceId: ud._id,
+              statutActuel: ud.statutActuel,
+              etats: ['Actif', 'Inactif'],
             }));
+
+
             this.filteredMaisonDevices = [...this.maisonDevices];
+            this.cdr.detectChanges();
           },
           error: () => {
             this.currentUser = null;
@@ -363,9 +383,10 @@ export class AccueilComponent implements OnInit {
           this.currentUser = user;
           this.maisonDevices = user.userDevices.map((ud: any) => ({
             ...ud.device,
+            userDeviceId: ud._id, // ✅ important
             statutActuel: ud.statutActuel
           }));
-          this.filteredMaisonDevices = [...this.maisonDevices];
+          this.filteredMaisonDevices = this.maisonDevices.map(d => ({ ...d }));
           console.log('Maison rechargée :', this.maisonDevices);
         }
       });
@@ -401,7 +422,7 @@ export class AccueilComponent implements OnInit {
     const userId = localStorage.getItem('userId');
     this.http.post('http://localhost:3000/api/users/' + userId + '/remove-device', {
       userId,
-      deviceId: device._id
+      deviceId: device.userDeviceId
     }).subscribe({
       next: () => {
         this.reloadMaisonDevices();
@@ -430,15 +451,15 @@ export class AccueilComponent implements OnInit {
   }
 
   filtrerMaisonDevices(filtres: any): void {
-    this.filteredMaisonDevices = this.maisonDevices.filter(device => {
-      const matchPiece = filtres.pieces.length === 0 || filtres.pieces.includes(device.room);
-      const matchEtat = filtres.etats.length === 0 || filtres.etats.includes(device.statutActuel);
-      const matchConnectivite = filtres.connectivite.length === 0 || filtres.connectivite.includes(device.connectivite);
-      const matchType = filtres.types.length === 0 || filtres.types.includes(device.type);
-
-      return matchPiece && matchEtat && matchConnectivite && matchType;
-    });
-    console.log('Objets filtrés :', this.filteredMaisonDevices);
+    this.filteredMaisonDevices = this.maisonDevices
+      .filter(device => {
+        const matchPiece = filtres.pieces.length === 0 || filtres.pieces.includes(device.room);
+        const matchEtat = filtres.etats.length === 0 || filtres.etats.includes(device.statutActuel);
+        const matchConnectivite = filtres.connectivite.length === 0 || filtres.connectivite.includes(device.connectivite);
+        const matchType = filtres.types.length === 0 || filtres.types.includes(device.type);
+        return matchPiece && matchEtat && matchConnectivite && matchType;
+      })
+      .map(d => ({ ...d }));
   }
 
   filtrerSearchResults(filtres: any): void {
@@ -461,9 +482,14 @@ export class AccueilComponent implements OnInit {
 
   updateDeviceStatus(device: any): void {
     const userId = localStorage.getItem('userId');
-
+    const userDeviceId = device.userDeviceId;
+    if (!userDeviceId) {
+      console.error('❌ userDeviceId manquant pour updateDeviceStatus');
+      return;
+    }
     if (userId && device.newStatus && device.newStatus !== device.statutActuel) {
-      this.http.put(`http://localhost:3000/api/users/${userId}/devices/${device._id}/status`, { status: device.newStatus })
+      this.http.put(`http://localhost:3000/api/users/${userId}/devices/${userDeviceId}/status`, { status: device.newStatus })
+
         .subscribe({
           next: (response: any) => {
             this.reloadMaisonDevices();
@@ -483,33 +509,35 @@ export class AccueilComponent implements OnInit {
   }
 
   updateDeviceName(device: any): void {
-    const userId = localStorage.getItem('userId');  // Récupère l'ID de l'utilisateur
-    if (!userId) {
-      console.error('Utilisateur non connecté');
+    const userId = localStorage.getItem('userId');
+    const deviceId = device.userDeviceId;
+
+    if (!userId || !deviceId) {
+      console.error('❌ Utilisateur ou device ID manquant', { userId, deviceId });
       return;
     }
 
     if (device.newName && device.newName !== device.nom) {
-      // Envoi de la requête PUT pour mettre à jour le nom du device dans la maison de l'utilisateur
-      this.http.put(`http://localhost:3000/api/users/${userId}/devices/${device._id}/name`, { name: device.newName })
+      this.http.put(`http://localhost:3000/api/users/${userId}/devices/${deviceId}/name`, { name: device.newName })
         .subscribe({
           next: (response: any) => {
-            // Met à jour le nom localement
             device.nom = device.newName;
-            device.newName = undefined;  // Réinitialiser le champ
-            console.log('Nom mis à jour avec succès :', response);
+            device.newName = undefined;
+            console.log('✅ Nom mis à jour :', response);
+            console.log('📤 Requête PUT :', `http://localhost:3000/api/users/${userId}/devices/${deviceId}/name`, {
+              name: device.newName
+            });
           },
           error: (err) => {
-            console.error('Erreur lors de la mise à jour du nom :', err);
+            console.log('📤 Requête PUT :', `http://localhost:3000/api/users/${userId}/devices/${deviceId}/name`, {
+              name: device.newName
+            });
+            console.error('❌ Erreur lors de la mise à jour du nom :', err);
           }
         });
-    } else {
-      console.error('Le nouveau nom est le même que l\'ancien ou vide');
     }
+
   }
-
-
-
 
   toggleEditStatus(device: any): void {
     device.isEditingStatus = !device.isEditingStatus;
@@ -517,16 +545,21 @@ export class AccueilComponent implements OnInit {
   }
 
   toggleEditName(device: any): void {
+    console.log('🧪 toggleEditName called for device:', device);
+
+    if (!device.userDeviceId) {
+      console.warn('⚠️ userDeviceId manquant dans device !');
+      return;
+    }
+
     if (device.isEditingName) {
-      // Si l'utilisateur valide la modification
       if (device.newName && device.newName !== device.nom) {
         this.updateDeviceName(device);
       }
       device.isEditingName = false;
     } else {
-      // Active le mode édition
       device.isEditingName = true;
-      device.newName = device.nom; // Pré-remplit avec le nom actuel
+      device.newName = device.nom;
     }
   }
 }

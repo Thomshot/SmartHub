@@ -1,22 +1,42 @@
-import mongoose, { Schema, Document, Types } from 'mongoose';
-import { IDevice } from './device'; // si besoin
+import mongoose, { Schema, Document } from 'mongoose';
 
-// 🔥 Petit device stocké chez l'utilisateur
+// Interface pour le sous-objet Device intégré dans un utilisateur
 export interface IUserDeviceEmbedded {
   idUnique: string;
   nom: string;
   type: string;
   statutActuel: string;
-  // Ajoute d'autres champs si tu veux (température, connectivité, etc)
+  etats?: string[];
+  fonctionnalites?: string[];
+  derniereMiseAJour?: Date;
+  temperatureActuelle?: number;
+  temperatureCible?: number;
+  mode?: string;
+  connectivite?: string;
+  etatBatterie?: string;
+  resolution?: string;
+  couleurActuelle?: string;
+  luminosite?: string;
+  consommationActuelle?: string;
+  niveauBatterie?: string;
+  humidite?: string;
+  volumeActuel?: string;
+  derniereInteraction?: Date;
+  brand?: string;
+  room?: string;
+  ip?: string;
+  mac?: string;
+  protocol?: string;
+  image?: string;
 }
 
-// 🔥 Objet device pour User
+// Objet device pour User
 export interface IUserDevice {
-  device: IUserDeviceEmbedded; // Ici on n'a pas ObjectId ni IDevice complet
+  device: IUserDeviceEmbedded;
   statutActuel: string;
 }
 
-// 🔥 L'utilisateur complet
+// Interface complète pour un utilisateur
 export interface IUser extends Document {
   gender?: string;
   otherGender?: string;
@@ -30,7 +50,7 @@ export interface IUser extends Document {
   login?: string;
   memberType?: string;
   photo?: string;
-  role: 'débutant' | 'intermédiaire' | 'avancé' | 'expert';
+  role: 'debutant' | 'intermediaire' | 'avance' | 'expert';
   isVerified: boolean;
   verificationToken?: string;
   userType: 'simple' | 'complexe' | 'administrateur';
@@ -38,18 +58,40 @@ export interface IUser extends Document {
   userDevices: IUserDevice[];
 }
 
-// Schéma pour sous-objet Device dans userDevices
+// Schéma pour un device dans un utilisateur
 const userDeviceSchema = new Schema({
   device: {
     idUnique: { type: String, required: true },
     nom: { type: String, required: true },
     type: { type: String, required: true },
     statutActuel: { type: String, required: true },
+    etats: { type: [String] },
+    fonctionnalites: { type: [String] },
+    derniereMiseAJour: { type: Date },
+    temperatureActuelle: { type: Number },
+    temperatureCible: { type: Number },
+    mode: { type: String },
+    connectivite: { type: String },
+    etatBatterie: { type: String },
+    resolution: { type: String },
+    couleurActuelle: { type: String },
+    luminosite: { type: String },
+    consommationActuelle: { type: String },
+    niveauBatterie: { type: String },
+    humidite: { type: String },
+    volumeActuel: { type: String },
+    derniereInteraction: { type: Date },
+    brand: { type: String },
+    room: { type: String },
+    ip: { type: String },
+    mac: { type: String },
+    protocol: { type: String },
+    image: { type: String },
   },
   statutActuel: { type: String, required: true },
 });
 
-// Schéma principal User
+// Schéma principal pour l'utilisateur
 const userSchema = new Schema({
   gender: { type: String },
   otherGender: { type: String },
@@ -63,13 +105,21 @@ const userSchema = new Schema({
   login: { type: String },
   memberType: { type: String },
   photo: { type: String, default: '' },
-  role: { type: String, default: 'débutant', enum: ['débutant', 'intermédiaire', 'avancé', 'expert'] },
+  role: {
+    type: String,
+    default: 'debutant',
+    enum: ['debutant', 'intermediaire', 'avance', 'expert'],
+  },
   isVerified: { type: Boolean, default: false },
   verificationToken: { type: String },
-  userType: { type: String, default: 'simple', enum: ['simple', 'complexe', 'administrateur'] },
+  userType: {
+    type: String,
+    default: 'simple',
+    enum: ['simple', 'complexe', 'administrateur'],
+  },
   points: { type: Number, default: 0 },
   userDevices: [userDeviceSchema],
 }, { timestamps: true });
 
-// Export du modèle User
+// Export du modèle
 export default mongoose.model<IUser>('User', userSchema, 'users');
