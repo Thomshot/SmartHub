@@ -8,7 +8,7 @@
   import { MatDialog } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 
-
+import { ViewChild } from '@angular/core';
   import { AjoutObjetDialogComponent } from './ajout-objet-dialog/ajout-objet-dialog.component';
   import { FiltreDialogComponent } from './filtre-dialog/filtre-dialog.component';
   import { ProgressionNiveauDialogComponent } from './progression-niveau-dialog/progression-niveau-dialog.component';
@@ -81,7 +81,8 @@ export type ChartOptions = {
     serviceSearchTriggered = false;
     currentUser: any = null;
     editOtherUserMode = false;
-
+    deleteMessage: string | null = null;
+    deleteMessageType: 'success' | 'error' | null = null;
     availableDevices: any[] = [];
     maisonDevices: any[] = [];
     filteredMaisonDevices: any[] = [];
@@ -103,8 +104,10 @@ export type ChartOptions = {
       private deviceService: DeviceService,
       private userService: UserService,
       private dialog: MatDialog,
-    private cdr: ChangeDetectorRef
-    ) { }
+    private cdr: ChangeDetectorRef,@Inject(PLATFORM_ID) private platformId: Object
+    ) {this.isBrowser = isPlatformBrowser(platformId); 
+
+    }
 
     loadPoints(): void {
       if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {

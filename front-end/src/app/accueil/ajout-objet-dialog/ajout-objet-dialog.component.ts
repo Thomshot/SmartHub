@@ -21,7 +21,6 @@ import {
 } from '@angular/material/dialog';
 
 import { DeviceService } from '../../services/device.service';
-import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-ajout-objet-dialog',
