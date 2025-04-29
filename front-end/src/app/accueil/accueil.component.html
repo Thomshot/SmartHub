@@ -1,8 +1,9 @@
 <div class="smarthub-accueil">
   <mat-sidenav-container class="example-container">
-    <mat-sidenav #sidenav [mode]="isMobileorTablet ? 'over' : 'side'" [opened]="shouldSidenavBeOpened()">
-      <div class="logo-container">
-        <img src="assets/images/smarthub.png" alt="SmartHub Logo" class="logo-img" />
+    <mat-sidenav [(opened)]="menuOpened" #sidenav [mode]="isMobileorTablet ? 'over' : 'side'" >
+      <div class="logo-container justify-content-between">
+        <img src="assets/images/smarthub.png" alt="SmartHub Logo" class="logo-img pl-2" />
+        <mat-icon class="icon-close px-2" (click)="onTabClose()"></mat-icon>
       </div>
       <mat-tab-group [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
         <mat-tab *ngFor="let tab of tabs; let i = index" [disabled]="tab.disabled">
@@ -13,6 +14,7 @@
       </mat-tab-group>
     </mat-sidenav>
     <mat-sidenav-content>
+  
       <div class="header d-flex justify-content-between align-items-center p-3">
         <div class="d-flex gap-1 align-items-center">
           <mat-icon class="menu-btn" (click)="sidenav.toggle()">menu</mat-icon>
@@ -106,7 +108,19 @@
             <p>Aucun objet dans la Maison.</p>
           </ng-template>
         </div>
+          <div class="pt-4">
+            <mat-card class="p-3 card-chart">
+              <mat-button-toggle-group [(ngModel)]="selectedChart" aria-label="Choisir une vue">
+                <mat-button-toggle value="electricite">Électricité</mat-button-toggle>
+                <mat-button-toggle value="eau">Eau</mat-button-toggle>
+                <mat-button-toggle value="appareils">Appareils</mat-button-toggle>
+              </mat-button-toggle-group>
+              <app-chart-wrapper *ngIf="isBrowser && selectedChart === 'eau'" [type]="'eau'"></app-chart-wrapper>
+<app-chart-wrapper *ngIf="isBrowser && selectedChart === 'electricite'" [type]="'electricite'"></app-chart-wrapper>
+<app-chart-wrapper *ngIf="isBrowser && selectedChart === 'appareils'" [type]="'appareils'"></app-chart-wrapper>
 
+            </mat-card>
+          </div>
         <div class="p-4" *ngIf="currentUser?.userType !== 'simple'">
           <h2>Objets disponibles</h2>
           <div *ngIf="availableDevices.length > 0; else noDevices" class="d-flex flex-wrap gap-3">
@@ -126,6 +140,34 @@
       <div *ngIf="selectedIndex === 1">
         <div class="p-4">
           <h2>Objet crée:</h2>
+          <h1 *ngIf="createdObjects.length === 0" class="p-4 d-flex justify-content-center">
+            Aucun objet n’a encore été créé.
+          </h1>
+        
+          <!-- Liste des objets -->
+          <div *ngFor="let obj of createdObjects" class="my-4">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>{{ obj.name }} ({{ obj.type }})</mat-card-title>
+                <mat-card-subtitle>{{ obj.room }} • {{ obj.brand }}</mat-card-subtitle>
+              </mat-card-header>
+              <img *ngIf="obj.imageUrl" [src]="obj.imageUrl" alt="Image de l'objet" style="max-width: 100%; max-height: 200px; object-fit: contain;">
+              <mat-card-content>
+                <p><strong>IP :</strong> {{ obj.ip || 'Non renseignée' }}</p>
+                <p><strong>MAC :</strong> {{ obj.mac || 'Non renseignée' }}</p>
+                <p><strong>Protocole :</strong> {{ obj.protocol }}</p>
+                <p *ngIf="obj.id"><strong>ID :</strong> {{ obj.id }}</p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-icon-button color="primary" (click)="editObject(obj)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deleteObject(obj)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
           <button mat-button (click)="openDialog()">ajouter</button>
         </div>
       </div>
@@ -208,7 +250,7 @@
       <div *ngIf="selectedIndex === 3">
         <div class="p-4">
           <h1>Recherche d'objets</h1>
-          <div class="search-container">
+          <div class="search-container d-flex gap-2 align-items-center">
             <mat-form-field class="example-full-width">
               <mat-label>Rechercher un objet</mat-label>
               <input matInput [(ngModel)]="searchQuery" placeholder="Entrez le nom de l'objet">
@@ -243,7 +285,7 @@
       <div *ngIf="selectedIndex === 4">
         <div class="p-4">
           <h1>Recherche d'outils/services</h1>
-          <div class="search-container">
+          <div class="search-container d-flex gap-2 align-items-center">
             <mat-form-field class="example-full-width">
               <mat-label>Rechercher un outil/service</mat-label>
               <input matInput [(ngModel)]="serviceSearchQuery" placeholder="Entrez le nom de l'outil/service">
@@ -279,7 +321,7 @@
       <div *ngIf="selectedIndex === 5">
         <div class="p-4">
           <h1>Recherche d'utilisateurs</h1>
-          <div class="search-container">
+          <div class="search-container d-flex gap-2 align-items-center">
             <mat-form-field class="example-full-width">
               <mat-label>Rechercher un utilisateur</mat-label>
               <input matInput [(ngModel)]="userSearchQuery" placeholder="Entrez le login de l'utilisateur">

@@ -17,6 +17,7 @@ import {
   MatDialogClose,
   MatDialogContent,
   MatDialogTitle,
+  MatDialogRef
 } from '@angular/material/dialog';
 
 import { DeviceService } from '../../services/device.service';
