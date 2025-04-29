@@ -1,7 +1,8 @@
 import express from 'express';
 import multer from 'multer';
 import path from 'path';
-import { searchUser, getProfile, updateUser, deleteUser, getUserPoints } from '../controllers/user.controller'; // ✨ Ajout de getUserPoints
+import { searchUser, getProfile, updateUser, deleteUser, getUserPoints} from '../controllers/user.controller'; // ✨ Ajout de getUserPoints
+import { requestDeleteDevice,updateDeviceStatus, updateUserDeviceName, addDeviceToUser  } from '../controllers/device.controller';
 
 const router = express.Router();
 
@@ -33,5 +34,12 @@ router.put('/:id', upload.single('photo'), updateUser);
 
 // ❌ Suppression utilisateur
 router.delete('/:id', deleteUser);
+
+router.post('/:id/add-device', addDeviceToUser);
+
+router.post('/:id/remove-device', requestDeleteDevice);
+
+router.put('/:userId/devices/:deviceId/status', updateDeviceStatus);
+router.put('/:userId/devices/:userDeviceId/name', updateUserDeviceName);
 
 export default router;

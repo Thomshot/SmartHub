@@ -36,7 +36,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // ✅ Routes principales
 app.use('/api', authRoutes);
 app.use('/api/devices', deviceRoutes);
-console.log('✅ Route /api/devices enregistrée');
 app.use('/api/services', serviceRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/actions', actionsRouter);

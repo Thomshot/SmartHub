@@ -1,7 +1,8 @@
 import { Request, Response, RequestHandler } from 'express';
 import User from '../models/user';
 import bcrypt from 'bcrypt';
-
+import { syncUserLevel } from '../utils/userLevel';
+import Device from '../models/device';
 
 export const searchUser: RequestHandler = async (req, res) => {
   try {
@@ -26,25 +27,28 @@ export const searchUser: RequestHandler = async (req, res) => {
   }
 };
 
-export const getProfile: RequestHandler = async (req, res) => {
+export const getProfile = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req.params.id;
-    const user = await User.findById(userId).select('-password -verificationToken');
+    const user = await User.findById(req.params.id)
+      .select('-password -verificationToken') // cacher le mot de passe
+
     if (!user) {
-      res.status(404).json({ message: 'Utilisateur introuvable' });
+      res.status(404).json({ message: 'Utilisateur non trouvé' });
       return;
     }
-    res.json(user);
-  } catch (err) {
-    console.error('Erreur getProfile:', err);
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Erreur getProfile:', error);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 
-// ✏️ Mise à jour du profil
+
 export const updateUser: RequestHandler = async (req, res) => {
   try {
     const userId = req.params.id;
+
     // Préparer les champs à mettre à jour
     const updateData: any = {
       gender: req.body.gender,
@@ -57,25 +61,54 @@ export const updateUser: RequestHandler = async (req, res) => {
       login: req.body.login,
     };
 
-    // Hash du mot de passe si fourni
+    if (req.body.gender) updateData.gender = req.body.gender;
+    if (req.body.birthDate) updateData.birthDate = req.body.birthDate;
+    if (req.body.lastName) updateData.lastName = req.body.lastName;
+    if (req.body.firstName) updateData.firstName = req.body.firstName;
+    if (req.body.city) updateData.city = req.body.city;
+    if (req.body.address) updateData.address = req.body.address;
+    if (req.body.email) updateData.email = req.body.email;
+    if (req.body.login) updateData.login = req.body.login;
+    
     if (req.body.password && req.body.password.trim() !== "") {
       const saltRounds = 10;
       updateData.password = await bcrypt.hash(req.body.password, saltRounds);
     }
+    
     if (req.file) {
       updateData.photo = req.file.filename;
     }
-
-    const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true, runValidators: true }).select('-password');
-    if (!updatedUser) {
-      res.json({ message: 'Profil mis à jour avec succès', user: updatedUser });
+    
+    if (typeof req.body.points === 'number') {
+      updateData.points = req.body.points;
     }
-    res.json({ message: 'Profil mis à jour avec succès', user: updatedUser });
+
+    const user = await User.findById(userId);
+    if (!user) {
+      res.status(404).json({ message: 'Utilisateur non trouvé' });
+      return;
+    }
+
+    Object.keys(updateData).forEach((key) => {
+      if (updateData[key] !== undefined) {
+        (user as any)[key] = updateData[key];
+      }
+    });
+
+    syncUserLevel(user);     // Mets à jour le rôle/niveau à chaque update, peu importe ce qui change
+
+    await user.save();
+
+    const { password, ...safeUser } = user.toObject();
+
+    res.json({ message: 'Profil mis à jour avec succès', user: safeUser });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
+
+
 
 export const deleteUser: RequestHandler = async (req, res) => {
   try {

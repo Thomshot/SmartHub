@@ -1,0 +1,94 @@
+<div class="smarthub-accueil">
+  <mat-sidenav-container class="example-container">
+    <mat-sidenav #sidenav [mode]="isMobileorTablet ? 'over' : 'side'" [opened]="shouldSidenavBeOpened()">
+      <div class="logo-container">
+        <img src="assets/images/smarthub.png" alt="SmartHub Logo" class="logo-img" />
+      </div>
+      <mat-tab-group [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
+        <mat-tab><ng-template mat-tab-label><span>Recherche d'objets</span></ng-template></mat-tab>
+        <mat-tab><ng-template mat-tab-label><span>Recherche d'outils/services</span></ng-template></mat-tab>
+      </mat-tab-group>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="header d-flex justify-content-between align-items-center p-3">
+        <div class="d-flex gap-1 align-items-center">
+          <mat-icon class="menu-btn" (click)="sidenav.toggle()">menu</mat-icon>
+        </div>
+        <div class="d-flex gap-2">
+          <button mat-raised-button color="accent" (click)="navigateToSignup()">Inscription</button>
+        </div>
+      </div>
+
+      <!-- Section Recherche d'objets -->
+      <div *ngIf="selectedIndex === 0">
+        <div class="p-4">
+          <h1>Recherche d'objets</h1>
+          <div class="search-container">
+            <mat-form-field class="example-full-width">
+              <mat-label>Rechercher un objet</mat-label>
+              <input matInput [(ngModel)]="searchQuery" placeholder="Entrez le nom de l'objet">
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="searchDevice()">Rechercher</button>
+            <button mat-raised-button color="accent" (click)="showAllDevices()">Afficher tous les objets</button>
+          </div>
+          <div *ngIf="searchResults.length > 0" class="search-results">
+            <h3>Résultats de la recherche :</h3>
+            <div class="d-flex flex-wrap gap-3">
+              <mat-card *ngFor="let device of searchResults" appearance="outlined" class="w-25">
+                <mat-card-header>
+                  <mat-card-title>{{ device.nom || 'Non disponible' }}</mat-card-title>
+                  <mat-card-subtitle>{{ device.type || 'Non disponible' }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <p *ngIf="device.statutActuel"><strong>Statut actuel :</strong> {{ device.statutActuel }}</p>
+                  <p *ngIf="device.connectivite"><strong>Connectivité :</strong> {{ device.connectivite }}</p>
+                  <p *ngIf="device.etatDeBatterie"><strong>État de batterie :</strong> {{ device.etatDeBatterie }}</p>
+                  <p *ngIf="device.derniereInteraction"><strong>Dernière interaction :</strong> {{ device.derniereInteraction | date:'medium' }}</p>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+          <div *ngIf="searchTriggered && searchResults.length === 0" class="no-results">
+            <p>Aucun objet trouvé avec ce nom.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section Recherche d'outils/services -->
+      <div *ngIf="selectedIndex === 1">
+        <div class="p-4">
+          <h1>Recherche d'outils/services</h1>
+          <div class="search-container">
+            <mat-form-field class="example-full-width">
+              <mat-label>Rechercher un outil/service</mat-label>
+              <input matInput [(ngModel)]="serviceSearchQuery" placeholder="Rechercher un outil ou un service">
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="searchService()">Rechercher</button>
+            <button mat-raised-button color="accent" (click)="showAllServices()">Afficher tous les outils/services</button>
+          </div>
+          <div *ngIf="serviceSearchResults.length > 0" class="search-results">
+            <h3>Résultats de la recherche :</h3>
+            <div class="d-flex flex-wrap gap-3">
+              <mat-card *ngFor="let service of serviceSearchResults" appearance="outlined" class="w-25">
+                <mat-card-header>
+                  <mat-card-title>{{ service.nom || 'Non disponible' }}</mat-card-title>
+                  <mat-card-subtitle>{{ service.type || 'Non disponible' }}</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <p *ngIf="service.statutActuel"><strong>Statut actuel :</strong> {{ service.statutActuel }}</p>
+                  <p *ngIf="service.etats"><strong>États :</strong> {{ service.etats.join(', ') }}</p>
+                  <p *ngIf="service.description"><strong>Description :</strong> {{ service.description }}</p>
+                  <p *ngIf="service.tarif"><strong>Tarif :</strong> {{ service.tarif }}</p>
+                  <p *ngIf="service.derniereMiseAJour"><strong>Dernière mise à jour :</strong> {{ service.derniereMiseAJour | date:'medium' }}</p>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+          <div *ngIf="serviceSearchTriggered && serviceSearchResults.length === 0" class="no-results">
+            <p>Aucun outil/service trouvé avec ce nom.</p>
+          </div>
+        </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

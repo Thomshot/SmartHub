@@ -6,22 +6,22 @@ export interface IDevice extends Document {
   nom: string;
   type: string;
   statutActuel: string;
-  états: string[];
-  fonctionnalités: string[];
-  dernièreMiseÀJour: Date;
-  températureActuelle?: number;
-  températureCible?: number;
+  etats: string[];
+  fonctionnalites: string[];
+  derniereMiseAJour: Date;
+  temperatureActuelle?: number;
+  temperatureCible?: number;
   mode?: string;
-  connectivité?: string;
-  étatDeBatterie?: string;
-  résolution?: string;
+  connectivite?: string;
+  etatBatterie?: string;
+  resolution?: string;
   couleurActuelle?: string;
-  luminosité?: string;
+  luminosite?: string;
   consommationActuelle?: string;
-  niveauDeBatterie?: string;
-  humidité?: string;
+  niveauBatterie?: string;
+  humidite?: string;
   volumeActuel?: string;
-  dernièreInteraction?: Date;
+  derniereInteraction?: Date;
   brand?: string;
   room?: string;
   ip?: string;
@@ -36,28 +36,28 @@ const deviceSchema: Schema = new Schema({
   nom: { type: String, required: true },
   type: { type: String, required: true },
   statutActuel: { type: String, required: true },
-  états: { type: [String], required: true },
-  fonctionnalités: { type: [String], required: true },
-  dernièreMiseÀJour: { type: Date, default: Date.now },
-  températureActuelle: { type: Number },
-  températureCible: { type: Number },
+  etats: { type: [String], required: true },
+  fonctionnalites: { type: [String], required: true },
+  derniereMiseAJour: { type: Date, default: Date.now },
+  temperatureActuelle: { type: Number },
+  temperatureCible: { type: Number },
   mode: { type: String },
-  connectivité: { type: String },
-  étatDeBatterie: { type: String },
-  résolution: { type: String },
+  connectivite: { type: String },
+  etatBatterie: { type: String },
+  resolution: { type: String },
   couleurActuelle: { type: String },
-  luminosité: { type: String },
+  luminosite: { type: String },
   consommationActuelle: { type: String },
-  niveauDeBatterie: { type: String },
-  humidité: { type: String },
+  niveauBatterie: { type: String },
+  humidite: { type: String },
   volumeActuel: { type: String },
-  dernièreInteraction: { type: Date, default: Date.now },
+  derniereInteraction: { type: Date, default: Date.now },
   brand: { type: String },
   room: { type: String },
   ip: { type: String },
   mac: { type: String },
   protocol: { type: String },
-  image: { type: String }, // URL ou base64 de l'image
+  image: { type: String },
 });
 
 // Export du modèle
