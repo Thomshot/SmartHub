@@ -107,8 +107,8 @@ const userSchema = new Schema({
   photo: { type: String, default: '' },
   role: {
     type: String,
-    default: 'debutant',
-    enum: ['debutant', 'intermediaire', 'avance', 'expert'],
+    default: 'débutant',
+    enum: ['débutant', 'intermédiaire', 'avancé', 'expert'],
   },
   isVerified: { type: Boolean, default: false },
   verificationToken: { type: String },
