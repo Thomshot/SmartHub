@@ -597,3 +597,7 @@ mat-select {
 .mat-mdc-card-subtitle {
   color: lightgray !important; /* Set text color to light gray */
 }
+
+.mat-card-title, .mat-card-subtitle {
+  color: #000 !important; // Définit le texte en noir
+}

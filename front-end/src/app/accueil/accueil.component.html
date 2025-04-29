@@ -62,9 +62,14 @@
                 <mat-card-title>Progression Niveau</mat-card-title>
               </mat-card-header>
               <div class="p-3 d-flex justify-content-center flex-column gap-3">
-                <span>Vous avez {{ pointsActuels }} point{{ pointsActuels !== 1 ? 's' : '' }} sur {{ pointsMax }}</span>
-                <mat-progress-bar [value]="(pointsActuels / pointsMax) * 100"></mat-progress-bar>
-                <span>Il ne vous reste plus que {{ pointsMax - pointsActuels }} point{{ (pointsMax - pointsActuels) !== 1 ? 's' : '' }} pour monter de niveau</span>
+                <ng-container *ngIf="currentUser?.userType === 'administrateur'; else progressionContent">
+                  <span>🎉 Vous avez atteint le niveau maximum !</span>
+                </ng-container>
+                <ng-template #progressionContent>
+                  <span>Vous avez {{ pointsActuels }} point{{ pointsActuels !== 1 ? 's' : '' }} sur {{ pointsMax }}</span>
+                  <mat-progress-bar [value]="(pointsActuels / pointsMax) * 100"></mat-progress-bar>
+                  <span>Il ne vous reste plus que {{ pointsMax - pointsActuels }} point{{ (pointsMax - pointsActuels) !== 1 ? 's' : '' }} pour monter de niveau</span>
+                </ng-template>
               </div>
               <mat-card-actions>
                 <button (click)="statusDialog()" mat-button>Status actuel</button>
@@ -139,10 +144,7 @@
       <!-- Section Création objet -->
       <div *ngIf="selectedIndex === 1">
         <div class="p-4">
-          <h2>Objet crée:</h2>
-          <h1 *ngIf="createdObjects.length === 0" class="p-4 d-flex justify-content-center">
-            Aucun objet n’a encore été créé.
-          </h1>
+          <h2>Création d'objet :</h2>
 
           <!-- Liste des objets -->
           <div *ngFor="let obj of createdObjects" class="my-4">
