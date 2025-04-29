@@ -128,22 +128,25 @@ export type ChartOptions = {
       }
     }
 
-    loadLoginHistory(): void {
-      if (this.currentUser?.userType !== 'administrateur') {
-        console.log('Accès refusé : utilisateur non admin');
-        return;
-      }
-
-      this.http.get<any[]>('http://localhost:3000/api/login-history').subscribe({
-        next: (history) => {
-          this.loginHistory = history;
-          this.showLoginHistory = true; // 🛠️ C'est cette ligne qui manquait
-          console.log('✅ Historique des connexions chargé :', this.loginHistory);
-        },
-        error: (err) => {
-          console.error('❌ Erreur lors de la récupération de l\'historique de connexion :', err);
+    toggleLoginHistory(): void {
+      this.showLoginHistory = !this.showLoginHistory;
+    
+      if (this.showLoginHistory && this.loginHistory.length === 0) {
+        if (this.currentUser?.userType !== 'administrateur') {
+          console.log('Accès refusé : utilisateur non admin');
+          return;
         }
-      });
+    
+        this.http.get<any[]>('http://localhost:3000/api/login-history').subscribe({
+          next: (history) => {
+            this.loginHistory = history;
+            console.log('✅ Historique des connexions chargé :', this.loginHistory);
+          },
+          error: (err) => {
+            console.error('❌ Erreur lors de la récupération de l\'historique de connexion :', err);
+          }
+        });
+      }
     }
 
 

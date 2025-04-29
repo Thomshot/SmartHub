@@ -5,7 +5,7 @@
         <img src="assets/images/smarthub.png" alt="SmartHub Logo" class="logo-img pl-2" />
         <mat-icon class="icon-close px-2" (click)="onTabClose()"></mat-icon>
       </div>
-      <mat-tab-group [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
+      <mat-tab-group [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)" (selectedTabChange)="onTabClose()">
         <mat-tab *ngFor="let tab of tabs; let i = index" [disabled]="tab.disabled">
           <ng-template mat-tab-label>
             <span>{{ tab.label }}</span>
@@ -34,9 +34,9 @@
           <h1>Bonjour <span>{{user}}</span></h1>
           <div *ngIf="currentUser?.userType === 'administrateur'" class="p-4">
             <h2>📜 Historique des connexions</h2>
-          
-            <button mat-raised-button color="primary" (click)="loadLoginHistory()">Voir l'historique</button>
-          
+            <button mat-raised-button color="primary" (click)="toggleLoginHistory()">
+              {{ showLoginHistory ? 'Masquer l’historique' : 'Voir l’historique' }}
+            </button>
             <div *ngIf="showLoginHistory" class="list-connexion">
               <div *ngIf="loginHistory.length > 0; else noHistory">
                 <mat-list>
@@ -108,7 +108,7 @@
             <p>Aucun objet dans la Maison.</p>
           </ng-template>
         </div>
-          <div class="pt-4">
+          <div class="p-4">
             <mat-card class="p-3 card-chart">
               <mat-button-toggle-group [(ngModel)]="selectedChart" aria-label="Choisir une vue">
                 <mat-button-toggle value="electricite">Électricité</mat-button-toggle>

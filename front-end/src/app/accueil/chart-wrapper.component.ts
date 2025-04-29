@@ -56,7 +56,7 @@ import {
               },
               plotOptions: {
                 pie: {
-                  offsetY: 90
+                  offsetY: 150
                 }
               },
               legend: {
