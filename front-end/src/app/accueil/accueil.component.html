@@ -1,10 +1,11 @@
 <div class="smarthub-accueil">
   <mat-sidenav-container class="example-container">
-    <mat-sidenav #sidenav [mode]="isMobileorTablet ? 'over' : 'side'" [opened]="shouldSidenavBeOpened()">
-      <div class="logo-container">
-        <img src="assets/images/smarthub.png" alt="SmartHub Logo" class="logo-img" />
+    <mat-sidenav [(opened)]="menuOpened" #sidenav [mode]="isMobileorTablet ? 'over' : 'side'" >
+      <div class="logo-container justify-content-between">
+        <img src="assets/images/smarthub.png" alt="SmartHub Logo" class="logo-img pl-2" />
+        <mat-icon class="icon-close px-2" (click)="onTabClose()"></mat-icon>
       </div>
-      <mat-tab-group [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)">
+      <mat-tab-group [@.disabled]="true" [(selectedIndex)]="selectedIndex" (selectedIndexChange)="onTabChange($event)" (selectedTabChange)="onTabClose()">
         <mat-tab><ng-template mat-tab-label><span>Accueil</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Creation objet</span></ng-template></mat-tab>
         <mat-tab><ng-template mat-tab-label><span>Gestion objet</span></ng-template></mat-tab>
@@ -15,17 +16,13 @@
       </mat-tab-group>
     </mat-sidenav>
     <mat-sidenav-content>
+  
       <div class="header d-flex justify-content-between align-items-center p-3">
         <div class="d-flex gap-1 align-items-center">
           <mat-icon class="menu-btn" (click)="sidenav.toggle()">menu</mat-icon>
         </div>
 
         <div>
-         <!-- <mat-icon class="icon-profil" [matMenuTriggerFor]="menu">profil</mat-icon>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item [routerLink]="'/'">Deconnexion</button>
-            <button mat-menu-item (click)="selectedIndex = 3">gestion Profil</button>
-          </mat-menu>-->
            <div class="d-flex gap-2 align-items-center">
                   <mat-icon class="icon-profil" (click)="goToProfile()">person</mat-icon>
                   <button class="logout-btn" (click)="logout()">Déconnexion</button>
@@ -61,7 +58,7 @@
             </mat-card>
           </div>
           <div class="pt-4">
-            <mat-card class="p-3">
+            <mat-card class="p-3 card-chart">
               <mat-button-toggle-group [(ngModel)]="selectedChart" aria-label="Choisir une vue">
                 <mat-button-toggle value="electricite">Électricité</mat-button-toggle>
                 <mat-button-toggle value="eau">Eau</mat-button-toggle>
@@ -110,7 +107,7 @@
       </div>
       </div>
       <div *ngIf="selectedIndex === 2">
-        <div class="p-4">
+        <div class="p-4 gestion-objet">
           <div class="d-flex flex-column gap-3">
           <div class="d-flex gap-3 align-items-center">
             <mat-icon (click)="filtreDialog()" class="icon-filtre"></mat-icon>
@@ -139,7 +136,7 @@
       <div *ngIf="selectedIndex === 4">
         <div class="p-4">
           <h1>Recherche d'objets</h1>
-          <div class="search-container">
+          <div class="search-container d-flex gap-2 align-items-center">
             <mat-form-field class="example-full-width">
               <mat-label>Rechercher un objet</mat-label>
               <input matInput [(ngModel)]="searchQuery" placeholder="Entrez le nom de l'objet">
@@ -165,7 +162,7 @@
       <div *ngIf="selectedIndex === 5">
         <div class="p-4">
           <h1>Recherche d'outils/services</h1>
-          <div class="search-container">
+          <div class="search-container d-flex gap-2 align-items-center">
             <mat-form-field class="example-full-width">
               <mat-label>Rechercher un outil/service</mat-label>
               <input matInput [(ngModel)]="serviceSearchQuery" placeholder="Entrez le nom de l'outil/service">
@@ -193,7 +190,7 @@
       <div *ngIf="selectedIndex === 6">
         <div class="p-4">
           <h1>Recherche d'utilisateurs</h1>
-          <div class="search-container">
+          <div class="search-container d-flex gap-2 align-items-center">
             <mat-form-field class="example-full-width">
               <mat-label>Rechercher un utilisateur</mat-label>
               <input matInput [(ngModel)]="userSearchQuery" placeholder="Entrez le login de l'utilisateur">

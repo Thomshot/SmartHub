@@ -28,6 +28,8 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
 import { ChartWrapperComponent } from './chart-wrapper.component';
+import { MatSidenav } from '@angular/material/sidenav';
+import { LayoutModule } from '@angular/cdk/layout';
 
 
 export type ChartOptions = {
@@ -44,13 +46,13 @@ export type ChartOptions = {
   selector: 'app-accueil',
   standalone: true,
 
-  imports: [MaterialDModule, CommonModule, ProfilComponent, FormsModule,RouterModule,ChartWrapperComponent ], // ✅ Add FormsModule here
+  imports: [MaterialDModule, CommonModule, ProfilComponent, FormsModule,RouterModule,ChartWrapperComponent, LayoutModule  ], // ✅ Add FormsModule here
   templateUrl: './accueil.component.html', // Ensure this path is correct
   styleUrls: ['./accueil.component.scss'] // Ensure this path is correct
 })
 export class AccueilComponent implements OnInit {
   @ViewChild("chart") chart!: ChartComponent;
-  public chartOptions: Partial<ChartOptions>;
+
   isMobileorTablet: boolean = false;
   user: string = 'Utilisateur inconnu';
   selectedIndex: number = 0;
@@ -59,44 +61,14 @@ export class AccueilComponent implements OnInit {
   searchResults: any[] = [];
   searchTriggered: boolean = false;
   selectedDevice: any = null;
-
+  menuOpened=false;
   serviceSearchQuery: string = '';
   serviceSearchResults: any[] = [];
   serviceSearchTriggered: boolean = false;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,private breakpointObserver: BreakpointObserver, private http: HttpClient,private router: Router) {
     this.isBrowser = isPlatformBrowser(this.platformId);
-    this.chartOptions = {
-      series: [44, 55, 41, 17, 15],
-      chart: {
-        width: 380,
-        type: "donut"
-      },
-      dataLabels: {
-        enabled: false
-      },
-      fill: {
-        type: "gradient"
-      },
-      legend: {
-        formatter: function(val, opts) {
-          return val + " - " + opts.w.globals.series[opts.seriesIndex];
-        }
-      },
-      responsive: [
-        {
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 200
-            },
-            legend: {
-              position: "bottom"
-            }
-          }
-        }
-      ]
-    };
+    
   }
   readonly dialog = inject(MatDialog);
 
@@ -141,8 +113,14 @@ export class AccueilComponent implements OnInit {
   userSearchTriggered: boolean = false;
 
   ngOnInit(): void {
+    const screenWidth = window.innerWidth;
+    this.isMobileorTablet = screenWidth <= 960;
+    this.menuOpened = !this.isMobileorTablet;
+  
+    // Ensuite continue à écouter les changements de taille
     this.breakpointObserver.observe(['(max-width: 960px)']).subscribe(result => {
       this.isMobileorTablet = result.matches;
+      this.menuOpened = !this.isMobileorTablet;
     });
 
     // ✅ Vérifie que l’on est bien dans le navigateur
@@ -161,17 +139,19 @@ export class AccueilComponent implements OnInit {
   }
 
   shouldSidenavBeOpened(): boolean {
+
     return !this.isMobileorTablet;
   }
 
   onTabChange(index: number): void {
     this.selectedIndex = index;
-
-    if (index === 0) {
-      window.scrollTo(0, 0);
-      console.log("🟢 Accueil affiché !");
+  }
+  onTabClose(): void {
+    if (this.isMobileorTablet) {
+      this.menuOpened = false;
     }
   }
+
 
   closeSidenav(): boolean {
     return !this.isMobileorTablet;
@@ -273,4 +253,5 @@ export class AccueilComponent implements OnInit {
     // (nécessite un peu plus de logique côté openDialog())
     console.log('Édition demandée pour :', obj);
   }
+ 
 }

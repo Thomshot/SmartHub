@@ -19,8 +19,7 @@
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-
-        <div>
+        <div class="mt-4 d-flex justify-content-between">
           <button mat-button matStepperNext>Suivant</button>
         </div>
       </form>
@@ -28,7 +27,7 @@
     <mat-step [stepControl]="secondFormGroup">
       <form [formGroup]="secondFormGroup">
         <ng-template matStepLabel>Détails de l'objet</ng-template>
-        <div class="d-flex gap-1">
+        <div class="d-flex gap-2 flex-column">
         <mat-form-field appearance="outline" class="w-full">
           <mat-label>Nom de l'objet</mat-label>
           <input matInput formControlName="objectName" placeholder="Ex : Frigo Cuisine" required>
@@ -58,7 +57,7 @@
         <div *ngIf="previewUrl" style="margin-top: 10px;">
           <img [src]="previewUrl" alt="Aperçu de l’objet" style="max-width: 100%; border-radius: 8px;">
         </div>
-        <div class="mt-4">
+        <div class="mt-4  d-flex justify-content-between">
           <button mat-button matStepperPrevious>Précédent</button>
           <button mat-button matStepperNext>Suivant</button>
         </div>
@@ -89,7 +88,7 @@
           </mat-select>
         </mat-form-field>
 
-        <div class="mt-4">
+        <div class="mt-4 d-flex justify-content-between">
           <button mat-button matStepperPrevious>Précédent</button>
           <button mat-button matStepperNext>Suivant</button>
         </div>
@@ -115,7 +114,7 @@
         </div>
       </div>
 
-      <div class="mt-4">
+      <div class="mt-4 d-flex justify-content-between">
         <button mat-button matStepperPrevious>Précédent</button>
         <button mat-raised-button color="primary" (click)="submitObject()">Créer l'objet</button>
       </div>

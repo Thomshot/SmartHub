@@ -43,9 +43,28 @@ import {
             floating:'true',
           position: 'left',
           fontSize: '14px',    
-          labels: { colors: '#FFF'}
+          labels: { colors: '#FFF'},
+          offsetY:30
         },
         tooltip: { theme: 'dark' },
+        responsive: [
+          {
+            breakpoint: 600, // mobile
+            options: {
+              chart: {
+                height: 250
+              },
+              plotOptions: {
+                pie: {
+                  offsetY: 90
+                }
+              },
+              legend: {
+                position: 'top'
+              }
+            }
+          }
+        ]
       };
   
       let options: any;
