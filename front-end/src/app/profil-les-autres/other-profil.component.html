@@ -56,15 +56,16 @@
           <strong>Rôle :</strong> {{ user?.role || 'Non renseigné' }}
         </mat-list-item>
       </mat-list>
+    </mat-card-content>
       <mat-card-actions *ngIf="isAdmin" align="end">
-        <button mat-raised-button color="primary"
+        <button mat-button 
           style="margin-right: 1rem;"
           (click)="editRequested.emit()">Modifier ce profil</button>
-        <button mat-raised-button color="warn" (click)="supprimerUtilisateur()" [disabled]="isDeleting">
+        <button mat-button  (click)="supprimerUtilisateur()" [disabled]="isDeleting">
           <mat-icon>delete</mat-icon>
           Supprimer cet utilisateur
         </button>
       </mat-card-actions>
-    </mat-card-content>
+  
   </mat-card>
 </div>

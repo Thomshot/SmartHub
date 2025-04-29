@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NgIf } from '@angular/common';
 import { UserService } from '../services/user.service';
 import { Output, EventEmitter } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   standalone: true,
@@ -19,7 +20,8 @@ import { Output, EventEmitter } from '@angular/core';
     MatListModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    NgIf
+    NgIf,
+    MatButtonModule
   ]
 })
 export class ProfilLesAutresComponent {
