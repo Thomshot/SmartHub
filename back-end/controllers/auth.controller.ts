@@ -5,6 +5,9 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { syncUserLevel } from '../utils/userLevel';
+import LoginHistory from '../models/loginHistory'; 
+
+
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -82,7 +85,6 @@ export const verifyEmail = async (req: Request, res: Response) => {
   }
 };
 
-
 export const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -115,10 +117,13 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Email ou mot de passe incorrect.' });
     }
 
+    await LoginHistory.create({
+      userId: user._id,
+      ipAddress: req.ip || req.connection.remoteAddress
+    });
+
     // Mise à jour des points pour la connexion
     user.points += 0.25;
-
-    // 🔥 Mise à jour du niveau si besoin
     syncUserLevel(user);
 
     try {
@@ -134,8 +139,6 @@ export const loginUser = async (req: Request, res: Response) => {
       process.env.JWT_SECRET!,
       { expiresIn: '2h' }
     );
-
-    console.log('✅ [DEBUG] Connexion réussie pour', email);
 
     // ✅ Réponse
     res.status(200).json({
@@ -155,6 +158,17 @@ export const loginUser = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Erreur connexion :', error);
     res.status(500).json({ message: 'Erreur serveur lors de la connexion.' });
+  }
+};
+
+
+export const getLoginHistory = async (req: Request, res: Response) => {
+  try {
+    const history = await LoginHistory.find().sort({ timestamp: -1 }).populate('userId', 'email firstName lastName');
+    res.status(200).json(history);
+  } catch (error) {
+    console.error('Erreur récupération historique de connexion:', error);
+    res.status(500).json({ message: 'Erreur serveur.' });
   }
 };
 

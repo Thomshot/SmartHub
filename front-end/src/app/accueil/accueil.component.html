@@ -29,21 +29,45 @@
       <!-- Section Accueil -->
       <div *ngIf="selectedIndex === 0">
         <div class="p-4">
-          <h1>Bonjour <span>{{ currentUser?.firstName }} {{ currentUser?.lastName || user }}</span></h1>
+          <h1>Bonjour <span>{{user}}</span></h1>
+          <div *ngIf="currentUser?.userType === 'administrateur'" class="p-4">
+            <h2>📜 Historique des connexions</h2>
+          
+            <button mat-raised-button color="primary" (click)="loadLoginHistory()">Voir l'historique</button>
+          
+            <div *ngIf="showLoginHistory" class="list-connexion">
+              <div *ngIf="loginHistory.length > 0; else noHistory">
+                <mat-list>
+                  <mat-list-item *ngFor="let entry of loginHistory">
+                    <div class="d-flex flex-column">
+                      <strong>{{ entry.userId?.firstName }} {{ entry.userId?.lastName }}</strong>
+                      <small>Email : {{ entry.userId?.email }}</small>
+                      <small>IP : {{ entry.ipAddress }}</small>
+                      <small>Connecté le : {{ entry.connectedAt | date:'medium' }}</small>
+                    </div>
+                  </mat-list-item>
+                </mat-list>
+              </div>
+          
+              <ng-template #noHistory>
+                <p>Aucune connexion enregistrée.</p>
+              </ng-template>
+            </div>
+          </div>
           <div class="d-flex justify-content-around">
             <mat-card appearance="outlined" class="w-25">
               <mat-card-header>
                 <mat-card-title>Progression Niveau</mat-card-title>
               </mat-card-header>
               <div class="p-3 d-flex justify-content-center flex-column gap-3">
-                <span>Vous avez 1 point sur 10</span>
-                <mat-progress-bar value="10"></mat-progress-bar>
-                <span>Il ne vous reste plus que 9 points pour monter de niveau</span>
+                <span>Vous avez {{ pointsActuels }} point{{ pointsActuels !== 1 ? 's' : '' }} sur {{ pointsMax }}</span>
+                <mat-progress-bar [value]="(pointsActuels / pointsMax) * 100"></mat-progress-bar>
+                <span>Il ne vous reste plus que {{ pointsMax - pointsActuels }} point{{ (pointsMax - pointsActuels) !== 1 ? 's' : '' }} pour monter de niveau</span>
               </div>
               <mat-card-actions>
                 <button (click)="statusDialog()" mat-button>Status actuel</button>
               </mat-card-actions>
-            </mat-card>
+            </mat-card>            
           </div>
         </div>
 
