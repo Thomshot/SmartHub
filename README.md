@@ -95,20 +95,12 @@ SmartHub offre une gamme de fonctionnalités pour simplifier la gestion des appa
    npm install
    ```
 
-3. Créez un fichier `.env` dans le répertoire `back-end` et configurez les variables suivantes :
-   ```env
-   MONGO_URI=<votre_chaine_de_connexion_mongo>
-   JWT_SECRET=<votre_secret_jwt>
-   EMAIL_USER=<votre_email>
-   EMAIL_PASS=<votre_mot_de_passe_email>
-   ```
-
-4. Lancez le serveur de développement :
+3. Lancez le serveur de développement :
    ```bash
    npm run dev
    ```
 
-5. Le serveur back-end sera accessible à l'adresse `http://localhost:3000`.
+4. Le serveur back-end sera accessible à l'adresse `http://localhost:3000`.
 
 ---
 
